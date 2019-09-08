@@ -8,6 +8,8 @@ import org.parboiled.parserunners.RecoveringParseRunner;
 import org.parboiled.support.ParsingResult;
 import org.parboiled.support.Var;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import static java.util.Map.entry;
@@ -20,6 +22,10 @@ import static java.util.Map.entry;
 @BuildParseTree
 @SuppressWarnings("WeakerAccess")
 public class ShaderParser extends BaseParser<ASTNode> {
+    public static StatementNode parseProgram(String input) {
+        return parse(input, INSTANCE.Sequence(INSTANCE.Program(), EOI), StatementNode.class);
+    }
+
     public static StatementNode parseStatement(String input) {
         return parse(input, INSTANCE.Sequence(INSTANCE.Statement(), EOI), StatementNode.class);
     }
@@ -50,11 +56,20 @@ public class ShaderParser extends BaseParser<ASTNode> {
     // –––––––––––– Grammar rules ––––––––––––
 
     protected Rule Program() {
-        return Sequence(ZeroOrMore(Statement()), EOI);
+        return Sequence(Block(), EOI);
+    }
+
+    protected Rule Block() {
+        Var<List<StatementNode>> list = new Var<>(new ArrayList<>());
+        return Sequence(
+            OneOrMore(
+                Statement(),
+                list.get().add((StatementNode) pop())),
+            push(new BlockNode(list.get())));
     }
 
     protected Rule Statement() {
-        return Sequence(Assignment(), ".");
+        return Sequence(Assignment(), ".", WhiteSpace());
     }
 
     protected Rule Assignment() {

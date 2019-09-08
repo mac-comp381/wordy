@@ -3,7 +3,10 @@ package enshader.parser;
 import org.junit.jupiter.api.Test;
 import org.parboiled.Parboiled;
 
+import java.util.List;
+
 import static enshader.parser.ShaderParser.parseExpression;
+import static enshader.parser.ShaderParser.parseProgram;
 import static enshader.parser.ShaderParser.parseStatement;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
@@ -105,6 +108,33 @@ public class ParserTest {
                     new ConstantNode(7))),
             parseStatement("set sprongle to zoink plus 7."));
         assertParseError(() -> parseExpression("set sprongle to -3"));  // missing period
+    }
+
+    @Test
+    void testProgram() {
+        assertParseError(() -> parseProgram(""));
+        assertEquals(
+            new BlockNode(
+                new AssignmentStatement(
+                    new VariableNode("x"),
+                    new ConstantNode(1))),
+            parseProgram("set x to 1."));
+
+        for(var whitespaceVariant : List.of(
+            "set x to 1.set y to 2.",
+            "set x to 1. set y to 2.",
+            " \n  set x to 1.\n\n   \n\tset y to 2.   \n  ")
+        ) {
+            assertEquals(
+                new BlockNode(
+                    new AssignmentStatement(
+                        new VariableNode("x"),
+                        new ConstantNode(1)),
+                    new AssignmentStatement(
+                        new VariableNode("y"),
+                        new ConstantNode(2))),
+                parseProgram(whitespaceVariant));
+        }
     }
 
     private void assertParseError(Runnable parseAction) {

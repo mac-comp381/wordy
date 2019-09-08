@@ -1,0 +1,39 @@
+package enshader.parser;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.Objects;
+
+public class BlockNode extends StatementNode {
+    public final List<StatementNode> statements;
+
+    public BlockNode(List<StatementNode> statements) {
+        this.statements = statements;
+    }
+
+    public BlockNode(StatementNode... statements) {
+        this.statements = Arrays.asList(statements);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if(this == o)
+            return true;
+        if(o == null || getClass() != o.getClass())
+            return false;
+        BlockNode blockNode = (BlockNode) o;
+        return statements.equals(blockNode.statements);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(statements);
+    }
+
+    @Override
+    public String toString() {
+        return "BlockNode{" +
+            "statements=" + statements +
+            '}';
+    }
+}
