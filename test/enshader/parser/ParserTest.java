@@ -52,6 +52,24 @@ public class ParserTest {
                 new ConstantNode(1),
                 new ConstantNode(2)),
             parseExpression("1 divided by 2"));
+        assertEquals(
+            new BinaryExpressionNode(
+                BinaryExpressionNode.Operator.DIVISION,
+                new ConstantNode(1),
+                new ConstantNode(2)),
+            parseExpression("1\ndivided    by\n 2"));
+        assertEquals(
+            new BinaryExpressionNode(
+                BinaryExpressionNode.Operator.EXPONENTIATION,
+                new ConstantNode(2),
+                new ConstantNode(8)),
+            parseExpression("2 to the power of 8"));
+        assertEquals(
+            new BinaryExpressionNode(
+                BinaryExpressionNode.Operator.EXPONENTIATION,
+                new ConstantNode(16),
+                new ConstantNode(2)),
+            parseExpression("16 squared"));
     }
 
     @Test
@@ -83,6 +101,54 @@ public class ParserTest {
                     new ConstantNode(2)),
                 new ConstantNode(3)),
             parseExpression("(1 minus 2) divided by 3"));
+        assertEquals(
+            new BinaryExpressionNode(
+                BinaryExpressionNode.Operator.EXPONENTIATION,
+                new VariableNode("x"),
+                new BinaryExpressionNode(
+                    BinaryExpressionNode.Operator.EXPONENTIATION,
+                    new VariableNode("y"),
+                    new VariableNode("z"))),
+            parseExpression("x to the power of y to the power of z"));
+        assertEquals(
+            new BinaryExpressionNode(
+                BinaryExpressionNode.Operator.EXPONENTIATION,
+                new BinaryExpressionNode(
+                    BinaryExpressionNode.Operator.EXPONENTIATION,
+                    new VariableNode("x"),
+                    new ConstantNode(2)),
+                new ConstantNode(2)),
+            parseExpression("x squared squared"));
+        assertEquals(
+            new BinaryExpressionNode(
+                BinaryExpressionNode.Operator.EXPONENTIATION,
+                new VariableNode("y"),
+                new BinaryExpressionNode(
+                    BinaryExpressionNode.Operator.EXPONENTIATION,
+                    new VariableNode("z"),
+                    new ConstantNode(2.0))),
+            parseExpression("y to the power of z squared"));
+        assertEquals(
+            new BinaryExpressionNode(
+                BinaryExpressionNode.Operator.SUBTRACTION,
+                new BinaryExpressionNode(
+                    BinaryExpressionNode.Operator.ADDITION,
+                    new BinaryExpressionNode(
+                        BinaryExpressionNode.Operator.EXPONENTIATION,
+                        new VariableNode("x"),
+                        new ConstantNode(2.0)),
+                    new BinaryExpressionNode(
+                        BinaryExpressionNode.Operator.MULTIPLICATION,
+                        new ConstantNode(2.0),
+                        new BinaryExpressionNode(
+                            BinaryExpressionNode.Operator.EXPONENTIATION,
+                            new VariableNode("y"),
+                            new BinaryExpressionNode(
+                                BinaryExpressionNode.Operator.EXPONENTIATION,
+                                new VariableNode("z"),
+                                new ConstantNode(2.0))))),
+                new ConstantNode(1.0)),
+            parseExpression("x squared plus 2 times y to the power of z squared minus 1"));
     }
 
     @Test

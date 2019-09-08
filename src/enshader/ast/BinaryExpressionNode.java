@@ -4,7 +4,7 @@ import java.util.Objects;
 
 public class BinaryExpressionNode extends ExpressionNode {
     public enum Operator {
-        ADDITION, SUBTRACTION, MULTIPLICATION, DIVISION;
+        ADDITION, SUBTRACTION, MULTIPLICATION, DIVISION, EXPONENTIATION;
     }
 
     public final Operator operator;

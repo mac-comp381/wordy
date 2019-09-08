@@ -75,7 +75,7 @@ public class ShaderParser extends BaseParser<ASTNode> {
     }
 
     protected Rule Statement() {
-        return Sequence(Assignment(), ".", WhiteSpace());
+        return Sequence(Assignment(), ".", OptionalWhitespace());
     }
 
     protected Rule Assignment() {
@@ -89,35 +89,56 @@ public class ShaderParser extends BaseParser<ASTNode> {
     }
 
     protected Rule Expression() {
+        return AdditiveExpression();
+    }
+
+    protected Rule AdditiveExpression() {
         var op = new Var<BinaryExpressionNode.Operator>();
         return Sequence(
-            Term(),
+            MultiplicativeExpression(),
             ZeroOrMore(
                 FirstOf(
                     Sequence("plus ",  op.set(BinaryExpressionNode.Operator.ADDITION)),
                     Sequence("minus ", op.set(BinaryExpressionNode.Operator.SUBTRACTION))
                 ),
-                Term(),
+                MultiplicativeExpression(),
 
                 push(new BinaryExpressionNode(op.get(), (ExpressionNode) pop(1), (ExpressionNode) pop()))
             )
         );
     }
 
-    protected Rule Term() {
+    protected Rule MultiplicativeExpression() {
         var op = new Var<BinaryExpressionNode.Operator>();
         return Sequence(
-            Atom(),
+            ExponentialExpression(),
             ZeroOrMore(
                 FirstOf(
                     Sequence("times ",      op.set(BinaryExpressionNode.Operator.MULTIPLICATION)),
                     Sequence("divided by ", op.set(BinaryExpressionNode.Operator.DIVISION))
                 ),
-                Atom(),
+                ExponentialExpression(),
 
                 push(new BinaryExpressionNode(op.get(), (ExpressionNode) pop(1), (ExpressionNode) pop()))
             )
         );
+    }
+
+    protected Rule ExponentialExpression() {
+        return Sequence(
+            Atom(),
+            ZeroOrMore(
+                FirstOf(
+                    Sequence(
+                        "to the power of ", ExponentialExpression(),  // note the exponentiation is right-associative
+                        push(new BinaryExpressionNode(BinaryExpressionNode.Operator.EXPONENTIATION,
+                            (ExpressionNode) pop(1),
+                            (ExpressionNode) pop()))),
+                    Sequence(
+                        "squared", OptionalWhitespace(),
+                        push(new BinaryExpressionNode(BinaryExpressionNode.Operator.EXPONENTIATION,
+                            (ExpressionNode) pop(),
+                            new ConstantNode(2)))))));
     }
 
     protected Rule Atom() {
@@ -141,7 +162,7 @@ public class ShaderParser extends BaseParser<ASTNode> {
             // the matchOrDefault() call returns the matched input text of the immediately preceding rule
             // or a default string (in this case if it is run during error recovery (resynchronization))
             push(new ConstantNode(Double.parseDouble(matchOrDefault("0")))),
-            WhiteSpace()
+            OptionalWhitespace()
         );
     }
 
@@ -152,12 +173,12 @@ public class ShaderParser extends BaseParser<ASTNode> {
                 CharRange('A', 'Z'),
                 "_")),
             push(new VariableNode(matchOrDefault("0"))),
-            WhiteSpace()
+            OptionalWhitespace()
         );
     }
 
-    protected Rule WhiteSpace() {
-        return ZeroOrMore(AnyOf(" \t\f\r\n"));
+    protected Rule OptionalWhitespace() {
+        return ZeroOrMore(" ");
     }
 
     protected Rule Digit() {
