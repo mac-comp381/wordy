@@ -61,11 +61,11 @@ public class ShaderParser extends BaseParser<ASTNode> {
 
     // –––––––––––– Grammar rules ––––––––––––
 
-    protected Rule Program() {
+    Rule Program() {
         return Sequence(Block(), EOI);
     }
 
-    protected Rule Block() {
+    Rule Block() {
         Var<List<StatementNode>> list = new Var<>(new ArrayList<>());
         return Sequence(
             OneOrMore(
@@ -74,11 +74,11 @@ public class ShaderParser extends BaseParser<ASTNode> {
             push(new BlockNode(list.get())));
     }
 
-    protected Rule Statement() {
+    Rule Statement() {
         return Sequence(Assignment(), ".", OptionalWhitespace());
     }
 
-    protected Rule Assignment() {
+    Rule Assignment() {
         return Sequence(
             "set ",
             Variable(),
@@ -88,11 +88,11 @@ public class ShaderParser extends BaseParser<ASTNode> {
         );
     }
 
-    protected Rule Expression() {
+    Rule Expression() {
         return AdditiveExpression();
     }
 
-    protected Rule AdditiveExpression() {
+    Rule AdditiveExpression() {
         var op = new Var<BinaryExpressionNode.Operator>();
         return Sequence(
             MultiplicativeExpression(),
@@ -108,7 +108,7 @@ public class ShaderParser extends BaseParser<ASTNode> {
         );
     }
 
-    protected Rule MultiplicativeExpression() {
+    Rule MultiplicativeExpression() {
         var op = new Var<BinaryExpressionNode.Operator>();
         return Sequence(
             ExponentialExpression(),
@@ -124,7 +124,7 @@ public class ShaderParser extends BaseParser<ASTNode> {
         );
     }
 
-    protected Rule ExponentialExpression() {
+    Rule ExponentialExpression() {
         return Sequence(
             Atom(),
             ZeroOrMore(
@@ -141,15 +141,15 @@ public class ShaderParser extends BaseParser<ASTNode> {
                             new ConstantNode(2)))))));
     }
 
-    protected Rule Atom() {
+    Rule Atom() {
         return FirstOf(Number(), Variable(), Parens());
     }
 
-    protected Rule Parens() {
+    Rule Parens() {
         return Sequence("(", Expression(), ") ");
     }
 
-    protected Rule Number() {
+    Rule Number() {
         return Sequence(
             // we use another Sequence in the "Number" Sequence so we can easily access the input text matched
             // by the three enclosed rules with "match()" or "matchOrDefault()"
@@ -166,7 +166,7 @@ public class ShaderParser extends BaseParser<ASTNode> {
         );
     }
 
-    protected Rule Variable() {
+    Rule Variable() {
         return Sequence(
             OneOrMore(FirstOf(
                 CharRange('a', 'z'),
@@ -177,11 +177,11 @@ public class ShaderParser extends BaseParser<ASTNode> {
         );
     }
 
-    protected Rule OptionalWhitespace() {
+    Rule OptionalWhitespace() {
         return ZeroOrMore(" ");
     }
 
-    protected Rule Digit() {
+    Rule Digit() {
         return CharRange('0', '9');
     }
 }
