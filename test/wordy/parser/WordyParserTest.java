@@ -11,13 +11,13 @@ import wordy.ast.ConditionalNode;
 import wordy.ast.ConstantNode;
 import wordy.ast.VariableNode;
 
-import static wordy.parser.ShaderParser.parseExpression;
-import static wordy.parser.ShaderParser.parseProgram;
-import static wordy.parser.ShaderParser.parseStatement;
+import static wordy.parser.WordyParser.parseExpression;
+import static wordy.parser.WordyParser.parseProgram;
+import static wordy.parser.WordyParser.parseStatement;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
 
-public class ParserTest {
+public class WordyParserTest {
 
     @Test
     void testNumbers() {

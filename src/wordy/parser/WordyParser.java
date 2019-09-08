@@ -28,7 +28,7 @@ import wordy.ast.VariableNode;
  */
 @BuildParseTree
 @SuppressWarnings("WeakerAccess")
-public class ShaderParser extends BaseParser<ASTNode> {
+public class WordyParser extends BaseParser<ASTNode> {
     public static StatementNode parseProgram(String input) {
         return parse(input, INSTANCE.Sequence(INSTANCE.Program(), EOI), StatementNode.class);
     }
@@ -41,7 +41,7 @@ public class ShaderParser extends BaseParser<ASTNode> {
         return parse(input, INSTANCE.Sequence(INSTANCE.Expression(), EOI), ExpressionNode.class);
     }
 
-    private static final ShaderParser INSTANCE = Parboiled.createParser(ShaderParser.class);
+    private static final WordyParser INSTANCE = Parboiled.createParser(WordyParser.class);
 
     private static <T extends ASTNode> T parse(String input, Rule rule, Class<T> expectedOutput) {
         input = input
