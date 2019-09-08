@@ -1,4 +1,4 @@
-package enshader.parser;
+package enshader.ast;
 
 import java.util.Objects;
 

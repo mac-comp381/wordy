@@ -1,4 +1,4 @@
-package enshader.parser;
+package enshader.ast;
 
 public abstract class ASTNode {
     @Override

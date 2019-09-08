@@ -11,6 +11,15 @@ import org.parboiled.support.Var;
 import java.util.ArrayList;
 import java.util.List;
 
+import enshader.ast.ASTNode;
+import enshader.ast.AssignmentNode;
+import enshader.ast.BinaryExpressionNode;
+import enshader.ast.BlockNode;
+import enshader.ast.ConstantNode;
+import enshader.ast.ExpressionNode;
+import enshader.ast.StatementNode;
+import enshader.ast.VariableNode;
+
 /**
  * Parses programs or program framgments in the Enshader language.
  * <p>

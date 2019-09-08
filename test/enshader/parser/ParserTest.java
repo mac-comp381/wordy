@@ -4,6 +4,12 @@ import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
+import enshader.ast.AssignmentNode;
+import enshader.ast.BinaryExpressionNode;
+import enshader.ast.BlockNode;
+import enshader.ast.ConstantNode;
+import enshader.ast.VariableNode;
+
 import static enshader.parser.ShaderParser.parseExpression;
 import static enshader.parser.ShaderParser.parseProgram;
 import static enshader.parser.ShaderParser.parseStatement;
