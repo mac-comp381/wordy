@@ -10,9 +10,6 @@ import org.parboiled.support.Var;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-
-import static java.util.Map.entry;
 
 /**
  * Parses programs or program framgments in the Enshader language.
@@ -78,7 +75,7 @@ public class ShaderParser extends BaseParser<ASTNode> {
             Variable(),
             "to ",
             Expression(),
-            push(new AssignmentStatement((VariableNode) pop(1), (ExpressionNode) pop()))
+            push(new AssignmentNode((VariableNode) pop(1), (ExpressionNode) pop()))
         );
     }
 

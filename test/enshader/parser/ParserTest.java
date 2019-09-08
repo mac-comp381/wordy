@@ -1,7 +1,6 @@
 package enshader.parser;
 
 import org.junit.jupiter.api.Test;
-import org.parboiled.Parboiled;
 
 import java.util.List;
 
@@ -95,12 +94,12 @@ public class ParserTest {
     @Test
     void testAssignmentStatement() {
         assertEquals(
-            new AssignmentStatement(
+            new AssignmentNode(
                 new VariableNode("sprongle"),
                 new ConstantNode(-3)),
             parseStatement("set sprongle to -3."));
         assertEquals(
-            new AssignmentStatement(
+            new AssignmentNode(
                 new VariableNode("sprongle"),
                 new BinaryExpressionNode(
                     BinaryExpressionNode.Operator.ADDITION,
@@ -115,7 +114,7 @@ public class ParserTest {
         assertParseError(() -> parseProgram(""));
         assertEquals(
             new BlockNode(
-                new AssignmentStatement(
+                new AssignmentNode(
                     new VariableNode("x"),
                     new ConstantNode(1))),
             parseProgram("set x to 1."));
@@ -127,10 +126,10 @@ public class ParserTest {
         ) {
             assertEquals(
                 new BlockNode(
-                    new AssignmentStatement(
+                    new AssignmentNode(
                         new VariableNode("x"),
                         new ConstantNode(1)),
-                    new AssignmentStatement(
+                    new AssignmentNode(
                         new VariableNode("y"),
                         new ConstantNode(2))),
                 parseProgram(whitespaceVariant));

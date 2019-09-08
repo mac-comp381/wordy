@@ -2,11 +2,11 @@ package enshader.parser;
 
 import java.util.Objects;
 
-public class AssignmentStatement extends StatementNode {
+public class AssignmentNode extends StatementNode {
     public final VariableNode variable;
     public final ExpressionNode expression;
 
-    public AssignmentStatement(VariableNode variable, ExpressionNode expression) {
+    public AssignmentNode(VariableNode variable, ExpressionNode expression) {
         this.variable = variable;
         this.expression = expression;
     }
@@ -17,7 +17,7 @@ public class AssignmentStatement extends StatementNode {
             return true;
         if(o == null || getClass() != o.getClass())
             return false;
-        AssignmentStatement that = (AssignmentStatement) o;
+        AssignmentNode that = (AssignmentNode) o;
         return variable.equals(that.variable)
             && expression.equals(that.expression);
     }
