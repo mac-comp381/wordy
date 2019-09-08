@@ -124,6 +124,7 @@ public class ShaderParser extends BaseParser<ASTNode> {
         );
     }
 
+    @SuppressWarnings("InfiniteRecursion")  // parboiled instruments this so it doesn't actually infinitely recurse
     Rule ExponentialExpression() {
         return Sequence(
             Atom(),
