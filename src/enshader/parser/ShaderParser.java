@@ -66,7 +66,7 @@ public class ShaderParser extends BaseParser<ASTNode> {
                 ),
                 Term(),
 
-                push(new BinaryExpressionNode(op.get(), pop(1), pop()))
+                push(new BinaryExpressionNode(op.get(), (ExpressionNode) pop(1), (ExpressionNode) pop()))
             )
         );
     }
@@ -82,7 +82,7 @@ public class ShaderParser extends BaseParser<ASTNode> {
                 ),
                 Atom(),
 
-                push(new BinaryExpressionNode(op.get(), pop(1), pop()))
+                push(new BinaryExpressionNode(op.get(), (ExpressionNode) pop(1), (ExpressionNode) pop()))
             )
         );
     }

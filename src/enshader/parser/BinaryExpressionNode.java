@@ -8,9 +8,9 @@ public class BinaryExpressionNode extends ExpressionNode {
     }
 
     public final Operator operator;
-    public final ASTNode lhs, rhs;
+    public final ExpressionNode lhs, rhs;
 
-    public BinaryExpressionNode(Operator operator, ASTNode lhs, ASTNode rhs) {
+    public BinaryExpressionNode(Operator operator, ExpressionNode lhs, ExpressionNode rhs) {
         this.operator = operator;
         this.lhs = lhs;
         this.rhs = rhs;
