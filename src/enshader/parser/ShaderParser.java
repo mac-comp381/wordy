@@ -54,7 +54,17 @@ public class ShaderParser extends BaseParser<ASTNode> {
     }
 
     protected Rule Statement() {
-        return Sequence(Expression(), ".");
+        return Sequence(Assignment(), ".");
+    }
+
+    protected Rule Assignment() {
+        return Sequence(
+            "set ",
+            Variable(),
+            "to ",
+            Expression(),
+            push(new AssignmentStatement((VariableNode) pop(1), (ExpressionNode) pop()))
+        );
     }
 
     protected Rule Expression() {

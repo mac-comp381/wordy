@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Test;
 import org.parboiled.Parboiled;
 
 import static enshader.parser.ShaderParser.parseExpression;
+import static enshader.parser.ShaderParser.parseStatement;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
 
@@ -86,6 +87,24 @@ public class ParserTest {
                 new VariableNode("x"),
                 new VariableNode("y")),
             parseExpression("x plus y"));
+    }
+
+    @Test
+    void testAssignmentStatement() {
+        assertEquals(
+            new AssignmentStatement(
+                new VariableNode("sprongle"),
+                new ConstantNode(-3)),
+            parseStatement("set sprongle to -3."));
+        assertEquals(
+            new AssignmentStatement(
+                new VariableNode("sprongle"),
+                new BinaryExpressionNode(
+                    BinaryExpressionNode.Operator.ADDITION,
+                    new VariableNode("zoink"),
+                    new ConstantNode(7))),
+            parseStatement("set sprongle to zoink plus 7."));
+        assertParseError(() -> parseExpression("set sprongle to -3"));  // missing period
     }
 
     private void assertParseError(Runnable parseAction) {
