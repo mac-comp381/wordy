@@ -31,7 +31,9 @@ public class ShaderParser extends BaseParser<ASTNode> {
     private static final ShaderParser INSTANCE = Parboiled.createParser(ShaderParser.class);
 
     private static <T extends ASTNode> T parse(String input, Rule rule, Class<T> expectedOutput) {
-        input = input.replaceAll("\\s+", " ").trim();
+        input = input
+            .toLowerCase()
+            .replaceAll("\\s+", " ").trim();
         ParsingResult<?> result = new RecoveringParseRunner(rule).run(input);
         if(result.hasErrors())
             throw new ParseException(result);

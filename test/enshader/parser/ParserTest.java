@@ -79,7 +79,7 @@ public class ParserTest {
     @Test
     void testVariables() {
         assertEquals(new VariableNode("x"), parseExpression("x"));
-        assertEquals(new VariableNode("Snake_and_camelCase_OK"), parseExpression("Snake_and_camelCase_OK"));
+        assertEquals(new VariableNode("snake_and_camelcase_ok"), parseExpression("snake_and_camelCase_OK"));
         assertEquals(
             new BinaryExpressionNode(
                 BinaryExpressionNode.Operator.ADDITION,
