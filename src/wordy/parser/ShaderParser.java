@@ -15,6 +15,7 @@ import wordy.ast.ASTNode;
 import wordy.ast.AssignmentNode;
 import wordy.ast.BinaryExpressionNode;
 import wordy.ast.BlockNode;
+import wordy.ast.ConditionalNode;
 import wordy.ast.ConstantNode;
 import wordy.ast.ExpressionNode;
 import wordy.ast.StatementNode;
@@ -70,12 +71,53 @@ public class ShaderParser extends BaseParser<ASTNode> {
         return Sequence(
             OneOrMore(
                 Statement(),
+                OptionalWhitespace(), ".", OptionalWhitespace(),
                 list.get().add((StatementNode) pop())),
             push(new BlockNode(list.get())));
     }
 
     Rule Statement() {
-        return Sequence(Assignment(), ".", OptionalWhitespace());
+        return FirstOf(
+            Assignment(),
+            Conditional());
+    }
+
+    Rule Conditional() {
+        Var<ConditionalNode.Operator> comparisonOperator = new Var<>();
+        Var<StatementNode> ifTrue = new Var<>(), ifFalse = new Var<>();
+        return Sequence(
+            "if ",
+            Expression(),
+            FirstOf(
+                Sequence("equals ",          comparisonOperator.set(ConditionalNode.Operator.EQUALS)),
+                Sequence("is equal to ",     comparisonOperator.set(ConditionalNode.Operator.EQUALS)),
+                Sequence("is less than ",    comparisonOperator.set(ConditionalNode.Operator.LESS_THAN)),
+                Sequence("is greater than ", comparisonOperator.set(ConditionalNode.Operator.GREATER_THAN))),
+            Expression(),
+            FirstOf(
+                Sequence(
+                    "then",
+                    OptionalWhitespace(), ":", OptionalWhitespace(),
+                    Block(),
+                    FirstOf(
+                        Sequence(
+                            "else",
+                            OptionalWhitespace(), ":", OptionalWhitespace(),
+                            Block()),
+                        push(BlockNode.EMPTY)),
+                    "end of conditional"),
+                Sequence(
+                    "then ", Statement(),
+                    FirstOf(
+                        Sequence("else ", Statement()),
+                        push(BlockNode.EMPTY)))),
+            push(new ConditionalNode(
+                comparisonOperator.get(),
+                (ExpressionNode) pop(3),
+                (ExpressionNode) pop(2),
+                (StatementNode) pop(1),
+                (StatementNode) pop()))
+        );
     }
 
     Rule Assignment() {

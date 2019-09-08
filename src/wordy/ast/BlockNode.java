@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Objects;
 
 public class BlockNode extends StatementNode {
+    public static final BlockNode EMPTY = new BlockNode();
+
     public final List<StatementNode> statements;
 
     public BlockNode(List<StatementNode> statements) {

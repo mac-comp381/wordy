@@ -7,6 +7,7 @@ import java.util.List;
 import wordy.ast.AssignmentNode;
 import wordy.ast.BinaryExpressionNode;
 import wordy.ast.BlockNode;
+import wordy.ast.ConditionalNode;
 import wordy.ast.ConstantNode;
 import wordy.ast.VariableNode;
 
@@ -169,7 +170,7 @@ public class ParserTest {
             new AssignmentNode(
                 new VariableNode("sprongle"),
                 new ConstantNode(-3)),
-            parseStatement("set sprongle to -3."));
+            parseStatement("set sprongle to -3"));
         assertEquals(
             new AssignmentNode(
                 new VariableNode("sprongle"),
@@ -177,8 +178,49 @@ public class ParserTest {
                     BinaryExpressionNode.Operator.ADDITION,
                     new VariableNode("zoink"),
                     new ConstantNode(7))),
-            parseStatement("set sprongle to zoink plus 7."));
-        assertParseError(() -> parseExpression("set sprongle to -3"));  // missing period
+            parseStatement("set sprongle to zoink plus 7"));
+    }
+
+    @Test
+    void testConditional() {
+        assertEquals(
+            new ConditionalNode(
+                ConditionalNode.Operator.EQUALS,
+                new VariableNode("x"),
+                new ConstantNode(2),
+                parseStatement("set y to 1"),
+                parseStatement("set z to 3")),
+            parseStatement("if x is equal to 2 then set y to 1 else set z to 3"));
+        assertEquals(
+            new ConditionalNode(
+                ConditionalNode.Operator.EQUALS,
+                new VariableNode("x"),
+                new ConstantNode(2),
+                parseStatement("set y to 1"),
+                BlockNode.EMPTY),
+            parseStatement("if x equals 2 then set y to 1"));
+        assertEquals(
+            new ConditionalNode(
+                ConditionalNode.Operator.EQUALS,
+                new VariableNode("x"),
+                new ConstantNode(2),
+                new BlockNode(
+                    parseStatement("set y to 1"),
+                    parseStatement("set z to 3")),
+                new BlockNode(
+                    parseStatement("set a to 1"),
+                    parseStatement("set b to 3"))),
+            parseStatement("if x equals 2 then:set y to 1.set z to 3.else:set a to 1.set b to 3.end of conditional"));
+        assertEquals(
+            new ConditionalNode(
+                ConditionalNode.Operator.EQUALS,
+                new VariableNode("x"),
+                new ConstantNode(2),
+                new BlockNode(
+                    parseStatement("set y to 1"),
+                    parseStatement("set z to 3")),
+                BlockNode.EMPTY),
+            parseStatement("if x is equal to 2 then  :  \nset y to 1.\nset z to 3.\n\nend  of conditional"));
     }
 
     @Test
