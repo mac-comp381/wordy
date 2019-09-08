@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/enshader.iml" filepath="$PROJECT_DIR$/enshader.iml" />
+      <module fileurl="file://$PROJECT_DIR$/wordy.iml" filepath="$PROJECT_DIR$/wordy.iml" />
     </modules>
   </component>
 </project>

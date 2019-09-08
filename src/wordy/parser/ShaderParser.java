@@ -1,4 +1,4 @@
-package enshader.parser;
+package wordy.parser;
 
 import org.parboiled.BaseParser;
 import org.parboiled.Parboiled;
@@ -11,14 +11,14 @@ import org.parboiled.support.Var;
 import java.util.ArrayList;
 import java.util.List;
 
-import enshader.ast.ASTNode;
-import enshader.ast.AssignmentNode;
-import enshader.ast.BinaryExpressionNode;
-import enshader.ast.BlockNode;
-import enshader.ast.ConstantNode;
-import enshader.ast.ExpressionNode;
-import enshader.ast.StatementNode;
-import enshader.ast.VariableNode;
+import wordy.ast.ASTNode;
+import wordy.ast.AssignmentNode;
+import wordy.ast.BinaryExpressionNode;
+import wordy.ast.BlockNode;
+import wordy.ast.ConstantNode;
+import wordy.ast.ExpressionNode;
+import wordy.ast.StatementNode;
+import wordy.ast.VariableNode;
 
 /**
  * Parses programs or program framgments in the Enshader language.

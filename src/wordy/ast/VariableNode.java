@@ -1,4 +1,4 @@
-package enshader.ast;
+package wordy.ast;
 
 import java.util.Objects;
 

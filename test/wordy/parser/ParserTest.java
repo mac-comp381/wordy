@@ -1,18 +1,18 @@
-package enshader.parser;
+package wordy.parser;
 
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
-import enshader.ast.AssignmentNode;
-import enshader.ast.BinaryExpressionNode;
-import enshader.ast.BlockNode;
-import enshader.ast.ConstantNode;
-import enshader.ast.VariableNode;
+import wordy.ast.AssignmentNode;
+import wordy.ast.BinaryExpressionNode;
+import wordy.ast.BlockNode;
+import wordy.ast.ConstantNode;
+import wordy.ast.VariableNode;
 
-import static enshader.parser.ShaderParser.parseExpression;
-import static enshader.parser.ShaderParser.parseProgram;
-import static enshader.parser.ShaderParser.parseStatement;
+import static wordy.parser.ShaderParser.parseExpression;
+import static wordy.parser.ShaderParser.parseProgram;
+import static wordy.parser.ShaderParser.parseStatement;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
 

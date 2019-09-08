@@ -1,4 +1,4 @@
-package enshader.parser;
+package wordy.parser;
 
 import org.parboiled.errors.ErrorUtils;
 import org.parboiled.support.ParsingResult;

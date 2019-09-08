@@ -1,4 +1,4 @@
-package enshader.ast;
+package wordy.ast;
 
 public abstract class ASTNode {
     @Override
