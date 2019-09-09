@@ -5,6 +5,7 @@ import org.parboiled.Parboiled;
 import org.parboiled.Rule;
 import org.parboiled.annotations.BuildParseTree;
 import org.parboiled.parserunners.RecoveringParseRunner;
+import org.parboiled.parserunners.ReportingParseRunner;
 import org.parboiled.support.ParsingResult;
 import org.parboiled.support.Var;
 
@@ -50,7 +51,7 @@ public class WordyParser extends BaseParser<ASTNode> {
         input = input
             .toLowerCase()
             .replaceAll("\\s", " ");
-        ParsingResult<?> result = new RecoveringParseRunner(rule).run(input);
+        ParsingResult<?> result = new ReportingParseRunner(rule).run(input);
         if(result.hasErrors())
             throw new ParseException(result);
 
