@@ -1,10 +1,7 @@
 package wordy.ast;
 
-import java.util.Collections;
 import java.util.Map;
 import java.util.Objects;
-
-import wordy.ast.ASTNode;
 
 public class LoopNode extends StatementNode {
     public final StatementNode body;

@@ -2,8 +2,6 @@ package wordy.ast;
 
 import org.parboiled.common.StringUtils;
 
-import java.util.Arrays;
-import java.util.List;
 import java.util.Map;
 
 public abstract class ASTNode {

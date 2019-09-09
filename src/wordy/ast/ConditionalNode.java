@@ -3,7 +3,6 @@ package wordy.ast;
 import java.util.Map;
 import java.util.Objects;
 
-import static java.util.Map.entry;
 import static wordy.ast.Utils.orderedMap;
 
 /**
