@@ -3,6 +3,9 @@ package wordy.ast;
 import java.util.Map;
 import java.util.Objects;
 
+import static java.util.Map.entry;
+import static wordy.ast.Utils.orderedMap;
+
 /**
  * Conditionals in wordy are all in the form of single-level boolean comparisons between two numeric values.
  */
@@ -25,7 +28,7 @@ public class ConditionalNode extends StatementNode {
 
     @Override
     public Map<String, ASTNode> getChildren() {
-        return Map.of(
+        return orderedMap(
             "lhs", lhs,
             "rhs", rhs,
             "ifTrue", ifTrue,

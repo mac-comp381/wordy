@@ -25,7 +25,7 @@ public abstract class ASTNode {
             out.append(label);
             out.append(": ");
         }
-        out.append(getClass().getSimpleName());
+        out.append(getClass().getSimpleName().replaceFirst("Node$", ""));
         out.append(describeAttributes());
         out.append('\n');
         for(var entry : getChildren().entrySet()) {

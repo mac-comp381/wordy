@@ -3,6 +3,9 @@ package wordy.ast;
 import java.util.Map;
 import java.util.Objects;
 
+import static java.util.Map.entry;
+import static wordy.ast.Utils.orderedMap;
+
 public class AssignmentNode extends StatementNode {
     public final VariableNode variable;
     public final ExpressionNode expression;
@@ -14,7 +17,7 @@ public class AssignmentNode extends StatementNode {
 
     @Override
     public Map<String, ASTNode> getChildren() {
-        return Map.of(
+        return orderedMap(
             "variable", variable,
             "expression", expression);
     }
