@@ -1,5 +1,7 @@
 package wordy.ast;
 
+import java.util.Collections;
+import java.util.Map;
 import java.util.Objects;
 
 public final class ConstantNode extends ExpressionNode {
@@ -7,6 +9,11 @@ public final class ConstantNode extends ExpressionNode {
 
     public ConstantNode(double value) {
         this.value = value;
+    }
+
+    @Override
+    public Map<String, ASTNode> getChildren() {
+        return Collections.emptyMap();
     }
 
     @Override
@@ -27,5 +34,10 @@ public final class ConstantNode extends ExpressionNode {
     @Override
     public String toString() {
         return "ConstantNode{value=" + value + '}';
+    }
+
+    @Override
+    protected String describeAttributes() {
+        return "(value=" + value + ')';
     }
 }

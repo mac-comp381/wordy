@@ -1,5 +1,6 @@
 package wordy.ast;
 
+import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -21,6 +22,16 @@ public class ConditionalNode extends StatementNode {
         this.ifTrue = ifTrue;
         this.ifFalse = ifFalse;
     }
+
+    @Override
+    public Map<String, ASTNode> getChildren() {
+        return Map.of(
+            "lhs", lhs,
+            "rhs", rhs,
+            "ifTrue", ifTrue,
+            "ifFalse", ifFalse);
+    }
+
 
     @Override
     public boolean equals(Object o) {
@@ -48,5 +59,10 @@ public class ConditionalNode extends StatementNode {
             + ", trueBlock=" + ifTrue
             + ", falseBlock=" + ifFalse
             + '}';
+    }
+
+    @Override
+    protected String describeAttributes() {
+        return "(operator=" + operator + ')';
     }
 }

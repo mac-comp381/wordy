@@ -1,6 +1,9 @@
 package wordy.ast;
 
+import java.util.Map;
 import java.util.Objects;
+
+import static java.util.Map.entry;
 
 public class BinaryExpressionNode extends ExpressionNode {
     public enum Operator {
@@ -14,6 +17,13 @@ public class BinaryExpressionNode extends ExpressionNode {
         this.operator = operator;
         this.lhs = lhs;
         this.rhs = rhs;
+    }
+
+    @Override
+    public Map<String, ASTNode> getChildren() {
+        return Map.of(
+            "lhs", lhs,
+            "rhs", rhs);
     }
 
     @Override
@@ -40,5 +50,10 @@ public class BinaryExpressionNode extends ExpressionNode {
             + ", lhs=" + lhs
             + ", rhs=" + rhs
             + '}';
+    }
+
+    @Override
+    protected String describeAttributes() {
+        return "(operator=" + operator + ')';
     }
 }

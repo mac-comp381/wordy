@@ -1,9 +1,16 @@
 package wordy.ast;
 
+import java.util.Collections;
+import java.util.Map;
+
 public final class LoopExitNode extends StatementNode {
     public LoopExitNode() {
     }
 
+    @Override
+    public Map<String, ASTNode> getChildren() {
+        return Collections.emptyMap();
+    }
     @Override
     public boolean equals(Object o) {
         return this == o

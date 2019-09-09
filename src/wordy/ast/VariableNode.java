@@ -1,5 +1,7 @@
 package wordy.ast;
 
+import java.util.Collections;
+import java.util.Map;
 import java.util.Objects;
 
 public class VariableNode extends ExpressionNode {
@@ -7,6 +9,11 @@ public class VariableNode extends ExpressionNode {
 
     public VariableNode(String name) {
         this.name = name;
+    }
+
+    @Override
+    public Map<String, ASTNode> getChildren() {
+        return Collections.emptyMap();
     }
 
     @Override
@@ -26,6 +33,11 @@ public class VariableNode extends ExpressionNode {
 
     @Override
     public String toString() {
-        return "VariableNode{name='" + name + '\'' + '}';
+        return "VariableNode" + describeAttributes();
+    }
+
+    @Override
+    protected String describeAttributes() {
+        return "(name=\"" + name + "\")";
     }
 }

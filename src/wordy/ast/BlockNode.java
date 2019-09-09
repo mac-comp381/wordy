@@ -1,7 +1,9 @@
 package wordy.ast;
 
 import java.util.Arrays;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 public class BlockNode extends StatementNode {
@@ -15,6 +17,16 @@ public class BlockNode extends StatementNode {
 
     public BlockNode(StatementNode... statements) {
         this.statements = Arrays.asList(statements);
+    }
+
+    @Override
+    public Map<String, ASTNode> getChildren() {
+        Map<String, ASTNode> result = new LinkedHashMap<>();
+        var iter = statements.iterator();
+        for(int index = 0; iter.hasNext(); index++) {
+            result.put(String.valueOf(index), iter.next());
+        }
+        return result;
     }
 
     @Override

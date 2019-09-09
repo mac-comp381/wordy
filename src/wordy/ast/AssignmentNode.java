@@ -1,5 +1,6 @@
 package wordy.ast;
 
+import java.util.Map;
 import java.util.Objects;
 
 public class AssignmentNode extends StatementNode {
@@ -9,6 +10,13 @@ public class AssignmentNode extends StatementNode {
     public AssignmentNode(VariableNode variable, ExpressionNode expression) {
         this.variable = variable;
         this.expression = expression;
+    }
+
+    @Override
+    public Map<String, ASTNode> getChildren() {
+        return Map.of(
+            "variable", variable,
+            "expression", expression);
     }
 
     @Override
