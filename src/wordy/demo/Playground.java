@@ -8,34 +8,41 @@ import java.awt.Insets;
 import java.awt.Toolkit;
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 
 import javax.swing.JEditorPane;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JSplitPane;
+import javax.swing.JTabbedPane;
+import javax.swing.SwingUtilities;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.text.DefaultHighlighter;
 
 import wordy.ast.ASTNode;
+import wordy.ast.StatementNode;
+import wordy.interpreter.EvaluationContext;
 import wordy.parser.ParseException;
 import wordy.parser.WordyParser;
 
 import static java.awt.Font.PLAIN;
 
 public class Playground {
-    private JFrame window;
-    private JEditorPane codePane, outputPane;
-    private ASTNode ast;
+    private JEditorPane codeEditor, astDump, evalDump;
+    private StatementNode currentAST;
+    private Executor codeExecutionQueue = Executors.newFixedThreadPool(1);
 
     public Playground() {
-        this.window = new JFrame("Wordy IDE");
+        JFrame window = new JFrame("Wordy IDE");
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         window.setSize(900, screenSize.height);
 
-        codePane = new JEditorPane();
-        codePane.setText(
+        codeEditor = new JEditorPane();
+        codeEditor.setText(
             "Set a to 1.\n"
             + "Set b to 1.\n"
             + "Set count to 10.\n"
@@ -47,33 +54,41 @@ public class Playground {
             + "    Set count to count minus 1.\n"
             + "End of Loop.\n");
 
-        outputPane = new JEditorPane();
-        outputPane.setEditable(false);
+        astDump = new JEditorPane();
+        astDump.setEditable(false);
 
-        styleTextArea(codePane);
-        styleTextArea(outputPane);
+        evalDump = new JEditorPane();
+        evalDump.setEditable(false);
 
-        codePane.getDocument().addDocumentListener(
+        styleTextArea(codeEditor);
+        styleTextArea(astDump);
+        styleTextArea(evalDump);
+
+        codeEditor.getDocument().addDocumentListener(
             new DocumentListener() {
                 @Override
                 public void insertUpdate(DocumentEvent e) {
-                    refreshAST();
+                    codeChanged();
                 }
 
                 @Override
                 public void removeUpdate(DocumentEvent e) {
-                    refreshAST();
+                    codeChanged();
                 }
 
                 @Override
                 public void changedUpdate(DocumentEvent e) {
-                    refreshAST();
+                    codeChanged();
                 }
             }
         );
-        refreshAST();
+        codeChanged();
 
-        var mainSplit = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, codePane, outputPane);
+        JTabbedPane outputTabs = new JTabbedPane();
+        outputTabs.add("AST", astDump);
+        outputTabs.add("Evaluation", evalDump);
+
+        var mainSplit = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, codeEditor, outputTabs);
         mainSplit.setDividerLocation(window.getWidth() / 2);
         window.add(mainSplit);
 
@@ -81,17 +96,24 @@ public class Playground {
         window.setVisible(true);
     }
 
-    private void refreshAST() {
+    private void codeChanged() {
+        astDump.setForeground(Color.GRAY);
+        evalDump.setForeground(Color.GRAY);
+
+        StatementNode ast;
         try {
-            codePane.getHighlighter().removeAllHighlights();
-            ast = WordyParser.parseProgram(codePane.getText());
-            outputPane.setText(ast.dump());
+            codeEditor.getHighlighter().removeAllHighlights();
+            ast = WordyParser.parseProgram(codeEditor.getText());
+            astDump.setText(ast.dump());
+            astDump.setForeground(Color.BLACK);
+
+            reevaluate(ast);
         } catch(ParseException e) {
             ast = null;
             var error = e.getFirstError();
             var errorHighlight = new DefaultHighlighter.DefaultHighlightPainter(new Color(0xFF8866));
             try {
-                codePane.getHighlighter().addHighlight(
+                codeEditor.getHighlighter().addHighlight(
                     Math.max(0, error.getStartIndex() - 1),
                     error.getEndIndex(),
                     errorHighlight);
@@ -101,7 +123,44 @@ public class Playground {
         } catch(Exception e) {
             ast = null;
         }
-        outputPane.setForeground(ast == null ? Color.GRAY : Color.BLACK);
+    }
+
+    private void reevaluate(StatementNode ast) {
+        synchronized(this) {
+            currentAST = ast;
+        }
+
+        codeExecutionQueue.execute(() -> {
+            var context = new EvaluationContext((node, ctx) -> {
+                synchronized(this) {
+                    if(ast != currentAST)
+                        throw new ExecutionCancelledException();
+                }
+            });
+
+            try {
+//                ast.run(context);
+            } catch(ExecutionCancelledException e) {
+                return;
+            }
+
+            updateEvalDump(ast, context);
+        });
+    }
+
+    private void updateEvalDump(StatementNode executingAST, EvaluationContext context) {
+        StringBuilder builder = new StringBuilder();
+        for(var variableEntry: context.allVariables().entrySet()) {
+            builder.append(variableEntry.getKey());
+            builder.append(" = ");
+            builder.append(variableEntry.getValue());
+            builder.append('\n');
+        }
+        String dump = builder.toString();
+        SwingUtilities.invokeLater(() -> {
+            evalDump.setText(dump);
+            evalDump.setForeground(Color.BLACK);
+        });
     }
 
     private void styleTextArea(JEditorPane textArea) {
