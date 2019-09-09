@@ -18,6 +18,7 @@ import wordy.ast.BlockNode;
 import wordy.ast.ConditionalNode;
 import wordy.ast.ConstantNode;
 import wordy.ast.ExpressionNode;
+import wordy.ast.LoopExitNode;
 import wordy.ast.LoopNode;
 import wordy.ast.StatementNode;
 import wordy.ast.VariableNode;
@@ -81,7 +82,8 @@ public class WordyParser extends BaseParser<ASTNode> {
         return FirstOf(
             Assignment(),
             Conditional(),
-            Loop());
+            Loop(),
+            LoopExit());
     }
 
     Rule Conditional() {
@@ -130,6 +132,10 @@ public class WordyParser extends BaseParser<ASTNode> {
             Block(),
             "end of loop",
             push(new LoopNode((StatementNode) pop())));
+    }
+
+    Rule LoopExit() {
+        return Sequence("exit loop", push(new LoopExitNode()));
     }
 
     Rule Assignment() {

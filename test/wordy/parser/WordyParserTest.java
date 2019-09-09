@@ -9,6 +9,7 @@ import wordy.ast.BinaryExpressionNode;
 import wordy.ast.BlockNode;
 import wordy.ast.ConditionalNode;
 import wordy.ast.ConstantNode;
+import wordy.ast.LoopExitNode;
 import wordy.ast.LoopNode;
 import wordy.ast.VariableNode;
 
@@ -229,9 +230,14 @@ public class WordyParserTest {
         assertEquals(
             new LoopNode(
                 new BlockNode(
-                    parseStatement("set x to 3"),
-                    parseStatement("set y to 1"))),
-            parseStatement("loop: set x to 3. set y to 1. end of loop"));
+                    parseStatement("set x to x plus 1"),
+                    new ConditionalNode(
+                        ConditionalNode.Operator.EQUALS,
+                        new VariableNode("x"),
+                        new ConstantNode(3),
+                        new LoopExitNode(),
+                        BlockNode.EMPTY))),
+            parseStatement("loop: set x to x plus 1. if x equals 3 then exit loop. end of loop"));
     }
 
     @Test
