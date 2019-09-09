@@ -15,6 +15,10 @@ public class EvaluationContext {
         this.tracer = tracer;
     }
 
+    public EvaluationContext() {
+        this((node, ctx) -> { });
+    }
+
     public double get(String name) {
         Double result = variables.get(name);
         return (result == null) ? 0 : result;

@@ -14,6 +14,7 @@ import wordy.ast.LoopExitNode;
 import wordy.ast.LoopNode;
 import wordy.ast.VariableNode;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static wordy.parser.WordyParser.parseExpression;
 import static wordy.parser.WordyParser.parseProgram;
 import static wordy.parser.WordyParser.parseStatement;
@@ -294,11 +295,6 @@ public class WordyParserTest {
     }
 
     private void assertParseError(Runnable parseAction) {
-        try {
-            parseAction.run();
-            fail("Expected test to raise exception");
-        } catch(ParseException e) {
-            // success!
-        }
+        assertThrows(ParseException.class, parseAction::run);
     }
 }

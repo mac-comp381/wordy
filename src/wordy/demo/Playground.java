@@ -139,7 +139,7 @@ public class Playground {
             });
 
             try {
-//                ast.run(context);
+                ast.run(context);
             } catch(ExecutionCancelledException e) {
                 return;
             }
