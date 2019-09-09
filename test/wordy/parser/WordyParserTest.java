@@ -9,6 +9,7 @@ import wordy.ast.BinaryExpressionNode;
 import wordy.ast.BlockNode;
 import wordy.ast.ConditionalNode;
 import wordy.ast.ConstantNode;
+import wordy.ast.LoopNode;
 import wordy.ast.VariableNode;
 
 import static wordy.parser.WordyParser.parseExpression;
@@ -221,6 +222,16 @@ public class WordyParserTest {
                     parseStatement("set z to 3")),
                 BlockNode.EMPTY),
             parseStatement("if x is equal to 2 then  :  \nset y to 1.\nset z to 3.\n\nend  of conditional"));
+    }
+
+    @Test
+    void testLoop() {
+        assertEquals(
+            new LoopNode(
+                new BlockNode(
+                    parseStatement("set x to 3"),
+                    parseStatement("set y to 1"))),
+            parseStatement("loop: set x to 3. set y to 1. end of loop"));
     }
 
     @Test
