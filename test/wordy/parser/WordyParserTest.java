@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
+import wordy.ast.ASTNode;
 import wordy.ast.AssignmentNode;
 import wordy.ast.BinaryExpressionNode;
 import wordy.ast.BlockNode;
@@ -250,20 +251,45 @@ public class WordyParserTest {
                     new ConstantNode(1))),
             parseProgram("set x to 1."));
 
-        for(var whitespaceVariant : List.of(
-            "set x to 1.set y to 2.",
+        assertEquals(
+            new BlockNode(
+                new AssignmentNode(
+                    new VariableNode("x"),
+                    new ConstantNode(1)),
+                new AssignmentNode(
+                    new VariableNode("y"),
+                    new ConstantNode(2))),
+            parseProgram("set x to 1. set y to 2."));
+    }
+
+    @Test
+    void testWhitespaceHandling() {
+        assertEquivalentParsing(
             "set x to 1. set y to 2.",
-            " \n  set x to 1.\n\n   \n\tset y to 2.   \n  ")
-        ) {
-            assertEquals(
-                new BlockNode(
-                    new AssignmentNode(
-                        new VariableNode("x"),
-                        new ConstantNode(1)),
-                    new AssignmentNode(
-                        new VariableNode("y"),
-                        new ConstantNode(2))),
-                parseProgram(whitespaceVariant));
+            "set x to 1.set y to 2.",
+            "\n\n    set \tx  to \n 1      \n. set \n y \n to  \n 2 \n  .  \t ");
+        assertEquivalentParsing(
+            "loop: if x is greater than 2 then: exit loop. else: set x to x squared. end of conditional. end of loop.",
+            "loop:if x is greater than 2 then:exit loop.else:set x to x squared.end of conditional.end of loop.",
+            "  loop  :  if  x  is  greater  than  2  then  :  exit  loop  .  else  :  set  x  to  x  squared  .  "
+                + "   end  of  conditional  .  end  of  loop  .  ");
+        assertEquivalentParsing(
+            "set x to (x squared) plus (y to the power of (3 plus (z squared))).",
+            "set x to  (  x  squared  )  plus  (  y  to  the  power  of  (  3  plus  (  z squared  )  )  )  .",
+            "set x to(x squared)plus(y to the power of(3 plus(z squared))).");
+    }
+
+    private void assertEquivalentParsing(String... variants) {
+        ASTNode expected = parseProgram(variants[0]);
+        for(var variant : variants) {
+            try {
+                assertEquals(expected, parseProgram(variant));
+            } catch(RuntimeException e) {
+                System.err.println("Failure while comparing parsing of:"
+                    + "\n    " + variants[0]
+                    + "\n    " + variant);
+                throw e;
+            }
         }
     }
 

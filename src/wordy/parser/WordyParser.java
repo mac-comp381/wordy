@@ -73,7 +73,7 @@ public class WordyParser extends BaseParser<ASTNode> {
         return Sequence(
             OneOrMore(
                 Statement(),
-                OptionalWhitespace(), ".", OptionalWhitespace(),
+                OptionalSurroundingSpace("."),
                 list.get().add((StatementNode) pop())),
             push(new BlockNode(list.get())));
     }
@@ -90,30 +90,31 @@ public class WordyParser extends BaseParser<ASTNode> {
         Var<ConditionalNode.Operator> comparisonOperator = new Var<>();
         Var<StatementNode> ifTrue = new Var<>(), ifFalse = new Var<>();
         return Sequence(
-            "if ",
+            "if", OptionalSpace(),
             Expression(),
             FirstOf(
-                Sequence("equals ",          comparisonOperator.set(ConditionalNode.Operator.EQUALS)),
-                Sequence("is equal to ",     comparisonOperator.set(ConditionalNode.Operator.EQUALS)),
-                Sequence("is less than ",    comparisonOperator.set(ConditionalNode.Operator.LESS_THAN)),
-                Sequence("is greater than ", comparisonOperator.set(ConditionalNode.Operator.GREATER_THAN))),
+                Sequence("equals",          OptionalSpace(), comparisonOperator.set(ConditionalNode.Operator.EQUALS)),
+                Sequence("is equal to",     OptionalSpace(), comparisonOperator.set(ConditionalNode.Operator.EQUALS)),
+                Sequence("is less than",    OptionalSpace(), comparisonOperator.set(ConditionalNode.Operator.LESS_THAN)),
+                Sequence("is greater than", OptionalSpace(), comparisonOperator.set(ConditionalNode.Operator.GREATER_THAN))),
             Expression(),
             FirstOf(
                 Sequence(
                     "then",
-                    OptionalWhitespace(), ":", OptionalWhitespace(),
+                    OptionalSurroundingSpace(":"),
                     Block(),
                     FirstOf(
                         Sequence(
                             "else",
-                            OptionalWhitespace(), ":", OptionalWhitespace(),
+                            OptionalSurroundingSpace(":"),
                             Block()),
                         push(BlockNode.EMPTY)),
                     "end of conditional"),
                 Sequence(
-                    "then ", Statement(),
+                    "then", OptionalSpace(),
+                    Statement(),
                     FirstOf(
-                        Sequence("else ", Statement()),
+                        Sequence("else", OptionalSpace(), Statement()),
                         push(BlockNode.EMPTY)))),
             push(new ConditionalNode(
                 comparisonOperator.get(),
@@ -128,7 +129,7 @@ public class WordyParser extends BaseParser<ASTNode> {
         Var<StatementNode> ifTrue = new Var<>(), ifFalse = new Var<>();
         return Sequence(
             "loop",
-            OptionalWhitespace(), ":", OptionalWhitespace(),
+            OptionalSurroundingSpace(":"),
             Block(),
             "end of loop",
             push(new LoopNode((StatementNode) pop())));
@@ -140,9 +141,9 @@ public class WordyParser extends BaseParser<ASTNode> {
 
     Rule Assignment() {
         return Sequence(
-            "set ",
+            "set", OptionalSpace(),
             Variable(),
-            "to ",
+            "to", OptionalSpace(),
             Expression(),
             push(new AssignmentNode((VariableNode) pop(1), (ExpressionNode) pop()))
         );
@@ -158,8 +159,8 @@ public class WordyParser extends BaseParser<ASTNode> {
             MultiplicativeExpression(),
             ZeroOrMore(
                 FirstOf(
-                    Sequence("plus ",  op.set(BinaryExpressionNode.Operator.ADDITION)),
-                    Sequence("minus ", op.set(BinaryExpressionNode.Operator.SUBTRACTION))
+                    Sequence("plus",  OptionalSpace(), op.set(BinaryExpressionNode.Operator.ADDITION)),
+                    Sequence("minus", OptionalSpace(), op.set(BinaryExpressionNode.Operator.SUBTRACTION))
                 ),
                 MultiplicativeExpression(),
 
@@ -174,8 +175,8 @@ public class WordyParser extends BaseParser<ASTNode> {
             ExponentialExpression(),
             ZeroOrMore(
                 FirstOf(
-                    Sequence("times ",      op.set(BinaryExpressionNode.Operator.MULTIPLICATION)),
-                    Sequence("divided by ", op.set(BinaryExpressionNode.Operator.DIVISION))
+                    Sequence("times",      OptionalSpace(), op.set(BinaryExpressionNode.Operator.MULTIPLICATION)),
+                    Sequence("divided by", OptionalSpace(), op.set(BinaryExpressionNode.Operator.DIVISION))
                 ),
                 ExponentialExpression(),
 
@@ -191,12 +192,13 @@ public class WordyParser extends BaseParser<ASTNode> {
             ZeroOrMore(
                 FirstOf(
                     Sequence(
-                        "to the power of ", ExponentialExpression(),  // note the exponentiation is right-associative
+                        "to the power of", OptionalSpace(),
+                        ExponentialExpression(),  // note the exponentiation is right-associative
                         push(new BinaryExpressionNode(BinaryExpressionNode.Operator.EXPONENTIATION,
                             (ExpressionNode) pop(1),
                             (ExpressionNode) pop()))),
                     Sequence(
-                        "squared", OptionalWhitespace(),
+                        "squared", OptionalSpace(),
                         push(new BinaryExpressionNode(BinaryExpressionNode.Operator.EXPONENTIATION,
                             (ExpressionNode) pop(),
                             new ConstantNode(2)))))));
@@ -207,7 +209,10 @@ public class WordyParser extends BaseParser<ASTNode> {
     }
 
     Rule Parens() {
-        return Sequence("(", Expression(), ") ");
+        return Sequence(
+            OptionalSurroundingSpace("("),
+            Expression(),
+            OptionalSurroundingSpace(")"));
     }
 
     Rule Number() {
@@ -223,7 +228,7 @@ public class WordyParser extends BaseParser<ASTNode> {
             // the matchOrDefault() call returns the matched input text of the immediately preceding rule
             // or a default string (in this case if it is run during error recovery (resynchronization))
             push(new ConstantNode(Double.parseDouble(matchOrDefault("0")))),
-            OptionalWhitespace()
+            OptionalSpace()
         );
     }
 
@@ -234,12 +239,16 @@ public class WordyParser extends BaseParser<ASTNode> {
                 CharRange('A', 'Z'),
                 "_")),
             push(new VariableNode(matchOrDefault("0"))),
-            OptionalWhitespace()
+            OptionalSpace()
         );
     }
 
-    Rule OptionalWhitespace() {
-        return ZeroOrMore(" ");
+    Rule OptionalSpace() {
+        return ZeroOrMore(" ");  // parse() normalizes all whitespace chunks to a single space
+    }
+
+    Rule OptionalSurroundingSpace(Object content) {
+        return Sequence(OptionalSpace(), content, OptionalSpace());
     }
 
     Rule Digit() {
