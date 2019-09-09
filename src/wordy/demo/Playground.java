@@ -39,7 +39,7 @@ public class Playground {
     public Playground() {
         JFrame window = new JFrame("Wordy IDE");
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        window.setSize(900, screenSize.height);
+        window.setSize(1000, screenSize.height);
 
         codeEditor = new JEditorPane();
         codeEditor.setText(
@@ -52,7 +52,7 @@ public class Playground {
             + "    Set a to b.\n"
             + "    Set b to next.\n"
             + "    Set count to count minus 1.\n"
-            + "End of Loop.\n");
+            + "End of loop.\n");
 
         astDump = new JEditorPane();
         astDump.setEditable(false);
