@@ -1,0 +1,5 @@
+Set r to (x squared plus y squared) to the power of 0.5.
+
+Set red to (r to the power of 4 times (x minus y)) divided by 4.
+Set green to (x times y) to the power of (x plus y plus 0.001).
+Set blue to r squared.

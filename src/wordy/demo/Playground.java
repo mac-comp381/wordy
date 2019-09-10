@@ -8,7 +8,6 @@ import java.awt.Insets;
 import java.awt.Toolkit;
 import java.util.Arrays;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
@@ -23,7 +22,6 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.text.DefaultHighlighter;
 
-import wordy.ast.ASTNode;
 import wordy.ast.StatementNode;
 import wordy.interpreter.EvaluationContext;
 import wordy.parser.ParseException;
