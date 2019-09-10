@@ -19,6 +19,8 @@ import wordy.demo.ExecutionCancelledException;
 import wordy.parser.WordyParser;
 
 public class ShaderUI {
+    private static final boolean USE_COMPILER = true;
+
     private final StatementNode program;
     private final BufferedImage image;
     private final JFrame window;
@@ -80,7 +82,9 @@ public class ShaderUI {
     private void render() {
         Renderer renderer = new Renderer(
             image, centerX, centerY, scale,
-            new InterpretedPixelComputer(program, scale));
+            USE_COMPILER
+                ? new CompiledPixelComputer(program, scale)
+                : new InterpretedPixelComputer(program, scale));
 
         synchronized(this) {
             currentRenderer = renderer;

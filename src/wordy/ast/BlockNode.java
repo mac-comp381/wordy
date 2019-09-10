@@ -46,8 +46,6 @@ public class BlockNode extends StatementNode {
 
     @Override
     public String toString() {
-        return "BlockNode{" +
-            "statements=" + statements +
-            '}';
+        return "BlockNode{statements=" + statements + '}';
     }
 }

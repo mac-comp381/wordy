@@ -6,6 +6,8 @@ import java.awt.Font;
 import java.awt.GraphicsEnvironment;
 import java.awt.Insets;
 import java.awt.Toolkit;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
@@ -30,7 +32,7 @@ import wordy.parser.WordyParser;
 import static java.awt.Font.PLAIN;
 
 public class Playground {
-    private JEditorPane codeEditor, astDump, evalDump;
+    private JEditorPane codeEditor, astDump, evalDump, compilerDump;
     private StatementNode currentAST;
     private Executor codeExecutionQueue = Executors.newFixedThreadPool(1);
 
@@ -58,9 +60,13 @@ public class Playground {
         evalDump = new JEditorPane();
         evalDump.setEditable(false);
 
+        compilerDump = new JEditorPane();
+        compilerDump.setEditable(false);
+
         styleTextArea(codeEditor);
         styleTextArea(astDump);
         styleTextArea(evalDump);
+        styleTextArea(compilerDump);
 
         codeEditor.getDocument().addDocumentListener(
             new DocumentListener() {
@@ -84,7 +90,8 @@ public class Playground {
 
         JTabbedPane outputTabs = new JTabbedPane();
         outputTabs.add("AST", astDump);
-        outputTabs.add("Evaluation", evalDump);
+        outputTabs.add("Interpreted", evalDump);
+        outputTabs.add("Compiled", compilerDump);
 
         var mainSplit = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, codeEditor, outputTabs);
         mainSplit.setDividerLocation(window.getWidth() / 2);
@@ -127,26 +134,46 @@ public class Playground {
         synchronized(this) {
             currentAST = ast;
         }
-
         codeExecutionQueue.execute(() -> {
-            var context = new EvaluationContext((node, ctx) -> {
-                synchronized(this) {
-                    if(ast != currentAST)
-                        throw new ExecutionCancelledException();
-                }
-            });
-
-            try {
-                ast.run(context);
-            } catch(ExecutionCancelledException e) {
-                return;
-            }
-
-            updateEvalDump(ast, context);
+            updateCompilerDump(ast);
+            updateEvalDump(ast);
         });
     }
 
-    private void updateEvalDump(StatementNode executingAST, EvaluationContext context) {
+    private void updateCompilerDump(StatementNode ast) {
+        var compilerOutput = new StringWriter();
+        var printer = new PrintWriter(compilerOutput);
+        try {
+            ast.compileProgram("PlaygroundCode", printer);
+        } catch(Exception e) {
+            printer.println();
+            printer.println();
+            printer.println("–––––– Compilation failed ––––––");
+            printer.println();
+            e.printStackTrace(printer);
+        }
+
+        updateDump(compilerDump, compilerOutput.toString());
+    }
+
+    private void updateEvalDump(StatementNode executingAST) {
+        var context = new EvaluationContext((node, ctx) -> {
+            synchronized(Playground.this) {
+                if(executingAST != currentAST)
+                    throw new ExecutionCancelledException();
+            }
+        });
+
+        try {
+            executingAST.run(context);
+        } catch(ExecutionCancelledException e) {
+            return;
+        }
+
+        updateDump(evalDump, dumpContext(context));
+    }
+
+    private String dumpContext(EvaluationContext context) {
         StringBuilder builder = new StringBuilder();
         for(var variableEntry: context.allVariables().entrySet()) {
             builder.append(variableEntry.getKey());
@@ -154,10 +181,13 @@ public class Playground {
             builder.append(variableEntry.getValue());
             builder.append('\n');
         }
-        String dump = builder.toString();
+        return builder.toString();
+    }
+
+    private void updateDump(JEditorPane view, String text) {
         SwingUtilities.invokeLater(() -> {
-            evalDump.setText(dump);
-            evalDump.setForeground(Color.BLACK);
+            view.setText(text);
+            view.setForeground(Color.BLACK);
         });
     }
 
