@@ -1,0 +1,6 @@
+{
+    "java.configuration.updateBuildConfiguration": "automatic",
+    "java.test.config": {
+        "vmArgs": ["--illegal-access=permit"]  // required for parboiled; see https://github.com/sirthias/parboiled/issues/175#issuecomment-878331837
+    }
+}

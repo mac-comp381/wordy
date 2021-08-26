@@ -1,0 +1,31 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Launch Current File",
+            "request": "launch",
+            "mainClass": "${file}",
+            "vmArgs": "--illegal-access=permit"  // required for parboiled; see https://github.com/sirthias/parboiled/issues/175#issuecomment-878331837
+        },
+        {
+            "type": "java",
+            "name": "Launch Playground",
+            "request": "launch",
+            "mainClass": "wordy.demo.Playground",
+            "projectName": "wordy",
+            "vmArgs": "--illegal-access=permit"  // required for parboiled; see https://github.com/sirthias/parboiled/issues/175#issuecomment-878331837
+        },
+        {
+            "type": "java",
+            "name": "Launch ShaderUI",
+            "request": "launch",
+            "mainClass": "wordy.demo.shader.ShaderUI",
+            "projectName": "wordy",
+            "vmArgs": "--illegal-access=permit"  // required for parboiled; see https://github.com/sirthias/parboiled/issues/175#issuecomment-878331837
+        }
+    ]
+}
