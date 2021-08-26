@@ -49,7 +49,7 @@ public class WordyParser extends BaseParser<ASTNode> {
         input = input
             .toLowerCase()
             .replaceAll("\\s", " ");
-        ParsingResult<?> result = new ReportingParseRunner(rule).run(input);
+        ParsingResult<T> result = new ReportingParseRunner<T>(rule).run(input);
         if(result.hasErrors())
             throw new ParseException(result);
 
@@ -58,8 +58,7 @@ public class WordyParser extends BaseParser<ASTNode> {
             throw new ParseException("Could not parse");
         if(!expectedOutput.isAssignableFrom(ast.getClass()))
             throw new ParseException("Expected parser to produce " + expectedOutput + ", but got " + ast.getClass());
-        //noinspection unchecked
-        return (T) ast;
+        return ast;
     }
 
     // –––––––––––– Grammar rules ––––––––––––
@@ -88,7 +87,6 @@ public class WordyParser extends BaseParser<ASTNode> {
 
     Rule Conditional() {
         Var<ConditionalNode.Operator> comparisonOperator = new Var<>();
-        Var<StatementNode> ifTrue = new Var<>(), ifFalse = new Var<>();
         return Sequence(
             KeyPhrase("if"), 
             Expression(),
@@ -125,8 +123,6 @@ public class WordyParser extends BaseParser<ASTNode> {
     }
 
     Rule Loop() {
-        Var<ConditionalNode.Operator> comparisonOperator = new Var<>();
-        Var<StatementNode> ifTrue = new Var<>(), ifFalse = new Var<>();
         return Sequence(
             KeyPhrase("loop"),
             OptionalSurroundingSpace(":"),

@@ -3,12 +3,6 @@ package wordy.interpreter;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import wordy.ast.*;
-import wordy.parser.ParseException;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static wordy.parser.WordyParser.parseExpression;

@@ -2,8 +2,6 @@ package wordy.parser;
 
 import org.junit.jupiter.api.Test;
 
-import java.util.List;
-
 import wordy.ast.ASTNode;
 import wordy.ast.AssignmentNode;
 import wordy.ast.BinaryExpressionNode;
@@ -19,7 +17,6 @@ import static wordy.parser.WordyParser.parseExpression;
 import static wordy.parser.WordyParser.parseProgram;
 import static wordy.parser.WordyParser.parseStatement;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.fail;
 
 public class WordyParserTest {
 

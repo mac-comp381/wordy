@@ -29,21 +29,31 @@ public class CompilerTest {
 
     @Test
     void compileBinaryExpression() {
-        assertCompilationEquals("(context.x + 1.0)", parseExpression("x plus 1"));
-        assertCompilationEquals("(2.0 - (context.x + 3.0))", parseExpression("2 minus (x plus 3)"));
-        assertCompilationEquals("((2.0 - context.x) + 3.0)", parseExpression("2 minus x plus 3"));
-        assertCompilationEquals("((1.0 * 2.0) / 3.0)", parseExpression("1 times 2 divided by 3"));
-        assertCompilationEquals(
-            "(Math.pow(context.x,3.0)+Math.pow(context.y,2.0))",
-            parseExpression("x to the power of 3 plus y squared"));
+        assertExpressionCompilesTo(
+            "(context.x + 1.0)",
+            "x plus 1");
+        assertExpressionCompilesTo(
+            "(2.0 - (context.x + 3.0))",
+            "2 minus (x plus 3)");
+        assertExpressionCompilesTo(
+            "((2.0 - context.x) + 3.0)",
+            "2 minus x plus 3");
+        assertExpressionCompilesTo(
+            "((1.0 * 2.0) / 3.0)",
+            "1 times 2 divided by 3");
+        assertExpressionCompilesTo(
+            "(Math.pow(context.x, 3.0) + Math.pow(context.y, 2.0))",
+            "x to the power of 3 plus y squared");
     }
 
     @Test
     void compileAssignment() {
-        assertCompilationEquals("context.foo = 10.0;", parseStatement("set foo to 10"));
-        assertCompilationEquals(
+        assertStatementCompilesTo(
+            "context.foo = 10.0;",
+            "set foo to 10");
+        assertStatementCompilesTo(
             "context.foo = (context.bar - 10.0);",
-            parseStatement("set foo to bar minus 10"));
+            "set foo to bar minus 10");
     }
 
     @Test
@@ -55,44 +65,51 @@ public class CompilerTest {
 
     @Test
     void compileConditional() {
-        assertCompilationEquals(
+        assertStatementCompilesTo(
             "if(context.x < 12.0) context.a = context.x; else context.b = 0.0;",
-            parseStatement("if x is less than 12 then set a to x else set b to 0"));
-        assertCompilationEquals(
+            "if x is less than 12 then set a to x else set b to 0");
+        assertStatementCompilesTo(
             "if(context.x < 12.0) context.a = context.x; else {}",
-            parseStatement("if x is less than 12 then set a to x"));
-        assertCompilationEquals(
+            "if x is less than 12 then set a to x");
+        assertStatementCompilesTo(
             "if(context.x < 12.0) {"
                 + " context.a = context.x; context.b = 1.0; }"
                 + " else { context.a = 1.0; context.b = context.x; }",
-            parseStatement(
-                "if x is less than 12 then:"
+            "if x is less than 12 then:"
                 + " set a to x. set b to 1."
                 + " else: set a to 1. set b to x."
-                + " end of conditional"));
+                + " end of conditional");
     }
 
     @Test
     void compileLoopExit() {
-        assertCompilationEquals(
+        assertStatementCompilesTo(
             "break;",
-            parseStatement("exit loop"));
+            "exit loop");
     }
 
     @Test
     void compileLoop() {
-        assertCompilationEquals(
+        assertStatementCompilesTo(
             "while(true) { context.x = (context.x + 1.0); }",
-            parseStatement("loop: set x to x plus 1. end of loop"));
+            "loop: set x to x plus 1. end of loop");
     }
 
     // ––––––– Helpers –––––––
 
-    private void assertCompilationEquals(String expected, ASTNode ast) {
+    private void assertExpressionCompilesTo(String expectedJavaCode, String wordyExpression) {
+        assertCompilationEquals(expectedJavaCode, parseExpression(wordyExpression));
+    }
+
+    private void assertStatementCompilesTo(String expectedJavaCode, String wordyStatement) {
+        assertCompilationEquals(expectedJavaCode, parseStatement(wordyStatement));
+    }
+
+    private void assertCompilationEquals(String expectedJavaCode, ASTNode ast) {
         var result = new StringWriter();
         var out = new PrintWriter(result);
         ast.compile(out);
-        assertEquals(normalizeWhitespace(expected), normalizeWhitespace(result.toString()));
+        assertEquals(normalizeWhitespace(expectedJavaCode), normalizeWhitespace(result.toString()));
     }
 
     private String normalizeWhitespace(String code) {

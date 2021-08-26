@@ -3,7 +3,6 @@ package wordy.ast;
 import org.parboiled.common.StringUtils;
 
 import java.io.PrintWriter;
-import java.io.StringWriter;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
