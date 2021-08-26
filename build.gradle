@@ -27,6 +27,12 @@ dependencies {
 test {
     useJUnitPlatform()
     jvmArgs '--illegal-access=permit'  // required for parboiled; see https://github.com/sirthias/parboiled/issues/175#issuecomment-878331837
+    testLogging {
+        showStandardStreams = true
+    }
+    afterTest { desc, result -> 
+        logger.quiet "[${desc.className}] ${desc.name}: ${result.resultType}"
+    }
 }
 
 sourceCompatibility = 1.16
