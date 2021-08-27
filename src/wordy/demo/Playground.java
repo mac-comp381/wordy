@@ -153,7 +153,7 @@ public class Playground {
         var compilerOutput = new StringWriter();
         var printer = new PrintWriter(compilerOutput);
         try {
-            WordyCompiler.compile(ast, "PlaygroundCode", printer);
+            WordyCompiler.compile(ast, "PlaygroundCode", "PlaygroundCodeContext", printer);
         } catch(Exception e) {
             updateDump(compilerDump, e);
             return;

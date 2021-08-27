@@ -7,30 +7,26 @@ import wordy.compiler.WordyCompiler;
 import wordy.compiler.WordyExecutable;
 
 class CompiledPixelComputer implements PixelComputer {
-    private final WordyExecutable compiledShader;
-    private final WordyExecutable.ExecutionContext context;
+    private final WordyExecutable<ShaderExecutionContext> compiledShader;
+    private final ShaderExecutionContext context;
 
     public CompiledPixelComputer(StatementNode program, double viewScale) {
-        compiledShader = WordyCompiler.compile(program, "CompiledShader");
+        compiledShader = WordyCompiler.compile(program, "CompiledShader", ShaderExecutionContext.class);
         context = compiledShader.createContext();
-        if (context.hasVariable("view_scale")) {
-            context.set("view_scale", viewScale);
-        }
+        context.set_view_scale(viewScale);
     }
 
     public double computePixel(double x, double y, ColorComponents result) {
-        context.set("x", x);
-        context.set("y", y);
+        context.set_x(x);
+        context.set_y(y);
 
         compiledShader.runUnsafe(context);
 
         result.set(
-            context.get("red"),
-            context.get("green"),
-            context.get("blue"));
+            context.get_red(),
+            context.get_green(),
+            context.get_blue());
 
-        return context.hasVariable("work_done")
-            ? context.get("work_done")
-            : 1.0;
+        return context.get_work_done();
     }
 }

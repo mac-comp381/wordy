@@ -7,10 +7,11 @@ import java.io.StringWriter;
 import java.util.Map;
 
 import wordy.ast.StatementNode;
+import wordy.demo.shader.ShaderExecutionContext;
 import wordy.parser.WordyParser;
 
 public class WordyCompiler {
-    public static void compile(StatementNode program, String className, PrintWriter out) {
+    public static void compile(StatementNode program, String className, String contextInterfaceName, PrintWriter out) {
         out.print(
             """
             import wordy.compiler.WordyExecutable;
@@ -31,72 +32,44 @@ public class WordyCompiler {
                     return new ExecutionContext();
                 }
 
-                public static class ExecutionContext implements WordyExecutable.ExecutionContext {
-            """
+                public static class ExecutionContext implements %s {
+            """.formatted(contextInterfaceName)
         );
         for(var variable: program.findAllVariables()) {
-            out.println("        public double " + variable.name + ";");
+            out.println("        private double " + variable.name + ";");
         }
-        out.print(
-            """
+        out.println();
+        for(var variable: program.findAllVariables()) {
+            out.println(
+                """
+                        public double get_%1$s() {
+                            return %1$s;
+                        }
 
-                    public boolean hasVariable(String variable) {
-            """);
-        for(var variable: program.findAllVariables()) {
-            out.printf(
-                """
-                            if ("%1$s".equals(variable)) {
-                                return true;
-                            }
-                """, variable.name);
+                        public void set_%1$s(double %1$s) {
+                            this.%1$s = %1$s;
+                        }
+                """.formatted(variable.name)
+            );
         }
         out.print(
             """
-                        return false;
-                    }
-
-                    public Double get(String variable) {
-            """);
-        for(var variable: program.findAllVariables()) {
-            out.printf(
-                """
-                            if ("%1$s".equals(variable)) {
-                                return %1$s;
-                            }
-                """, variable.name);
-        }
-        out.print(
-            """
-                        throw new IllegalArgumentException("No such variable: " + variable);
-                    }
-            
-                    public void set(String variable, Double value) {
-            """);
-        for(var variable: program.findAllVariables()) {
-            out.printf(
-                """
-                            if ("%1$s".equals(variable)) {
-                                %1$s = value;
-                                return;
-                            }
-                """, variable.name);
-        }
-        out.print(
-            """
-                        throw new IllegalArgumentException("No such variable: " + variable);
-                    }
                 }
             }
             """
         );
     }
 
-    public static WordyExecutable<?> compile(StatementNode program, String className) {
+    public static <Context extends WordyExecutable.ExecutionContext> WordyExecutable<Context> compile(
+        StatementNode program,
+        String className,
+        Class<Context> shaderExecutionContextClass
+    ) {
         var javaSource = new StringWriter();
-        compile(program, className, new PrintWriter(javaSource));
+        compile(program, className, shaderExecutionContextClass.getName(), new PrintWriter(javaSource));
         try {
             //noinspection unchecked
-            var compiledClass = (Class<? extends WordyExecutable<?>>)
+            var compiledClass = (Class<? extends WordyExecutable<Context>>)
                 CompilerUtils.CACHED_COMPILER.loadFromJava(
                     WordyCompiler.class.getClassLoader(),
                     className,

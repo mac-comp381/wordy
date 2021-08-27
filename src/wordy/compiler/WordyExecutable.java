@@ -13,8 +13,5 @@ public interface WordyExecutable<Context extends WordyExecutable.ExecutionContex
     }
 
     interface ExecutionContext {
-        boolean hasVariable(String variable);
-        Double get(String variable);
-        void set(String variable, Double value);
     }
 }
