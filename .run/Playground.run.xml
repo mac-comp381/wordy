@@ -1,0 +1,16 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="Playground" type="Application" factoryName="Application" nameIsGenerated="true">
+    <option name="MAIN_CLASS_NAME" value="wordy.demo.Playground" />
+    <module name="wordy.main" />
+    <option name="VM_PARAMETERS" value="--illegal-access=permit" />
+    <extension name="coverage">
+      <pattern>
+        <option name="PATTERN" value="wordy.demo.*" />
+        <option name="ENABLED" value="true" />
+      </pattern>
+    </extension>
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>
