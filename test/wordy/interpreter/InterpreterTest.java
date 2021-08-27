@@ -1,5 +1,6 @@
 package wordy.interpreter;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -14,6 +15,7 @@ import static wordy.parser.WordyParser.parseExpression;
 import static wordy.parser.WordyParser.parseProgram;
 import static wordy.parser.WordyParser.parseStatement;
 
+@Disabled
 public class InterpreterTest {
     private EvaluationContext context = new EvaluationContext();
 
