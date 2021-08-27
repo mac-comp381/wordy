@@ -1,7 +1,5 @@
 package wordy.ast;
 
-import org.parboiled.common.StringUtils;
-
 import java.io.PrintWriter;
 import java.util.HashSet;
 import java.util.Map;
@@ -36,20 +34,32 @@ public abstract class ASTNode {
     public abstract int hashCode();
 
     public String dump() {
-        return dump(new StringBuffer(), "", 0).toString();
+        return dump(new StringBuffer(), null, "", true).toString();
     }
 
-    private StringBuffer dump(StringBuffer out, String label, int indent) {
-        out.append(" ".repeat(indent));
-        if(!StringUtils.isEmpty(label)) {
+    private StringBuffer dump(StringBuffer out, String label, String indent, boolean lastChild) {
+        out.append(indent);
+
+        if(label != null) {  // null label means root node
+            // Draw tree lines
+            out.append(lastChild ? "└─" : "├─");
+            indent += lastChild ? "  " : "│ ";
+
             out.append(label);
             out.append(": ");
+
+            // Indent children past label
+            indent += " ".repeat(label.length() + 2);
         }
-        out.append(getClass().getSimpleName().replaceFirst("Node$", ""));
+
+        out.append(getClass().getSimpleName());
+        out.append(' ');
         out.append(describeAttributes());
         out.append('\n');
-        for(var entry : getChildren().entrySet()) {
-            entry.getValue().dump(out, entry.getKey(), indent + 2);
+
+        for(var childIter = getChildren().entrySet().iterator(); childIter.hasNext(); ) {
+            var entry = childIter.next();
+            entry.getValue().dump(out, entry.getKey(), indent, !childIter.hasNext());
         }
         return out;
     }

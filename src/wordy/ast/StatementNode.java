@@ -6,7 +6,7 @@ import wordy.interpreter.EvaluationContext;
 
 public abstract class StatementNode extends ASTNode {
     public void run(EvaluationContext context) {
-        throw new UnsupportedOperationException("not implemented yet for " + getClass());
+        throw new UnsupportedOperationException("Interpreter not implemented yet for " + getClass().getSimpleName());
     }
 
     public void compileProgram(String className, PrintWriter out) {

@@ -1,6 +1,7 @@
 package wordy.demo;
 
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GraphicsEnvironment;
@@ -14,11 +15,12 @@ import java.util.Set;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
-import javax.swing.JEditorPane;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.JTabbedPane;
+import javax.swing.JTextArea;
 import javax.swing.SwingUtilities;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
@@ -32,7 +34,7 @@ import wordy.parser.WordyParser;
 import static java.awt.Font.PLAIN;
 
 public class Playground {
-    private JEditorPane codeEditor, astDump, evalDump, compilerDump;
+    private JTextArea codeEditor, astDump, interpreterDump, compilerDump;
     private StatementNode currentAST;
     private Executor codeExecutionQueue = Executors.newFixedThreadPool(1);
 
@@ -41,7 +43,7 @@ public class Playground {
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         window.setSize(1000, screenSize.height);
 
-        codeEditor = new JEditorPane();
+        codeEditor = new JTextArea();
         codeEditor.setText(
             "Set a to 1.\n"
             + "Set b to 1.\n"
@@ -54,18 +56,18 @@ public class Playground {
             + "    Set count to count minus 1.\n"
             + "End of loop.\n");
 
-        astDump = new JEditorPane();
+        astDump = new JTextArea();
         astDump.setEditable(false);
 
-        evalDump = new JEditorPane();
-        evalDump.setEditable(false);
+        interpreterDump = new JTextArea();
+        interpreterDump.setEditable(false);
 
-        compilerDump = new JEditorPane();
+        compilerDump = new JTextArea();
         compilerDump.setEditable(false);
 
         styleTextArea(codeEditor);
         styleTextArea(astDump);
-        styleTextArea(evalDump);
+        styleTextArea(interpreterDump);
         styleTextArea(compilerDump);
 
         codeEditor.getDocument().addDocumentListener(
@@ -89,12 +91,14 @@ public class Playground {
         codeChanged();
 
         JTabbedPane outputTabs = new JTabbedPane();
-        outputTabs.add("AST", astDump);
-        outputTabs.add("Interpreted", evalDump);
-        outputTabs.add("Compiled", compilerDump);
+        outputTabs.add("AST", new JScrollPane(astDump));
+        outputTabs.add("Interpreted", new JScrollPane(interpreterDump));
+        outputTabs.add("Compiled", new JScrollPane(compilerDump));
+        outputTabs.setBackground(new Color(160, 255, 240));
+        outputTabs.setForeground(Color.BLACK);
 
-        var mainSplit = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, codeEditor, outputTabs);
-        mainSplit.setDividerLocation(window.getWidth() / 2);
+        var mainSplit = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, new JScrollPane(codeEditor), outputTabs);
+        mainSplit.setDividerLocation(window.getWidth() * 1 / 3);
         window.add(mainSplit);
 
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -103,7 +107,7 @@ public class Playground {
 
     private void codeChanged() {
         astDump.setForeground(Color.GRAY);
-        evalDump.setForeground(Color.GRAY);
+        interpreterDump.setForeground(Color.GRAY);
 
         StatementNode ast;
         try {
@@ -136,7 +140,7 @@ public class Playground {
         }
         codeExecutionQueue.execute(() -> {
             updateCompilerDump(ast);
-            updateEvalDump(ast);
+            updateInterpreterDump(ast);
         });
     }
 
@@ -146,17 +150,13 @@ public class Playground {
         try {
             ast.compileProgram("PlaygroundCode", printer);
         } catch(Exception e) {
-            printer.println();
-            printer.println();
-            printer.println("–––––– Compilation failed ––––––");
-            printer.println();
-            e.printStackTrace(printer);
+            updateDump(compilerDump, e);
+            return;
         }
-
         updateDump(compilerDump, compilerOutput.toString());
     }
 
-    private void updateEvalDump(StatementNode executingAST) {
+    private void updateInterpreterDump(StatementNode executingAST) {
         var context = new EvaluationContext((node, ctx) -> {
             synchronized(Playground.this) {
                 if(executingAST != currentAST)
@@ -168,9 +168,12 @@ public class Playground {
             executingAST.run(context);
         } catch(ExecutionCancelledException e) {
             return;
+        } catch(Exception e) {
+            updateDump(interpreterDump, e);
+            return;
         }
 
-        updateDump(evalDump, dumpContext(context));
+        updateDump(interpreterDump, dumpContext(context));
     }
 
     private String dumpContext(EvaluationContext context) {
@@ -184,16 +187,27 @@ public class Playground {
         return builder.toString();
     }
 
-    private void updateDump(JEditorPane view, String text) {
+    private void updateDump(JTextArea view, String text) {
         SwingUtilities.invokeLater(() -> {
             view.setText(text);
             view.setForeground(Color.BLACK);
         });
     }
 
-    private void styleTextArea(JEditorPane textArea) {
-        textArea.setFont(findFont(11, "Zargle", "Menlo", "Consolas", Font.MONOSPACED));
+    private void updateDump(JTextArea view, Exception error) {
+        var output = new StringWriter();
+        var printer = new PrintWriter(output);
+        printer.println();
+        printer.println("–––––– FAILED ––––––");
+        printer.println();
+        error.printStackTrace(printer);
+        updateDump(view, output.toString());
+    }
+
+    private void styleTextArea(JTextArea textArea) {
+        textArea.setFont(findFont(11, "Menlo", "Consolas", Font.MONOSPACED));
         textArea.setMargin(new Insets(10, 10, 10, 10));
+        textArea.setLineWrap(false);
     }
 
     private Set<String> availableFonts = new HashSet<>(Arrays.asList(
