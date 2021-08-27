@@ -26,6 +26,7 @@ import javax.swing.event.DocumentListener;
 import javax.swing.text.DefaultHighlighter;
 
 import wordy.ast.StatementNode;
+import wordy.compiler.WordyCompiler;
 import wordy.interpreter.EvaluationContext;
 import wordy.parser.ParseException;
 import wordy.parser.WordyParser;
@@ -152,7 +153,7 @@ public class Playground {
         var compilerOutput = new StringWriter();
         var printer = new PrintWriter(compilerOutput);
         try {
-            ast.compileProgram("PlaygroundCode", printer);
+            WordyCompiler.compile(ast, "PlaygroundCode", printer);
         } catch(Exception e) {
             updateDump(compilerDump, e);
             return;
