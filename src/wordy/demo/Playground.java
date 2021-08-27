@@ -1,7 +1,6 @@
 package wordy.demo;
 
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GraphicsEnvironment;
@@ -34,9 +33,12 @@ import wordy.parser.WordyParser;
 import static java.awt.Font.PLAIN;
 
 public class Playground {
-    private JTextArea codeEditor, astDump, interpreterDump, compilerDump;
+    private final JTextArea codeEditor;
+    private final JTextArea astDump;
+    private final JTextArea interpreterDump;
+    private final JTextArea compilerDump;
     private StatementNode currentAST;
-    private Executor codeExecutionQueue = Executors.newFixedThreadPool(1);
+    private final Executor codeExecutionQueue = Executors.newFixedThreadPool(1);
 
     public Playground() {
         JFrame window = new JFrame("Wordy IDE");
@@ -45,16 +47,18 @@ public class Playground {
 
         codeEditor = new JTextArea();
         codeEditor.setText(
-            "Set a to 1.\n"
-            + "Set b to 1.\n"
-            + "Set count to 10.\n"
-            + "Loop:\n"
-            + "    If count is less than 1 then exit loop.\n"
-            + "    Set next to a plus b.\n"
-            + "    Set a to b.\n"
-            + "    Set b to next.\n"
-            + "    Set count to count minus 1.\n"
-            + "End of loop.\n");
+            """
+            Set a to 1.
+            Set b to 1.
+            Set count to 10.
+            Loop:
+                If count is less than 1 then exit loop.
+                Set next to a plus b.
+                Set a to b.
+                Set b to next.
+                Set count to count minus 1.
+            End of loop.
+            """);
 
         astDump = new JTextArea();
         astDump.setEditable(false);
@@ -98,7 +102,7 @@ public class Playground {
         outputTabs.setForeground(Color.BLACK);
 
         var mainSplit = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, new JScrollPane(codeEditor), outputTabs);
-        mainSplit.setDividerLocation(window.getWidth() * 1 / 3);
+        mainSplit.setDividerLocation(window.getWidth() / 3);
         window.add(mainSplit);
 
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -118,7 +122,6 @@ public class Playground {
 
             reevaluate(ast);
         } catch(ParseException e) {
-            ast = null;
             var error = e.getFirstError();
             var errorHighlight = new DefaultHighlighter.DefaultHighlightPainter(new Color(0xFF8866));
             try {
@@ -130,7 +133,8 @@ public class Playground {
                 // sometimes highlighting just doesn't work
             }
         } catch(Exception e) {
-            ast = null;
+            // Don't let internal parser errors kill UI
+            e.printStackTrace(System.err);
         }
     }
 
@@ -210,7 +214,7 @@ public class Playground {
         textArea.setLineWrap(false);
     }
 
-    private Set<String> availableFonts = new HashSet<>(Arrays.asList(
+    private final Set<String> availableFonts = new HashSet<>(Arrays.asList(
         GraphicsEnvironment.getLocalGraphicsEnvironment().getAvailableFontFamilyNames()));
 
     private Font findFont(int size, String... namesToTry) {

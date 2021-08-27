@@ -24,7 +24,7 @@ import wordy.ast.StatementNode;
 import wordy.ast.VariableNode;
 
 /**
- * Parses programs or program framgments in the Enshader language.
+ * Parses programs or program fragments in the Wordy language.
  * <p>
  * Large portions adapted from: https://github.com/sirthias/parboiled/tree/master/examples-java/src/main/java/org/parboiled/examples/calculators/
  */

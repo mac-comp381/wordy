@@ -11,7 +11,7 @@ import static wordy.parser.WordyParser.parseStatement;
 
 @Disabled
 public class InterpreterTest {
-    private EvaluationContext context = new EvaluationContext();
+    private final EvaluationContext context = new EvaluationContext();
 
     @Test
     void evaluateConstant() {

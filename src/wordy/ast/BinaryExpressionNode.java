@@ -7,7 +7,7 @@ import static wordy.ast.Utils.orderedMap;
 
 public class BinaryExpressionNode extends ExpressionNode {
     public enum Operator {
-        ADDITION, SUBTRACTION, MULTIPLICATION, DIVISION, EXPONENTIATION;
+        ADDITION, SUBTRACTION, MULTIPLICATION, DIVISION, EXPONENTIATION
     }
 
     public final Operator operator;

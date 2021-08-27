@@ -102,7 +102,7 @@ public class ShaderUI {
     }
 
     private static class ImageWindow extends JFrame {
-        private BufferedImage image;
+        private final BufferedImage image;
 
         public ImageWindow(String title, BufferedImage image, int pixelRatio) throws HeadlessException {
             super(title);

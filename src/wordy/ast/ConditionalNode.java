@@ -11,7 +11,7 @@ import static wordy.ast.Utils.orderedMap;
 public class ConditionalNode extends StatementNode {
     public enum Operator {
         EQUALS, LESS_THAN, GREATER_THAN
-    };
+    }
 
     public final Operator operator;
     public final ExpressionNode lhs, rhs;
