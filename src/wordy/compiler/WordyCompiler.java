@@ -14,8 +14,6 @@ public class WordyCompiler {
         out.print(
             """
             import wordy.compiler.WordyExecutable;
-            import java.util.Map;
-            import java.util.LinkedHashMap;
             
             public class %1$s implements WordyExecutable<%1$s.ExecutionContext> {
                 public void run(ExecutionContext context) {
@@ -42,28 +40,50 @@ public class WordyCompiler {
         out.print(
             """
 
-                    public Map<String,Double> toMap() {
-                        Map<String,Double> result = new LinkedHashMap<>();
-            """);
-        for(var variable: program.findAllVariables()) {
-            out.printf("            result.put(\"%1$s\", %1$s);\n", variable.name);
-        }
-        out.print(
-            """
-                        return result;
-                    }
-            
-                    public void updateFromMap(Map<String,Double> values) {
+                    public boolean hasVariable(String variable) {
             """);
         for(var variable: program.findAllVariables()) {
             out.printf(
                 """
-                            if (values.containsKey("%1$s"))
-                                %1$s = values.get("%1$s");
+                            if ("%1$s".equals(variable)) {
+                                return true;
+                            }
                 """, variable.name);
         }
         out.print(
             """
+                        return false;
+                    }
+
+                    public Double get(String variable) {
+            """);
+        for(var variable: program.findAllVariables()) {
+            out.printf(
+                """
+                            if ("%1$s".equals(variable)) {
+                                return %1$s;
+                            }
+                """, variable.name);
+        }
+        out.print(
+            """
+                        throw new IllegalArgumentException("No such variable: " + variable);
+                    }
+            
+                    public void set(String variable, Double value) {
+            """);
+        for(var variable: program.findAllVariables()) {
+            out.printf(
+                """
+                            if ("%1$s".equals(variable)) {
+                                %1$s = value;
+                                return;
+                            }
+                """, variable.name);
+        }
+        out.print(
+            """
+                        throw new IllegalArgumentException("No such variable: " + variable);
                     }
                 }
             }
@@ -85,15 +105,5 @@ public class WordyCompiler {
         } catch(Exception e) {
             throw new CompilationException(e, program, javaSource.toString());
         }
-    }
-
-    public static void main(String[] args) throws Exception {
-        var executable = compile(WordyParser.parseProgram("Set x to y plus 2."), "TestProgram");
-        var context = executable.createContext();
-        context.updateFromMap(Map.of("y", 7.0));
-        executable.runUnsafe(context);
-        System.out.println("––––––––––––––––––––––");
-        System.out.println(context.toMap());
-        System.out.println("––––––––––––––––––––––");
     }
 }
