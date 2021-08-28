@@ -91,11 +91,12 @@ public class ShaderUI {
         }
 
         renderer.onProgress(() -> {
-            window.repaint(100);
             synchronized(this) {
-                if(renderer != currentRenderer)
+                if(renderer != currentRenderer) {
                     throw new ExecutionCancelledException();
+                }
             }
+            window.repaint(100);
         });
 
         renderWorker.execute(renderer);

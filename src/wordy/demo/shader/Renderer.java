@@ -30,6 +30,7 @@ final class Renderer implements Runnable {
         System.out.println("Rendering...");
         System.out.flush();
         var timer = System.currentTimeMillis();
+        long nextUpdateTime = 0;
 
         try {
             ColorComponents color = new ColorComponents();
@@ -45,12 +46,16 @@ final class Renderer implements Runnable {
                     workSinceProgressReport += Math.max(workDone, 0) + 40;
                     if(workSinceProgressReport > 100000) {
                         workSinceProgressReport = 0;
-                        progressCallback.run();
+                        if (System.currentTimeMillis() > nextUpdateTime) {
+                            nextUpdateTime = System.currentTimeMillis() + 50;
+                            progressCallback.run();
+                        }
                     }
                 }
             }
             System.out.println("Done rendering (" + (System.currentTimeMillis() - timer) + "ms)");
             System.out.println();
+            progressCallback.run();
         } catch(ExecutionCancelledException e) {
             System.out.println("Rendering cancelled");
             System.out.println();
