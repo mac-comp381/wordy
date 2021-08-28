@@ -75,6 +75,20 @@ public class Playground {
         styleTextArea(interpreterDump);
         styleTextArea(compilerDump);
 
+        JTabbedPane outputTabs = new JTabbedPane();
+        outputTabs.add("AST", new JScrollPane(astDump));
+        outputTabs.add("Interpreted", new JScrollPane(interpreterDump));
+        outputTabs.add("Compiled", new JScrollPane(compilerDump));
+        outputTabs.setBackground(new Color(160, 255, 240));
+        outputTabs.setForeground(Color.BLACK);
+
+        var mainSplit = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, new JScrollPane(codeEditor), outputTabs);
+        mainSplit.setDividerLocation(window.getWidth() / 3);
+        window.add(mainSplit);
+
+        window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        window.setVisible(true);
+
         codeEditor.getDocument().addDocumentListener(
             new DocumentListener() {
                 @Override
@@ -94,20 +108,6 @@ public class Playground {
             }
         );
         codeChanged();
-
-        JTabbedPane outputTabs = new JTabbedPane();
-        outputTabs.add("AST", new JScrollPane(astDump));
-        outputTabs.add("Interpreted", new JScrollPane(interpreterDump));
-        outputTabs.add("Compiled", new JScrollPane(compilerDump));
-        outputTabs.setBackground(new Color(160, 255, 240));
-        outputTabs.setForeground(Color.BLACK);
-
-        var mainSplit = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, new JScrollPane(codeEditor), outputTabs);
-        mainSplit.setDividerLocation(window.getWidth() / 3);
-        window.add(mainSplit);
-
-        window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        window.setVisible(true);
     }
 
     private void codeChanged() {
@@ -162,11 +162,21 @@ public class Playground {
     }
 
     private void updateInterpreterDump(StatementNode executingAST) {
-        var context = new EvaluationContext((node, ctx) -> {
+        final StringBuilder builder = new StringBuilder();
+
+        var context = new EvaluationContext((node, ctx, phase, result) -> {
             synchronized(Playground.this) {
-                if(executingAST != currentAST)
-                    throw new ExecutionCancelledException();
+            if(executingAST != currentAST)
+                throw new ExecutionCancelledException();
             }
+
+            builder.append("%-10s".formatted(phase.name()));
+            builder.append(node);
+            if (result != null) {
+                builder.append("\n          → ");
+                builder.append(result);
+            }
+            builder.append("\n");
         });
 
         try {
@@ -178,18 +188,15 @@ public class Playground {
             return;
         }
 
-        updateDump(interpreterDump, dumpContext(context));
-    }
-
-    private String dumpContext(EvaluationContext context) {
-        StringBuilder builder = new StringBuilder();
+        builder.append("\nExecution complete.\n\nResulting EvaluationContext:\n");
         for(var variableEntry: context.allVariables().entrySet()) {
+            builder.append("  ");
             builder.append(variableEntry.getKey());
             builder.append(" = ");
             builder.append(variableEntry.getValue());
             builder.append('\n');
         }
-        return builder.toString();
+        updateDump(interpreterDump, builder.toString());
     }
 
     private void updateDump(JTextArea view, String text) {

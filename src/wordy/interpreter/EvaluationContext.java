@@ -3,20 +3,19 @@ package wordy.interpreter;
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.function.BiConsumer;
 
 import wordy.ast.ASTNode;
 
 public class EvaluationContext {
     private final Map<String,Double> variables = new LinkedHashMap<>();
-    private final BiConsumer<ASTNode, EvaluationContext> tracer;
+    private final Tracer tracer;
 
-    public EvaluationContext(BiConsumer<ASTNode, EvaluationContext> tracer) {
+    public EvaluationContext(Tracer tracer) {
         this.tracer = tracer;
     }
 
     public EvaluationContext() {
-        this((node, ctx) -> { });
+        this((node, ctx, phase, result) -> { });
     }
 
     public double get(String name) {
@@ -32,7 +31,17 @@ public class EvaluationContext {
         return Collections.unmodifiableMap(variables);
     }
 
-    public void trace(ASTNode astNode) {
-        tracer.accept(astNode, this);
+    public void trace(ASTNode astNode, Tracer.Phase phase) {
+        tracer.traceNode(astNode, this, phase, null);
+    }
+
+    public void trace(ASTNode astNode, Tracer.Phase phase, Object result) {
+        tracer.traceNode(astNode, this, phase, result);
+    }
+
+    public interface Tracer {
+        void traceNode(ASTNode astNode, EvaluationContext evaluationContext, Phase phase, Object result);
+
+        enum Phase { STARTED, COMPLETED }
     }
 }
