@@ -9,6 +9,9 @@ import java.io.StringWriter;
 import wordy.ast.ASTNode;
 import wordy.ast.ConstantNode;
 import wordy.ast.VariableNode;
+import wordy.compiler.WordyCompiler;
+import wordy.compiler.WordyExecutable;
+import wordy.demo.shader.ShaderExecutionContext;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static wordy.parser.WordyParser.parseExpression;
@@ -93,6 +96,25 @@ public class CompilerTest {
         assertStatementCompilesTo(
             "while(true) { context.x = (context.x + 1.0); }",
             "loop: set x to x plus 1. end of loop");
+    }
+
+    @Test
+    void executeCompiledCode() {
+        WordyExecutable<TestContext> executable = WordyCompiler.compile(
+            parseProgram("Set z to 3. Set x to y times z."),
+            "TestProgram",
+            TestContext.class);
+        assertEquals("TestProgram", executable.getClass().getName());
+
+        TestContext context = executable.createContext();
+        context.set_y(127);
+        executable.run(context);
+        assertEquals(381, context.get_x());
+    }
+
+    public static interface TestContext extends WordyExecutable.ExecutionContext {
+        void set_y(double y);
+        double get_x();
     }
 
     // ––––––– Helpers –––––––

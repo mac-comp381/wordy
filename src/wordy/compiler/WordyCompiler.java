@@ -63,10 +63,10 @@ public class WordyCompiler {
     public static <Context extends WordyExecutable.ExecutionContext> WordyExecutable<Context> compile(
         StatementNode program,
         String className,
-        Class<Context> shaderExecutionContextClass
+        Class<Context> executionContextInterface
     ) {
         var javaSource = new StringWriter();
-        compile(program, className, shaderExecutionContextClass.getName(), new PrintWriter(javaSource));
+        compile(program, className, executionContextInterface.getCanonicalName(), new PrintWriter(javaSource));
         try {
             //noinspection unchecked
             var compiledClass = (Class<? extends WordyExecutable<Context>>)

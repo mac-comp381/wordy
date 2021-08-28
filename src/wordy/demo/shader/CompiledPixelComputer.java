@@ -20,7 +20,7 @@ class CompiledPixelComputer implements PixelComputer {
         context.set_x(x);
         context.set_y(y);
 
-        compiledShader.runUnsafe(context);
+        compiledShader.run(context);
 
         result.set(
             context.get_red(),

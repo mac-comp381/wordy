@@ -1,5 +1,7 @@
 package wordy.compiler;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.io.PrintWriter;
 
 class IndentingPrintWriter extends PrintWriter {
@@ -12,7 +14,7 @@ class IndentingPrintWriter extends PrintWriter {
     }
 
     @Override
-    public void write(String s, int off, int len) {
+    public void write(@NotNull String s, int off, int len) {
         if (indentPending) {
             indentPending = false;
             super.write(linePrefix);

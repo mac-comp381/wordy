@@ -7,11 +7,5 @@ public interface WordyExecutable<Context extends WordyExecutable.ExecutionContex
 
     void run(Context context);
 
-    @SuppressWarnings("unchecked")
-    default void runUnsafe(Object unsafeContext) {
-        run ((Context) unsafeContext);
-    }
-
-    interface ExecutionContext {
-    }
+    interface ExecutionContext { }
 }
