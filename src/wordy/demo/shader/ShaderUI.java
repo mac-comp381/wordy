@@ -13,6 +13,7 @@ import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
 import javax.swing.JFrame;
+import javax.swing.SwingUtilities;
 
 import wordy.ast.StatementNode;
 import wordy.demo.ExecutionCancelledException;
@@ -40,7 +41,7 @@ public class ShaderUI {
     public ShaderUI(String sourceFileName, int width, int height) throws Exception {
         program = loadProgram("/" + sourceFileName);
 
-        int pixelRatio = 2;
+        final int pixelRatio = 2;
         image = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
         window = new ImageWindow(sourceFileName, image, pixelRatio);
 
@@ -52,13 +53,12 @@ public class ShaderUI {
             @Override
             @SuppressWarnings("IntegerDivisionInFloatingPointContext")
             public void mouseClicked(MouseEvent e) {
-                centerX = (e.getX() * pixelRatio - width  / 2) * scale + centerX;
-                centerY = (e.getY() * pixelRatio - height / 2) * scale + centerY;
-                if(e.isAltDown()) {
-                    scale *= 4;
-                } else {
-                    scale /= 4;
-                }
+                double x = (e.getX() - window.getInsets().left) * pixelRatio - width  / 2;
+                double y = (e.getY() - window.getInsets().top)  * pixelRatio - height / 2;
+                double newScale = scale * (e.isAltDown() ? 3.0 : 1/3.0);
+                centerX += x * (scale - newScale);
+                centerY += y * (scale - newScale);
+                scale = newScale;
                 render();
             }
         });
@@ -103,10 +103,12 @@ public class ShaderUI {
 
     private static class ImageWindow extends JFrame {
         private final BufferedImage image;
+        private final int pixelRatio;
 
         public ImageWindow(String title, BufferedImage image, int pixelRatio) throws HeadlessException {
             super(title);
             this.image = image;
+            this.pixelRatio = pixelRatio;
             pack();
             setSize(
                 image.getWidth()  / pixelRatio + getInsets().left + getInsets().right,
@@ -117,7 +119,7 @@ public class ShaderUI {
 
         @Override
         public void paint(Graphics g) {
-            g.drawImage(image, getInsets().left, getInsets().top, getWidth(), getHeight(), null);
+            g.drawImage(image, getInsets().left, getInsets().top, image.getWidth() / pixelRatio, image.getHeight() / pixelRatio, null);
         }
     }
 }
