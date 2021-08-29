@@ -4,6 +4,10 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.PrintWriter;
 
+/**
+ * A helper to produce better-formatted Java output. Prefixes each line of output with a given
+ * indent string.
+ */
 class IndentingPrintWriter extends PrintWriter {
     private final String linePrefix;
     private boolean indentPending = true;

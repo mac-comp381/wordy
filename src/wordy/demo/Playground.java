@@ -150,15 +150,12 @@ public class Playground {
     }
 
     private void updateCompilerDump(StatementNode ast) {
-        var compilerOutput = new StringWriter();
-        var printer = new PrintWriter(compilerOutput);
         try {
-            WordyCompiler.compile(ast, "PlaygroundCode", "PlaygroundCodeContext", printer);
+            updateDump(compilerDump, WordyCompiler.compile(ast, "PlaygroundCode", "PlaygroundCodeContext"));
         } catch(Exception e) {
             updateDump(compilerDump, e);
             return;
         }
-        updateDump(compilerDump, compilerOutput.toString());
     }
 
     private void updateInterpreterDump(StatementNode executingAST) {

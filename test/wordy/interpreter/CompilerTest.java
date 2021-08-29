@@ -11,7 +11,6 @@ import wordy.ast.ConstantNode;
 import wordy.ast.VariableNode;
 import wordy.compiler.WordyCompiler;
 import wordy.compiler.WordyExecutable;
-import wordy.demo.shader.ShaderExecutionContext;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static wordy.parser.WordyParser.parseExpression;
@@ -98,6 +97,7 @@ public class CompilerTest {
             "loop: set x to x plus 1. end of loop");
     }
 
+    // Full end-to-end test; other tests here just check generated code.
     @Test
     void executeCompiledCode() {
         WordyExecutable<TestContext> executable = WordyCompiler.compile(
@@ -134,6 +134,8 @@ public class CompilerTest {
         assertEquals(normalizeWhitespace(expectedJavaCode), normalizeWhitespace(result.toString()));
     }
 
+    // Permits non-significant whitespace differences between expected values in these tests and the
+    // actual compiler output
     private String normalizeWhitespace(String code) {
         return code
             .replaceAll("([^A-Za-z]|^)\\s+", "$1")

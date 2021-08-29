@@ -4,7 +4,16 @@ import java.util.Collections;
 import java.util.Map;
 import java.util.Objects;
 
+/**
+ * A variable reference (e.g. “x”) in a Wordy abstract syntax tree. Note that this is a variable
+ * _usage_; Wordy does not have variable _declarations_.
+ * 
+ * This expression evaluates to the current value of the variable.
+ */
 public class VariableNode extends ExpressionNode {
+    /**
+     * The name of the variable whose value this expression retrieves.
+     */
     public final String name;
 
     public VariableNode(String name) {

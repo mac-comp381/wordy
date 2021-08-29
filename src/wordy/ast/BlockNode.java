@@ -6,13 +6,19 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
+/**
+ * A sequence of zero or more sequentially executed statements in a Wordy abstract syntax tree.
+ */
 public class BlockNode extends StatementNode {
+    /**
+     * A BlockNode containing zero statements.
+     */
     public static final BlockNode EMPTY = new BlockNode();
 
     public final List<StatementNode> statements;
 
     public BlockNode(List<StatementNode> statements) {
-        this.statements = statements;
+        this.statements = List.copyOf(statements);
     }
 
     public BlockNode(StatementNode... statements) {

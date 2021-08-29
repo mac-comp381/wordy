@@ -3,6 +3,10 @@ package wordy.ast;
 import java.util.Map;
 import java.util.Objects;
 
+/**
+ * Wordy’s only looping construct, essentially an infinite while loop. Repeatedly runs the `body`
+ * statement until it encounters a LoopExitNode.
+ */
 public class LoopNode extends StatementNode {
     public final StatementNode body;
 

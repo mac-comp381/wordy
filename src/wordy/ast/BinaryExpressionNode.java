@@ -5,6 +5,9 @@ import java.util.Objects;
 
 import static wordy.ast.Utils.orderedMap;
 
+/**
+ * Two expressions joined by an operator (e.g. “x plus y”) in a Wordy abstract syntax tree.
+ */
 public class BinaryExpressionNode extends ExpressionNode {
     public enum Operator {
         ADDITION, SUBTRACTION, MULTIPLICATION, DIVISION, EXPONENTIATION

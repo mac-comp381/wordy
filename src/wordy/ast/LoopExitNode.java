@@ -3,6 +3,10 @@ package wordy.ast;
 import java.util.Collections;
 import java.util.Map;
 
+/**
+ * A statement that causes program flow to exit the nearest-nested loop. Often called “break” in
+ * other languages.
+ */
 public final class LoopExitNode extends StatementNode {
     public LoopExitNode() {
     }

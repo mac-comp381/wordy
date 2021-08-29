@@ -6,13 +6,28 @@ import java.util.Map;
 import java.util.Set;
 import java.util.function.Consumer;
 
+/**
+ * A node in the abstract syntax tree of a parser Wordy program.
+ */
 public abstract class ASTNode {
+    /**
+     * Returns all the children of this node (immediate children, not all descendants).
+     * @return A map whose values are child nodes, and whose keys are human-readable labels that
+     *         uniquely identify each child node’s role.
+     */
     public abstract Map<String, ASTNode> getChildren();
 
+    /**
+     * Translates this node and its descendants into Java code.
+     */
     public void compile(PrintWriter out) {
         throw new UnsupportedOperationException("Compilation not implemented yet for " + getClass().getSimpleName());
     }
 
+    /**
+     * Returns the set of all unique (by name) VariableNodes in this node's subtree. The results
+     * include this node itself if it is a VariableNode.
+     */
     public Set<VariableNode> findAllVariables() {
         Set<VariableNode> results = new HashSet<>();
         forEachVariable(results::add);
@@ -22,7 +37,7 @@ public abstract class ASTNode {
     private void forEachVariable(Consumer<VariableNode> consumer) {
         if(this instanceof VariableNode)
             consumer.accept((VariableNode) this);
-        for(var child: getChildren().values()) {
+        for(var child : getChildren().values()) {
             child.forEachVariable(consumer);
         }
     }
@@ -33,6 +48,9 @@ public abstract class ASTNode {
     @Override
     public abstract int hashCode();
 
+    /**
+     * Generates a multiline string indicating the tree structure of this node and its descendants.
+     */
     public String dump() {
         return dump(new StringBuffer(), null, "", true).toString();
     }
@@ -45,6 +63,7 @@ public abstract class ASTNode {
             out.append(lastChild ? "└─" : "├─");
             indent += lastChild ? "  " : "│ ";
 
+            // Identify this node with the label from its parent’s getChildren() method
             out.append(label);
             out.append(": ");
 
@@ -64,6 +83,9 @@ public abstract class ASTNode {
         return out;
     }
 
+    /**
+     * Describes the properties of this node, such as a variable’s name or a constant’s value.
+     */
     protected String describeAttributes() {
         return "";
     }

@@ -1,7 +1,5 @@
 package wordy.demo.shader;
 
-import java.util.Map;
-
 import wordy.ast.StatementNode;
 import wordy.compiler.WordyCompiler;
 import wordy.compiler.WordyExecutable;

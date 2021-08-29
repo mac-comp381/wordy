@@ -4,6 +4,9 @@ import java.util.Collections;
 import java.util.Map;
 import java.util.Objects;
 
+/**
+ * A literal floating-point value (e.g. “3.141”) in a Wordy abstract syntax tree.
+ */
 public final class ConstantNode extends ExpressionNode {
     public final double value;
 

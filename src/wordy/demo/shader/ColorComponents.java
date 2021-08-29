@@ -1,5 +1,8 @@
 package wordy.demo.shader;
 
+/**
+ * Passes colors for individual pixels to and from Wordy-based shaders.
+ */
 class ColorComponents {
     private double red, green, blue;
 

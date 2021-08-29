@@ -6,7 +6,13 @@ import java.util.Objects;
 import static wordy.ast.Utils.orderedMap;
 
 /**
- * Conditionals in wordy are all in the form of single-level boolean comparisons between two numeric values.
+ * A conditional (“If … then”) in a Wordy abstract syntax tree.
+ * 
+ * Wordy only supports direct comparisons between two numeric expressions, e.g.
+ * "If x is less than y then….” Wordy does not support boolean operators, or arbitrary boolean
+ * expressions. The general structure of a Wordy conditional is:
+ * 
+ *     If <lhs> <operator> <rhs> then <ifTrue> else <ifFalse>
  */
 public class ConditionalNode extends StatementNode {
     public enum Operator {
@@ -33,7 +39,6 @@ public class ConditionalNode extends StatementNode {
             "ifTrue", ifTrue,
             "ifFalse", ifFalse);
     }
-
 
     @Override
     public boolean equals(Object o) {

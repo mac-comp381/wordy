@@ -13,7 +13,6 @@ import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
 import javax.swing.JFrame;
-import javax.swing.SwingUtilities;
 
 import wordy.ast.StatementNode;
 import wordy.demo.ExecutionCancelledException;
