@@ -8,7 +8,7 @@ import java.util.Objects;
  * statement until it encounters a LoopExitNode.
  */
 public class LoopNode extends StatementNode {
-    public final StatementNode body;
+    private final StatementNode body;
 
     public LoopNode(StatementNode body) {
         this.body = body;

@@ -15,7 +15,7 @@ public class BlockNode extends StatementNode {
      */
     public static final BlockNode EMPTY = new BlockNode();
 
-    public final List<StatementNode> statements;
+    private final List<StatementNode> statements;
 
     public BlockNode(List<StatementNode> statements) {
         this.statements = List.copyOf(statements);

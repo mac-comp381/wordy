@@ -61,7 +61,7 @@ public class WordyCompiler {
             """.formatted(contextInterfaceName)
         );
         for(var variable: program.findAllVariables()) {
-            out.println("        private double " + variable.name + ";");
+            out.println("        private double " + variable.getName() + ";");
         }
         out.println();
         for(var variable: program.findAllVariables()) {
@@ -74,7 +74,7 @@ public class WordyCompiler {
                         public void set_%1$s(double %1$s) {
                             this.%1$s = %1$s;
                         }
-                """.formatted(variable.name)
+                """.formatted(variable.getName())
             );
         }
         out.print(

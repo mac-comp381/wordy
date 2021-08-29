@@ -13,8 +13,8 @@ public class BinaryExpressionNode extends ExpressionNode {
         ADDITION, SUBTRACTION, MULTIPLICATION, DIVISION, EXPONENTIATION
     }
 
-    public final Operator operator;
-    public final ExpressionNode lhs, rhs;
+    private final Operator operator;
+    private final ExpressionNode lhs, rhs;
 
     public BinaryExpressionNode(Operator operator, ExpressionNode lhs, ExpressionNode rhs) {
         this.operator = operator;

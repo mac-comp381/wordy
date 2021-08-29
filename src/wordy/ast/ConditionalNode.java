@@ -19,9 +19,9 @@ public class ConditionalNode extends StatementNode {
         EQUALS, LESS_THAN, GREATER_THAN
     }
 
-    public final Operator operator;
-    public final ExpressionNode lhs, rhs;
-    public final StatementNode ifTrue, ifFalse;
+    private final Operator operator;
+    private final ExpressionNode lhs, rhs;
+    private final StatementNode ifTrue, ifFalse;
 
     public ConditionalNode(Operator operator, ExpressionNode lhs, ExpressionNode rhs, StatementNode ifTrue, StatementNode ifFalse) {
         this.operator = operator;

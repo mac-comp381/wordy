@@ -12,13 +12,13 @@ public class AssignmentNode extends StatementNode {
     /**
      * The left-hand side (LHS) of the assignment, the variable whose value will be updated.
      */
-    public final VariableNode variable;
+    private final VariableNode variable;
 
     /**
      * The right-hand side (RHS) of the assignment, the expression whose value will be assigned to
      * the LHS variable.
      */
-    public final ExpressionNode expression;
+    private final ExpressionNode expression;
 
     public AssignmentNode(VariableNode variable, ExpressionNode expression) {
         this.variable = variable;

@@ -11,13 +11,17 @@ import java.util.Objects;
  * This expression evaluates to the current value of the variable.
  */
 public class VariableNode extends ExpressionNode {
-    /**
-     * The name of the variable whose value this expression retrieves.
-     */
-    public final String name;
+    private final String name;
 
     public VariableNode(String name) {
         this.name = name;
+    }
+
+    /**
+     * The name of the variable whose value this expression retrieves.
+     */
+    public String getName() {
+        return name;
     }
 
     @Override
