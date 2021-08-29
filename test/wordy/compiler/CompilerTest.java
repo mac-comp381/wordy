@@ -1,4 +1,4 @@
-package wordy.interpreter;
+package wordy.compiler;
 
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -9,8 +9,6 @@ import java.io.StringWriter;
 import wordy.ast.ASTNode;
 import wordy.ast.ConstantNode;
 import wordy.ast.VariableNode;
-import wordy.compiler.WordyCompiler;
-import wordy.compiler.WordyExecutable;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static wordy.parser.WordyParser.parseExpression;
