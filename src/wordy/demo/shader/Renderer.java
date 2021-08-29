@@ -4,10 +4,13 @@ import java.awt.image.BufferedImage;
 
 import wordy.demo.ExecutionCancelledException;
 
+/**
+ * Generates an image whose pixel colors come from a Shader.
+ */
 final class Renderer implements Runnable {
     private final BufferedImage image;
     private final double centerX, centerY, scale;
-    private final PixelComputer pixelComputer;
+    private final Shader shader;
     private Runnable progressCallback;
 
     public Renderer(
@@ -15,17 +18,16 @@ final class Renderer implements Runnable {
         double centerX,
         double centerY,
         double scale,
-        PixelComputer pixelComputer
+        Shader shader
     ) {
         this.image = image;
         this.centerX = centerX;
         this.centerY = centerY;
         this.scale = scale;
-        this.pixelComputer = pixelComputer;
+        this.shader = shader;
     }
 
     @Override
-    @SuppressWarnings("IntegerDivisionInFloatingPointContext")
     public void run() {
         System.out.println("Rendering...");
         System.out.flush();
@@ -40,7 +42,7 @@ final class Renderer implements Runnable {
                 for(int x = 0; x < width; x++) {
                     double realX = (x - width  / 2) * scale + centerX;
                     double realY = (y - height / 2) * scale + centerY;
-                    double workDone = pixelComputer.computePixel(realX, realY, color);
+                    double workDone = shader.computePixelColor(realX, realY, color);
                     image.setRGB(x, y, color.toInt());
 
                     workSinceProgressReport += Math.max(workDone, 0) + 40;

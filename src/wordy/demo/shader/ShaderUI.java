@@ -18,6 +18,10 @@ import wordy.ast.StatementNode;
 import wordy.demo.ExecutionCancelledException;
 import wordy.parser.WordyParser;
 
+/**
+ * An interactive Java UI that uses a Wordy-based shader to generate an image, which the user can
+ * click on to zoom.
+ */
 public class ShaderUI {
     private static final boolean USE_COMPILER = true;
 
@@ -50,7 +54,6 @@ public class ShaderUI {
 
         window.addMouseListener(new MouseAdapter() {
             @Override
-            @SuppressWarnings("IntegerDivisionInFloatingPointContext")
             public void mouseClicked(MouseEvent e) {
                 double x = (e.getX() - window.getInsets().left) * pixelRatio - width  / 2;
                 double y = (e.getY() - window.getInsets().top)  * pixelRatio - height / 2;
@@ -82,8 +85,8 @@ public class ShaderUI {
         Renderer renderer = new Renderer(
             image, centerX, centerY, scale,
             USE_COMPILER
-                ? new CompiledPixelComputer(program, scale)
-                : new InterpretedPixelComputer(program, scale));
+                ? new CompiledShader(program, scale)
+                : new InterpretedShader(program, scale));
 
         synchronized(this) {
             currentRenderer = renderer;

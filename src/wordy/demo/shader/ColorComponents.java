@@ -1,7 +1,8 @@
 package wordy.demo.shader;
 
 /**
- * Passes colors for individual pixels to and from Wordy-based shaders.
+ * Passes colors for individual pixels to and from Wordy-based shaders. This mutable class allows a
+ * single shader method to return all three color components without object allocation churn.
  */
 class ColorComponents {
     private double red, green, blue;

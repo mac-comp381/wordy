@@ -33,6 +33,14 @@ import wordy.parser.WordyParser;
 
 import static java.awt.Font.PLAIN;
 
+/**
+ * An interactive UI for exploring Wordy that shows:
+ * <ul>
+ * <li> the AST for user-entered Wordy code,
+ * <li> the execution trace and final output of its interpreted execution, and
+ * <li> the Wordy code compiled to Java.
+ * </ul>
+ */
 public class Playground {
     private final JTextArea codeEditor;
     private final JTextArea astDump;

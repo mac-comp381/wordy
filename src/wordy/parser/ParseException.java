@@ -4,6 +4,9 @@ import org.parboiled.errors.ErrorUtils;
 import org.parboiled.errors.ParseError;
 import org.parboiled.support.ParsingResult;
 
+/**
+ * A syntax error in a Wordy program.
+ */
 public class ParseException extends RuntimeException {
     private final ParsingResult<?> parseResult;
 

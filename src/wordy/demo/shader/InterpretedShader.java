@@ -3,18 +3,21 @@ package wordy.demo.shader;
 import wordy.ast.StatementNode;
 import wordy.interpreter.EvaluationContext;
 
-class InterpretedPixelComputer implements PixelComputer {
+/**
+ * A shader backed by interpreted Wordy code.
+ */
+class InterpretedShader implements Shader {
     private final StatementNode program;
     private final EvaluationContext context;
 
-    public InterpretedPixelComputer(StatementNode program, double viewScale) {
+    public InterpretedShader(StatementNode program, double viewScale) {
         this.program = program;
 
         context = new EvaluationContext();
         context.set("view_scale", viewScale);
     }
 
-    public double computePixel(double x, double y, ColorComponents result) {
+    public double computePixelColor(double x, double y, ColorComponents result) {
         context.set("x", x);
         context.set("y", y);
 

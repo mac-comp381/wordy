@@ -26,10 +26,13 @@ import wordy.ast.VariableNode;
 /**
  * Parses programs or program fragments in the Wordy language.
  * <p>
+ * This parser uses the Parboiled parser eDSL. The source code here functions as a definition of the
+ * Wordy language grammar.
+ * <p>
  * Large portions adapted from: https://github.com/sirthias/parboiled/tree/master/examples-java/src/main/java/org/parboiled/examples/calculators/
  */
 @BuildParseTree
-@SuppressWarnings("WeakerAccess")
+@SuppressWarnings("WeakerAccess")  // parboiled code generation requires greater visibility
 public class WordyParser extends BaseParser<ASTNode> {
     public static StatementNode parseProgram(String input) {
         return parse(input, INSTANCE.Sequence(INSTANCE.Program(), EOI), StatementNode.class);
