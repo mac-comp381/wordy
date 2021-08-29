@@ -8,7 +8,6 @@ import java.util.Map;
 import static java.util.Map.entry;
 
 abstract class Utils {
-
     /**
      * Utilities to create maps that preserve iteration order. We want AST node children to iterate
      * in the order the node specifies them, and while Java's Map.of() may preserve iteration order

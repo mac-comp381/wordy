@@ -31,7 +31,10 @@ public abstract class ExpressionNode extends ASTNode {
         }
     }
 
-    public double doEvaluate(EvaluationContext context) {
+    /**
+     * Subclasses should implement this to support interpreted execution.
+     */
+    protected double doEvaluate(EvaluationContext context) {
         throw new UnsupportedOperationException("Interpreter not implemented yet for " + getClass().getSimpleName());
     }
 }
