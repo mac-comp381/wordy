@@ -19,7 +19,7 @@
 ## Running the code
 
 - Run the tests:
-  - In your VS Code project, select the **Testing icon** in the toolbar on the far left. (The icon looks like a chemsistry lab beaker.)
+  - In your VS Code project, select the **Testing icon** in the toolbar on the far left. (The icon looks like a chemistry lab beaker.)
   - At the very top of the TESTING panel that appears, click the **Run all tests** button (looks like two triangles stacked on top of each other).
   - Test results should appear, showing that WordyParserTest’s tests all passed (green ✔️⃝), and `CompilerTest` and `InterpretedTest` are both skipped (grey hollow circles).
 - Run the Wordy Playground:

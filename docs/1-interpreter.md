@@ -13,12 +13,13 @@ This will involve implementing the `doEvaluate` method for subclasses of `Expres
   Not all ASTs for all languages draw this distinctions. In some languages, _everything_ is an expression. And some ASTs might use a type system to handle this (“a void-returning node”) instead of using separate method definitions. This is just how Wordy does it.
 </details>
 <details>
-  <summary>If you are curious: Why is there `run` and a `doRun` method? An `evaluate` and `doEvaluate`?</summary>
-  The `run` and `evaluate` do work common to all statements and expresisons: they report execution practice back to a `Tracer`, which allows the playground to show you how the program executed. They call the `doRun` and `doEvaluate` method to do the work that is specific to each kind of node.
+  <summary>If you are curious: Why is there both a `run` and a `doRun` method? An `evaluate` and `doEvaluate`?</summary>
 
+  The `run` and `evaluate` methods do work common to all statements and expressions: they report execution practice back to a `Tracer`, which allows the playground to show you how the program executed. They call the `doRun` and `doEvaluate` method to do the work that is specific to each kind of node.
+ 
   So, for example, if `a` is the parent of `b` in the AST, then you get this call structure:
-
-    a.run() → a.doRun() → b.run() → b.doRun()
+ 
+     a.run() → a.doRun() → b.run() → b.doRun()
 </details>
 <br>
 

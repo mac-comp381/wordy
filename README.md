@@ -8,7 +8,7 @@ This project contains the beginning of a Wordy implementation in Java. The start
 ## Learning Goals
 
 - Understand the difference between interpreters and compilers.
-- Understand how AST data structres relate to source code.
+- Understand how AST data structures relate to source code.
 - Practice writing code that processes code.
 - Think in detail about the semantics of basic language constructs.
 - Get a taste of the work involved in implementing a programming language.
@@ -16,11 +16,11 @@ This project contains the beginning of a Wordy implementation in Java. The start
 
 ## Project setup
 
-**Clone** this repository using the Git tool of your choice (such as [Github Desktop](https://desktop.github.com), [GitUp](https://gitup.co), [GitKraken](https://www.gitkraken.com), or the `git` command line).
+**Clone** this repository using the Git tool of your choice (such as [GitHub Desktop](https://desktop.github.com), [GitUp](https://gitup.co), [GitKraken](https://www.gitkraken.com), or the `git` command line).
 
 ⚠️ Make sure you **clone** the repository; do not just download the zip!
 
-⚠️ When you clone the repository, pay attention to _where_ you are cloning it on your computer’s file system. (In GitHub Desktop, you can use Repository → Show in Finder (Mac) / Repository → Show in Explorer (Windows) if you aaren’t sure where you cloned it. Other Git GUIs have a similar feature.)
+⚠️ When you clone the repository, pay attention to _where_ you are cloning it on your computer’s file system. (In GitHub Desktop, you can use Repository → Show in Finder (Mac) / Repository → Show in Explorer (Windows) if you aren’t sure where you cloned it. Other Git GUIs have a similar feature.)
 
 Now set up your development environment, using the Java development tool of your choice:
 

@@ -32,5 +32,7 @@ If you are curious:
 
   This class uses the [parboiled](https://github.com/sirthias/parboiled/wiki) library. The code you are looking at is a description of the Wordy _grammar_, but it does not contain a _parser_ (i.e. the code that applies the grammar to text input). Instead, parboiled _generates_ a parser from this class’s grammar description. This code is an example of **declarative programming** and also of an **eDSL**, both of which we will learn about later in this course.
 
-  **Don’t worry: you do not need to understand this code to do this homework!** This is just something to look at if you are feeling curious. It gives a window into a style of Java code that is probably unlike what you have enountered before. All these languages we study are much bigger than just what we see in class.
+  **Don’t worry: you do not need to understand this code to do this homework!** This is just something to look at if you are feeling curious. It gives a window into a style of Java code that is probably unlike what you have encountered before. All these languages we study are much bigger than just what we see in class.
 - You can study the `Playground` code, but I don’t particularly recommend it. That code does a lot of work, and very little of that work is interesting. It mostly illustrates why people don’t use Java Swing more out in industry (and why we made [Kilt Graphics](https://github.com/mac-comp127/kilt-graphics) instead of making you learn Swing in COMP 127).
+
+Ready to jump in? Proceed to [Part 1](1-interpreter.md).

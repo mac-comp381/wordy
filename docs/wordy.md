@@ -4,7 +4,7 @@ Wordy is a tiny programming language suitable for exploration of basic language 
 
 Wordy uses English words throughout its syntax. It supports simple arithmetic expressions, loops, and conditionals.
 
-Wordy is intentially a very simple language. It supports only a single type: 64-bit floating point numbers. A program operates on a set of named variables in a “context,” taking its input from any variables already present, and leaving its output as variables set at termination. Variables do not need to be declared, and all variables are zero by default.
+Wordy is intentionally a very simple language. It supports only a single type: 64-bit floating point numbers. A program operates on a set of named variables in a “context,” taking its input from any variables already present, and leaving its output as variables set at termination. Variables do not need to be declared, and all variables are zero by default.
 
 There are no other types other than double, including boolean. Wordy's conditionals allow a single comparison between two expressions; programs must construct “and” and “or” by using nested conditionals. The language has no traversible data structures, has no functions, and is not Turing complete.
 
