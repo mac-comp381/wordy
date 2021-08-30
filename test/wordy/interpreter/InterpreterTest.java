@@ -21,11 +21,11 @@ public class InterpreterTest {
 
     @Test
     void evaluateVariable() {
+        context.set("question", 54);
         context.set("answer", 42);
-        context.set("fish", 12);
-        assertEvaluationEquals(0, "question");
+        assertEvaluationEquals(54, "question");
         assertEvaluationEquals(42, "answer");
-        assertEvaluationEquals(12, "fish");
+        assertEvaluationEquals(0, "fish");
     }
 
     @Test

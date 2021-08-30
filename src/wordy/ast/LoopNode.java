@@ -6,6 +6,8 @@ import java.util.Objects;
 /**
  * Wordy’s only looping construct, essentially an infinite while loop. Repeatedly runs the `body`
  * statement until it encounters a LoopExitNode.
+ * 
+ * The interpreter implements this by catching a `LoopExited` exception to exit the loop.
  */
 public class LoopNode extends StatementNode {
     private final StatementNode body;

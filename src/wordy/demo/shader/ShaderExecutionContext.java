@@ -3,7 +3,7 @@ package wordy.demo.shader;
 import wordy.compiler.WordyExecutable;
 
 /**
- * The variables passed to and from a Wordy-based shader.
+ * The variables passed to and from a compiled Wordy-based shader.
  */
 public interface ShaderExecutionContext extends WordyExecutable.ExecutionContext {
     // –––––– Shader inputs ––––––

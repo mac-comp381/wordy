@@ -14,9 +14,9 @@ public class WordyCompiler {
      * Translates the given Wordy program to Java source code. The emitted Java source code consists
      * of a class that:
      * <ul>
-     * <li> has a nested class named ExecutionContext that contains properties for all the variables
+     * <li> has a nested class named `ExecutionContext` that contains properties for all the variables
      *      used in the Wordy program,
-     * <li> implements `WordyExecutable<ExecutionContext>`,
+     * <li> implements `WordyExecutable`,
      * <li> and thus has a `createContext()` method you can use to pass variable values to and from
      *      the Wordy code, and
      * <li> has a `run()` method you can use to execute the Wordy code.

@@ -5,8 +5,15 @@ package wordy.demo.shader;
  * units, sometimes called “graphics cards”) have their own special shader languages, which they use
  * to run custom app-provided shaders in parallel across the many pixels of an image.
  * 
- * This demo app approximates that, treating Wordy as a shader language, and using Wordy programs to
- * generate images.
+ * This demo app treats Wordy as a shader language, in the spirit of GPU shaders, and uses Wordy
+ * programs to generate images: the whole Wordy program implements the logic to compute the color
+ * for just one point, and the ShaderUI class runs the shader many times with different coordinates
+ * to produce a whole image.
+ * 
+ * A Wordy shader takes variables named x and y as input, and sets variables named red, greem, and
+ * blue as output. The Wordy shader may also use two optional variables: the view_scale input
+ * indicates how far the UI is zoomed in, and the work_done output gives an approximation of how
+ * much computation time the shader took.
  */
 interface Shader {
     /**

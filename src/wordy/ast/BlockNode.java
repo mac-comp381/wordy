@@ -54,4 +54,10 @@ public class BlockNode extends StatementNode {
     public String toString() {
         return "BlockNode{statements=" + statements + '}';
     }
+
+    @Override
+    protected String describeAttributes() {
+        return "(%d %s)"
+            .formatted(statements.size(), statements.size() == 1 ? "child" : "children");
+    }
 }

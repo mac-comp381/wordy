@@ -6,6 +6,8 @@ import java.util.Map;
 /**
  * A statement that causes program flow to exit the nearest-nested loop. Often called “break” in
  * other languages.
+ * 
+ * The interpreter implements this by throwing a `LoopExited` exception.
  */
 public final class LoopExitNode extends StatementNode {
     public LoopExitNode() {
