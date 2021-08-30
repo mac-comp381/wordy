@@ -27,8 +27,8 @@ Here are some suggestions for fun things. I encourage you to invent your own too
 
   You can do this by writing many separate transformers that each detect just _one_ very simple optimization. For example:
 
-    - `x plus 0` → `x` (It's OK to ignore floating point [NaN](https://en.wikipedia.org/wiki/NaN) and its weirdness for this exercise.)
-    - `x minus x` → `0`
+    - `x plus 0` → `x`
+    - `x minus x` → `0` (It's OK to ignore floating point [NaN](https://en.wikipedia.org/wiki/NaN) and its weirdness for this exercise.)
     - `Set x to x` → `BlockNode[]` (other optimizations will then remove the empty statement, if it’s possible to remove it)
     - Detect conditionals that do not use variables, and are thus always true or always false: `If 1 < 2 then <A> else <B>` → `<B>`
     - Remove empty statements from BlockNode parents: `BlockNode[<A>, BlockNode[], <B>]` → `BlockNode[<A>, <B>]`

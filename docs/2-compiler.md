@@ -90,18 +90,18 @@ Again, unit tests will guide you:
     <details>
       <summary>I think I have it working, but the test wants me to have all these parentheses…?</summary>
 
-        ASTs don’t have parentheses at all. Why? Because an AST is already a tree, and all parentheses do in code is make the tree structure explicit.
+      ASTs don’t have parentheses at all. Why? Because an AST is already a tree, and all parentheses do in code is make the tree structure explicit.
 
-        However, you are translating the tree back to text, which means you would need to _reintroduce_ parentheses to preserve the semantics. For example, if you convert `x * (y + z)` to an AST, then emit code with no parentheses, you get `x * y + z`, which has a different meaning.
+      However, you are translating the tree back to text, which means you sometimes need to _reintroduce_ parentheses to preserve the semantics. For example, if you convert `x * (y + z)` to an AST, then emit code with no parentheses, you get `x * y + z`, which has a different meaning.
 
-        So, when do you _need_ parentheses? Too much trouble to figure out! The compiled code does not need to be human-readable, and therefore there is no harm in extra parentheses. The tests thus tell you to make _all_ binary expressions emit parentheses, necessary or not, and you’re thus guaranteed that your AST’s structure is always preserved in the Java code.
+      So, when do you _need_ parentheses? Too much trouble to figure out! The compiled code does not need to be human-readable, and therefore there is no harm in extra parentheses. The tests thus tell you to make _all_ binary expressions emit parentheses, necessary or not, and you’re thus guaranteed that your AST’s structure is always preserved in the Java code.
     </details>
 
   - `AssignmentNode`:
     <details>
       <summary>Hint for making your code simple</summary>
 
-      `VariableNode` already knows how to compile `x` to `context.x`. Let `VariableNode` do that work; don’t duplicate the `context.` part in `AssignmentNode`.
+      `VariableNode` already knows how to compile `x` to `context.x`. Let `VariableNode` do that work; don’t duplicate the work of printing `"context."` in `AssignmentNode`.
     </details>
 
   - `BlockNode`:
