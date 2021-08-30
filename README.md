@@ -36,3 +36,4 @@ Any one of these tools will work fine. Pick the one you are most comfortable wit
 - Part 0: [Understand your starting point](docs/0-starting-point.md)
 - Part 1: [Implement an interpreter](docs/1-interpreter.md)
 - Part 2: [Implement a compiler](docs/2-compiler.md)
+- [Bonus challenges](3-bonus.md)

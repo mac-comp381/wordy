@@ -4,7 +4,9 @@ Wordy is a tiny programming language suitable for exploration of basic language 
 
 Wordy uses English words throughout its syntax. It supports simple arithmetic expressions, loops, and conditionals.
 
-Wordy is intentionally a very simple language. It supports only a single type: 64-bit floating point numbers. A program operates on a set of named variables in a “context,” taking its input from any variables already present, and leaving its output as variables set at termination. Variables do not need to be declared, and all variables are zero by default.
+Wordy is intentionally a very simple language. It supports only a single type: 64-bit floating point numbers\*. A program operates on a set of named variables in a “context,” taking its input from any variables already present, and leaving its output as variables set at termination. Variables do not need to be declared, and all variables are zero by default.
+
+> \* Wait, aren’t floating point numbers dangerous, [full of rounding pitfalls and wildly counterintuitive behavior](https://stackoverflow.com/questions/10371857/is-floating-point-addition-and-multiplication-associative)? Yes, they are, but don’t worry: Wordy is just a toy language. No _actual_ programming language in widespread practical use for critical applications would ever [do something as ridiculous as making floating point its default or only numeric type](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Numbers_and_dates). Perish the thought.
 
 There are no other types other than double, including boolean. Wordy's conditionals allow a single comparison between two expressions; programs must construct “and” and “or” by using nested conditionals. The language has no traversible data structures, has no functions, and is not Turing complete.
 

@@ -31,7 +31,7 @@ This will involve implementing the `doEvaluate` method for subclasses of `Expres
 - I recommend making the tests pass **one at a time, in the order they appear in the test code** (i.e. starting with `evaluateConstant`). They are ordered so as to guide you along a good implementation path.
 - For each test that fails, **look at the error message**. It will tell you which AST class does not yet have the method necessary for it to support interpreted execution.
 - Many of the methods will be quite easy to implement — even a single line! Don’t second-guess yourself. Sometimes simple is correct.
-- Here are some **hints for specific AST node types**, if you want them. (Give yourself a little time to wrestle first, but don’t hesitate to use them when you feel stuck!)
+- Here are some **hints for specific AST node types**, if you want them. (Give yourself a little time to wrestle first, but don’t hesitate to use the hints whenever you feel stuck!)
 
   - `ConstantNode`:
     <details>
@@ -146,7 +146,7 @@ This will involve implementing the `doEvaluate` method for subclasses of `Expres
 
       In Java, exceptions are how code reports errors. When an error happens, code “throws” an exception, and it immediately exits the block you’re inside, maybe the whole method, maybe the method that called it and the method that called that method and…on up the chain until it encounters a “try / catch” block that matches the exception.
 
-      The Wordy interpreter lightly abuses this mechanism to exit whatever loop we’re inside: `LoopExitNode` throws a `LoopExited` exception, and `LoopNode` catches it. That gives us a way of teleporting outside whatever loop we’re inside, no matter how deep the recursion has gone.
+      The Wordy interpreter uses (arguably misuses) this mechanism to exit whatever loop we’re inside: `LoopExitNode` throws a `LoopExited` exception, and `LoopNode` catches it. That gives us a way of teleporting outside whatever loop we’re inside, no matter how deep the recursion has gone.
     </details>
     <details>
       <summary>What is the Java syntax for throwing an exception?</summary>
@@ -158,12 +158,12 @@ This will involve implementing the `doEvaluate` method for subclasses of `Expres
     <details>
       <summary>I don’t know where to start. Can you sketch this out for me?</summary>
 
-      Remember, Wordy uses exceptions to exit loops. So the structure is something like this:
+      Remember, the Wordy interpreter uses exceptions to exit loops. So the structure is something like this:
       ```
       infinite loop:
         run the loop body
       but when there’s a LoopExited exception:
-        done
+        we’re done
       ```
     </details>
     <details>
@@ -195,9 +195,11 @@ This will involve implementing the `doEvaluate` method for subclasses of `Expres
     ```java
     protected abstract double doEvaluate(EvaluationContext context);
     ```
+
+    (Note the semicolon at the end, instead of braces.)
   </details>
 
-  Doing this means that subclasses _have_ to implement those methods — and thus prompts the authors of any new future types of AST nodes to think about to support interpretation.
+  Making these methods abstract means that subclasses _have_ to implement them. This prompts the authors of any new future types of AST nodes to think about how to support interpretation.
 
 Don’t forget to **commit and push your work**.
 
@@ -224,7 +226,7 @@ Do you see how incredibly cool this is?
 <details>
   <summary>I guess? Not really. How cool is it?</summary>
 
-  When you started this phase of the assigment, Wordy code was _just a bunch of data_: text, a tree.
+  When you started this phase of the assigment, Wordy code was _just a bunch of data_: some text, a tree.
 
   You made it a program. A program that _actually runs_. Your computer is now running code in a new programming language it could not run before because _you made it do that_.
 
