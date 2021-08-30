@@ -72,58 +72,64 @@ Again, unit tests will guide you:
 
   - `ConstantNode`:
     <details>
-      <summary>?</summary>
+      <summary>It’s somehow so simple, I don’t even know what to do.</summary>
 
-      </details>
+      You need to output a Java numeric literal…which is just the number. For example, for the Wordy code `3.14`, you need to output the Java text `3.14`.
     </details>
 
   - `VariableNode`:
     <details>
-      <summary>?</summary>
+      <summary>How do I get the value from the context?</summary>
 
-      </details>
+      Remember that you aren’t actually _running_ the code now; you’re outputting Java code. And remember that in the code you output, there will be a Java variable named `context` that has all of the Wordy program’s variables as Java instance variables.
+
+      Study the example above, in the "Some context" section.
     </details>
 
   - `BinaryExpressionNode`:
     <details>
-      <summary>?</summary>
+      <summary>I think I have it working, but the test wants me to have all these parentheses…?</summary>
 
-      </details>
+        ASTs don’t have parentheses at all. Why? Because an AST is already a tree, and all parentheses do in code is make the tree structure explicit.
+
+        However, you are translating the tree back to text, which means you would need to _reintroduce_ parentheses to preserve the semantics. For example, if you convert `x * (y + z)` to an AST, then emit code with no parentheses, you get `x * y + z`, which has a different meaning.
+
+        So, when do you _need_ parentheses? Too much trouble to figure out! The compiled code does not need to be human-readable, and therefore there is no harm in extra parentheses. The tests thus tell you to make _all_ binary expressions emit parentheses, necessary or not, and you’re thus guaranteed that your AST’s structure is always preserved in the Java code.
     </details>
 
   - `AssignmentNode`:
     <details>
-      <summary>?</summary>
+      <summary>Hint for making your code simple</summary>
 
-      </details>
+      `VariableNode` already knows how to compile `x` to `context.x`. Let `VariableNode` do that work; don’t duplicate the `context.` part in `AssignmentNode`.
     </details>
 
   - `BlockNode`:
     <details>
-      <summary>?</summary>
+      <summary>What’s up with the curly braces the test wants me to add?</summary>
 
-      </details>
+      Same thing as the often-unnecessary parentheses in `BinaryExpressionNode`: it ensures that you preserve the tree structure.
     </details>
 
   - `ConditionalNode`:
     <details>
-      <summary>?</summary>
+      <summary>Wait, now my output has too many curly braces?!</summary>
 
-      </details>
+      `BlockNode` already emits curly braces, so `ConditionalNode` doesn’t _also_ need to emit them.
     </details>
 
   - `LoopExitNode`:
     <details>
-      <summary>?</summary>
+      <summary>Huh? I thought we were supposed to throw an exception for this one.</summary>
 
-      </details>
+      Throwing an exception is how the Wordy _interpreter_ works. But now we are translating Wordy to Java, and Java already has a magic keyword that means “exit the innermost loop I’m currently inside.” That keyword is `break`.
     </details>
 
   - `LoopNode`:
     <details>
-      <summary>?</summary>
+      <summary>Again with the curly braces…?</summary>
 
-      </details>
+      See hint about braces for `ConditionalNode` above.
     </details>
 
 - Still stuck? **Reach out for help on Slack!**
@@ -138,6 +144,7 @@ Don’t forget to **commit and push your work**.
 - Open up the source code for `ShaderUI`, and change the `USE_COMPILER` flag to `true`.
 - Run `ShaderUI` once again.
 - Note the new rendering time in your IDE’s console (`Done rendering (___ms)`). How does it compare to the interpreter?
+- Yes, wow. That’s the advantage of a compiled language.
 - If you are curious (but only if you are really curious; it’s messy):
     - Look at `CompiledShader` to see how Java code compiles, runs, and communicates with Wordy code.
     - Read `WordyCompiler` to see how an app can compile and runs Java code it just generated from a string.
