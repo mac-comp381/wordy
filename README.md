@@ -16,7 +16,9 @@ This project contains the beginning of a Wordy implementation in Java. The start
 
 ## Project setup
 
-**Clone** this repository using the Git tool of your choice (such as [GitHub Desktop](https://desktop.github.com), [GitUp](https://gitup.co), [GitKraken](https://www.gitkraken.com), or the `git` command line).
+**Accept the assignment** in GitHub classroom. Make sure that you do not just clone the template! Check the URL of this page, and make sure the path ends with `wordy-YourGitHubUsername` and not just `wordy`.
+
+**Clone** your assignment repository using the Git tool of your choice (such as [GitHub Desktop](https://desktop.github.com), [GitUp](https://gitup.co), [GitKraken](https://www.gitkraken.com), or the `git` command line).
 
 ⚠️ Make sure you **clone** the repository; do not just download the zip!
 
