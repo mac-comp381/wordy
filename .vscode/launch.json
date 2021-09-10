@@ -16,7 +16,6 @@
             "name": "Launch Playground",
             "request": "launch",
             "mainClass": "wordy.demo.Playground",
-            "projectName": "wordy",
             "vmArgs": "--illegal-access=permit"  // required for parboiled; see https://github.com/sirthias/parboiled/issues/175#issuecomment-878331837
         },
         {
@@ -24,7 +23,6 @@
             "name": "Launch ShaderUI",
             "request": "launch",
             "mainClass": "wordy.demo.shader.ShaderUI",
-            "projectName": "wordy",
             "vmArgs": "--illegal-access=permit"  // required for parboiled; see https://github.com/sirthias/parboiled/issues/175#issuecomment-878331837
         }
     ]
