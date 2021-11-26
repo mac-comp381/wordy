@@ -1,5 +1,7 @@
 package wordy.demo;
 
+import org.parboiled.errors.ParseError;
+
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -131,19 +133,23 @@ public class Playground {
 
             reevaluate(ast);
         } catch(ParseException e) {
-            var error = e.getFirstError();
-            var errorHighlight = new DefaultHighlighter.DefaultHighlightPainter(new Color(0xFF8866));
-            try {
-                codeEditor.getHighlighter().addHighlight(
-                    Math.max(0, error.getStartIndex() - 1),
-                    error.getEndIndex(),
-                    errorHighlight);
-            } catch (Exception ble) {
-                // sometimes highlighting just doesn't work
-            }
+            highlightSyntaxError(e);
         } catch(Exception e) {
             // Don't let internal parser errors kill UI
             e.printStackTrace(System.err);
+        }
+    }
+
+    private void highlightSyntaxError(ParseException parseException) {
+        ParseError error = parseException.getFirstError();
+        try {
+            codeEditor.getHighlighter().addHighlight(
+                Math.max(0, error.getStartIndex() - 1),
+                error.getEndIndex(),
+                new DefaultHighlighter.DefaultHighlightPainter(
+                    new Color(0xFF8866)));
+        } catch (Exception bleah) {
+            // sometimes highlighting just doesn't work; don't let it crash UI
         }
     }
 
