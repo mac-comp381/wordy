@@ -20,6 +20,9 @@ This will involve implementing the `doEvaluate` method for subclasses of `Expres
   So, for example, if `a` is the parent of `b` in the AST, then you get this call structure:
  
      a.run() → a.doRun() → b.run() → b.doRun()
+
+   Note: As you work through this project, **you should never call `doEvaluate()` or `doRun()` directly.**
+   Instead, call `evaluate()` or `run()`, which in turn will call `doEvaluate()` or `doRun()`.
 </details>
 <br>
 
