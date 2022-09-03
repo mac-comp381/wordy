@@ -2,9 +2,7 @@
 
 ## Configuring the project
 
-- [Install JDK 16](https://adoptopenjdk.net/?variant=openjdk16&jvmVariant=hotspot) if you do not already have it installed.
-  - Double check that you are getting version 16.
-  - Choose the HotSpot JVM.
+- [Install JDK 16 or newer](https://adoptium.net) if you do not already have it installed.
 - [Install Gradle](https://gradle.org/install/) if you don't already have it.
 - `cd` into your wordy project directory.
 - Run `gradle test`. You should see a test report showing 20-some test cases. The tests from CompilerTest and InterpreterTest should all say SKIPPED, and the tests from WordyParserTest should all say SUCCESS.

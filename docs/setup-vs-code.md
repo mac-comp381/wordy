@@ -2,19 +2,22 @@
 
 ## Configuring the project
 
-- Make sure you have installed the Java language extension for VS Code. If you used VS Code in COMP 127 or 128, you should already have it. But if you don’t have it, or aren’t sure whether you do:
+- Make sure you have installed the Java language extension for VS Code. If you used VS Code in COMP 127 or 128, you should already have it, but you might need to update it. If you don’t have it, or aren’t sure whether you do:
   - Choose **File → New Window** if VS Code does not already have a window open.
   - In the far left toolbar of the VS Code window, click the **Extensions** icon (three little squares connected in an L shape, with a detached fourth square).
   - In the “Search Extensions in Marketplace” box in the upper left, type **java**.
   - The “Language Support for Java(TM) by Red Hat” should show up, probably as the first search result. **Select it.**
   - If there is an **Install** button, then click it. If there is instead an **Uninstall** button, you already have it installed. Yay!
-- Open the wordy project folder you just cloned in VS Code. There are two ways to do this:
+- Make sure you have Java 16 or newer installed. If you took COMP 127 or 128, you probably already have it — but it might not hurt to download the latest:
+  - In Visual Studio Code, open the command palette (cmd-shift-P / ctrl-shift-P).
+  - Search for and run the “Java: Install new JDK” command.
+  - This will take you to download instructions. Make sure you have a version ≥ 16 selected, and install it.
+  - Restart VS Code.
+- Now open the wordy project folder you just cloned in VS Code. There are two ways to do this:
   - Option 1: Drag the cloned wordy folder onto the VS Code app icon.
   - Option 2: In VS Code, choose File → Open….
 - VS Code may take some time importing / updating / building the project. If you see an “Opening Java project” message, wait for it finish.
-- Look at the blue status bar at the very bottom in the VS Code window. Almost all the way to the right, you should (eventually) see the word “Java,” with a thumbs-up icon next to it.
-  - If you do not see the word “Java,” either the Java extension didn’t get installed properly, or the project didn’t open properly. Contact the instructor for help.
-  - If you see the word “Java” but there is a spinning two-arrows-in-a-circle icon, give it a minute. If it keeps spinning forever, then press cmd-shift-P (Mac) / ctrl-shift-P (Windows/Linux), search for the “Clean Java langauge server workspace” command, run it, and choose “Restart and delete” in the dialog box that appears. If you _still_ don’t eventually get that thumbs-up icon next to “Java”, then contact the instructor for help.
+- Look toward the blue the bottom of the VS Code window. It should show a message about opening the Java project. This takes a long time the first time! Be patient. You are ready to proceed when the message goes away.
 
 ## Running the code
 
