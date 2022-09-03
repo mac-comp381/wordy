@@ -25,13 +25,11 @@ dependencies {
     task(taskName, dependsOn: 'classes', type: JavaExec) {
         main = mainClass
         classpath = sourceSets.main.runtimeClasspath
-        jvmArgs = ['--illegal-access=permit']  // required for parboiled; see https://github.com/sirthias/parboiled/issues/175#issuecomment-878331837
     }
 }
 
 test {
     useJUnitPlatform()
-    jvmArgs '--illegal-access=permit'  // required for parboiled; see https://github.com/sirthias/parboiled/issues/175#issuecomment-878331837
     testLogging {
         showStandardStreams = true
     }
