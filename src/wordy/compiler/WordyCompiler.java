@@ -3,7 +3,8 @@ package wordy.compiler;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 
-import net.openhft.compiler.CompilerUtils;
+import org.joor.Reflect;
+
 import wordy.ast.StatementNode;
 
 /**
@@ -126,13 +127,7 @@ public class WordyCompiler {
     ) {
         var javaSource = compile(program, className, executionContextInterface.getCanonicalName());
         try {
-            @SuppressWarnings("unchecked")  // No way for Java to check that generated code implements correct interface
-            var compiledClass = (Class<? extends WordyExecutable<Context>>)
-                CompilerUtils.CACHED_COMPILER.loadFromJava(
-                    WordyCompiler.class.getClassLoader(),
-                    className,
-                    javaSource);
-            return compiledClass.getDeclaredConstructor().newInstance();
+            return Reflect.compile(className, javaSource).create().get();
         } catch(Exception e) {
             throw new CompilationException(e, program, javaSource);
         }

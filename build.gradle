@@ -14,7 +14,7 @@ tasks.withType(JavaCompile) {
 dependencies {
     implementation group: 'org.parboiled', name: 'parboiled-java', version: '1.4.1'
     implementation group: 'org.ow2.asm', name: 'asm', version: '9.1'
-    implementation group: 'net.openhft', name: 'compiler', version: '2.+'
+    implementation group: 'org.jooq', name: 'joor', version: '0.9.+'
     testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter', version: '5.9.+'
 }
 
