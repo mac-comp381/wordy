@@ -36,6 +36,11 @@ public class EvaluationContext {
         return (result == null) ? 0 : result;
     }
 
+    public void print() {
+        for (Map.Entry<String, Double> entry : variables.entrySet()) {
+            System.out.println(entry.getKey() + " = " + entry.getValue());
+        }
+    }
     /**
      * Changes the current value of the variable with the given name.
      */

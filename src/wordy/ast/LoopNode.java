@@ -3,6 +3,9 @@ package wordy.ast;
 import java.util.Map;
 import java.util.Objects;
 
+import wordy.interpreter.EvaluationContext;
+import wordy.interpreter.LoopExited;
+
 /**
  * Wordy’s only looping construct, essentially an infinite while loop. Repeatedly runs the `body`
  * statement until it encounters a LoopExitNode.
@@ -23,9 +26,9 @@ public class LoopNode extends StatementNode {
 
     @Override
     public boolean equals(Object o) {
-        if(this == o)
+        if (this == o)
             return true;
-        if(o == null || getClass() != o.getClass())
+        if (o == null || getClass() != o.getClass())
             return false;
         LoopNode loopNode = (LoopNode) o;
         return body.equals(loopNode.body);
@@ -39,5 +42,14 @@ public class LoopNode extends StatementNode {
     @Override
     public String toString() {
         return "LoopNode{body=" + body + '}';
+    }
+
+    public void doRun(EvaluationContext context) {
+        try {
+            while (true) {
+                this.body.doRun(context);
+            }
+        } catch (LoopExited e) {
+        }
     }
 }

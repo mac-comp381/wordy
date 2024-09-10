@@ -45,4 +45,9 @@ public final class ConstantNode extends ExpressionNode {
     protected String describeAttributes() {
         return "(value=" + value + ')';
     }
+    
+    @Override
+    public double doEvaluate(EvaluationContext context) {
+        return value;
+    }
 }
