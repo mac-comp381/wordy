@@ -88,13 +88,13 @@ public class BinaryExpressionNode extends ExpressionNode {
     @Override
     public void compile(PrintWriter out) {
         if (operator == Operator.EXPONENTIATION) {
-            out.write("Math.pow(");
+            out.print("Math.pow(");
             lhs.compile(out);
-            out.write(',');
+            out.print(',');
             rhs.compile(out);
-            out.write(')');
+            out.print(')');
         } else {
-            out.write('(');
+            out.print('(');
             lhs.compile(out);
             if (operator == Operator.ADDITION)
                 out.print('+');
@@ -105,7 +105,7 @@ public class BinaryExpressionNode extends ExpressionNode {
             if (operator == Operator.DIVISION)
                 out.print('/');
             rhs.compile(out);
-            out.write(')');
+            out.print(')');
         }
     }
 }

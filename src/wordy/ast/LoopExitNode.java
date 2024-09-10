@@ -44,6 +44,6 @@ public final class LoopExitNode extends StatementNode {
 
     @Override
     public void compile(PrintWriter out) {
-        out.write("break;");
+        out.print("break;");
     }
 }

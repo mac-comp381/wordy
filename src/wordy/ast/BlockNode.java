@@ -32,7 +32,7 @@ public class BlockNode extends StatementNode {
     public Map<String, ASTNode> getChildren() {
         Map<String, ASTNode> result = new LinkedHashMap<>();
         var iter = statements.iterator();
-        for(int index = 0; iter.hasNext(); index++) {
+        for (int index = 0; iter.hasNext(); index++) {
             result.put(String.valueOf(index), iter.next());
         }
         return result;
@@ -40,9 +40,9 @@ public class BlockNode extends StatementNode {
 
     @Override
     public boolean equals(Object o) {
-        if(this == o)
+        if (this == o)
             return true;
-        if(o == null || getClass() != o.getClass())
+        if (o == null || getClass() != o.getClass())
             return false;
         BlockNode blockNode = (BlockNode) o;
         return statements.equals(blockNode.statements);
@@ -72,10 +72,11 @@ public class BlockNode extends StatementNode {
     }
 
     public void compile(PrintWriter out) {
-        out.write('{');
+        out.println('{');
         for (StatementNode statement : statements) {
             statement.compile(out);
         }
-        out.write('}');
+        out.print('}');
+        out.println();
     }
 }

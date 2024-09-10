@@ -57,7 +57,7 @@ public class LoopNode extends StatementNode {
 
     @Override
     public void compile(PrintWriter out) {
-        out.print("while (true)");
+        out.println("while (true)");
         this.body.compile(out);
     }
 }
