@@ -1,5 +1,6 @@
 package wordy.ast;
 
+import java.io.PrintWriter;
 import java.util.Map;
 import java.util.Objects;
 
@@ -75,6 +76,7 @@ public class ConditionalNode extends StatementNode {
         return "(operator=" + operator + ')';
     }
 
+    @Override
     public void doRun(EvaluationContext context) {
         double left = this.lhs.doEvaluate(context);
         double right = this.rhs.doEvaluate(context);
@@ -93,5 +95,20 @@ public class ConditionalNode extends StatementNode {
         else {
             throw new Error("Operator not supported");
         }
+    }
+
+    @Override
+    public void compile(PrintWriter out) {
+        out.print("if");
+        out.print('(');
+        lhs.compile(out);
+        if (operator ==  Operator.EQUALS) out.print("=");
+        if (operator ==  Operator.LESS_THAN) out.print("<");
+        if (operator ==  Operator.GREATER_THAN) out.print(">");
+        rhs.compile(out);
+        out.print(')');
+        ifTrue.compile(out);
+        out.print("else ");
+        ifFalse.compile(out);
     }
 }

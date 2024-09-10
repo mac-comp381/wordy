@@ -2,6 +2,7 @@ package wordy.ast;
 
 import java.util.Map;
 import java.util.Objects;
+import java.io.PrintWriter;
 
 import wordy.interpreter.EvaluationContext;
 
@@ -78,10 +79,33 @@ public class BinaryExpressionNode extends ExpressionNode {
             return left - right;
         } else if (operator == Operator.DIVISION) {
             return left / right;
-        }
-        else if (operator == Operator.EXPONENTIATION) {
+        } else if (operator == Operator.EXPONENTIATION) {
             return Math.pow(left, right);
         }
         throw new Error("Operator not valid");
+    }
+
+    @Override
+    public void compile(PrintWriter out) {
+        if (operator == Operator.EXPONENTIATION) {
+            out.write("Math.pow(");
+            lhs.compile(out);
+            out.write(',');
+            rhs.compile(out);
+            out.write(')');
+        } else {
+            out.write('(');
+            lhs.compile(out);
+            if (operator == Operator.ADDITION)
+                out.print('+');
+            if (operator == Operator.MULTIPLICATION)
+                out.print('*');
+            if (operator == Operator.SUBTRACTION)
+                out.print('-');
+            if (operator == Operator.DIVISION)
+                out.print('/');
+            rhs.compile(out);
+            out.write(')');
+        }
     }
 }
