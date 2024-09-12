@@ -1,5 +1,6 @@
 package wordy.ast;
 
+import java.io.PrintWriter;
 import java.util.Map;
 import java.util.Objects;
 
@@ -79,14 +80,54 @@ public class BinaryExpressionNode extends ExpressionNode {
                 return lhs.doEvaluate(context) / rhs.doEvaluate(context);
 
             case EXPONENTIATION:
-                double result = lhs.doEvaluate(context);
-                for (int i = 1; i < rhs.doEvaluate(context); i ++) {
-                    result = result * lhs.doEvaluate(context);
-                }
-                return result;
-            
+                return Math.pow(lhs.doEvaluate(context), rhs.doEvaluate(context));
+
             default:
                 throw new UnsupportedOperationException("Error operator " + getClass().getSimpleName());
         }        
+    }
+
+    public void compile(PrintWriter out) {
+        switch (operator) {
+            case ADDITION:
+                out.print("(");
+                lhs.compile(out);
+                out.print(" + ");
+                rhs.compile(out);
+                out.print(")");
+                break;
+        
+            case SUBTRACTION:
+                out.print("(");
+                lhs.compile(out);
+                out.print(" - ");
+                rhs.compile(out);
+                out.print(")");
+                break;
+
+            case MULTIPLICATION:
+                out.print("(");
+                lhs.compile(out);
+                out.print(" * ");
+                rhs.compile(out);
+                out.print(")");
+                break;
+
+            case DIVISION:
+                out.print("(");
+                lhs.compile(out);
+                out.print(" / ");
+                rhs.compile(out);
+                out.print(")");
+                break;
+
+            case EXPONENTIATION:
+                out.print("Math.pow(");
+                lhs.compile(out);
+                out.print(", ");
+                rhs.compile(out);
+                out.print(")");
+                break;
+        }
     }
 }

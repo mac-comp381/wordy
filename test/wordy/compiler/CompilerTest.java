@@ -15,7 +15,6 @@ import static wordy.parser.WordyParser.parseExpression;
 import static wordy.parser.WordyParser.parseProgram;
 import static wordy.parser.WordyParser.parseStatement;
 
-@Disabled
 public class CompilerTest {
     @Test
     void compileConstant() {
