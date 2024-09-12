@@ -10,7 +10,7 @@ package wordy.demo.shader;
  * for just one point, and the ShaderUI class runs the shader many times with different coordinates
  * to produce a whole image.
  * 
- * A Wordy shader takes variables named x and y as input, and sets variables named red, greem, and
+ * A Wordy shader takes variables named x and y as input, and sets variables named red, green, and
  * blue as output. The Wordy shader may also use two optional variables: the view_scale input
  * indicates how far the UI is zoomed in, and the work_done output gives an approximation of how
  * much computation time the shader took.
