@@ -87,8 +87,6 @@ public class BinaryExpressionNode extends ExpressionNode {
             
             default:
                 throw new UnsupportedOperationException("Error operator " + getClass().getSimpleName());
-        }
-
-        
+        }        
     }
 }
