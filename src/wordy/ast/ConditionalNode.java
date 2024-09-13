@@ -1,22 +1,27 @@
 package wordy.ast;
 
+import java.io.PrintWriter;
 import java.util.Map;
 import java.util.Objects;
+
+import wordy.interpreter.EvaluationContext;
 
 import static wordy.ast.Utils.orderedMap;
 
 /**
  * A conditional (“If … then”) in a Wordy abstract syntax tree.
  * 
- * Wordy only supports direct comparisons between two numeric expressions, e.g.
- * "If x is less than y then….” Wordy does not support boolean operators, or arbitrary boolean
- * expressions. The general structure of a Wordy conditional is:
+ * Wordy only supports direct comparisons between two numeric expressions, e.g. "If x is less than y
+ * then….” Wordy does not support boolean operators, or arbitrary boolean expressions. The general
+ * structure of a Wordy conditional is:
  * 
- *     If <lhs> <operator> <rhs> then <ifTrue> else <ifFalse>
+ * If <lhs> <operator> <rhs> then <ifTrue> else <ifFalse>
  */
 public class ConditionalNode extends StatementNode {
     public enum Operator {
-        EQUALS, LESS_THAN, GREATER_THAN
+        EQUALS,
+        LESS_THAN,
+        GREATER_THAN
     }
 
     private final Operator operator;
@@ -42,8 +47,10 @@ public class ConditionalNode extends StatementNode {
 
     @Override
     public boolean equals(Object o) {
-        if(this == o) return true;
-        if(o == null || getClass() != o.getClass()) return false;
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
         ConditionalNode that = (ConditionalNode) o;
         return this.operator == that.operator
             && this.lhs.equals(that.lhs)
@@ -71,5 +78,48 @@ public class ConditionalNode extends StatementNode {
     @Override
     protected String describeAttributes() {
         return "(operator=" + operator + ')';
+    }
+
+    @Override
+    public void doRun(EvaluationContext context) {
+        double left = this.lhs.doEvaluate(context);
+        double right = this.rhs.doEvaluate(context);
+        if (operator == Operator.EQUALS) {
+            if (left == right)
+                ifTrue.doRun(context);
+            else
+                ifFalse.doRun(context);
+        } else if (operator == Operator.LESS_THAN) {
+            if (left < right)
+                ifTrue.doRun(context);
+            else
+                ifFalse.doRun(context);
+        } else if (operator == Operator.GREATER_THAN) {
+            if (left > right)
+                ifTrue.doRun(context);
+            else
+                ifFalse.doRun(context);
+        } else {
+            throw new Error("Operator not supported");
+        }
+    }
+
+    @Override
+    public void compile(PrintWriter out) {
+        out.print("if");
+        out.print('(');
+        lhs.compile(out);
+        if (operator == Operator.EQUALS)
+            out.print("=");
+        if (operator == Operator.LESS_THAN)
+            out.print("<");
+        if (operator == Operator.GREATER_THAN)
+            out.print(">");
+        rhs.compile(out);
+        out.print(')');
+        ifTrue.compile(out);
+        out.println();
+        out.print("else ");
+        ifFalse.compile(out);
     }
 }

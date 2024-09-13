@@ -2,6 +2,9 @@ package wordy.ast;
 
 import java.util.Map;
 import java.util.Objects;
+import java.io.PrintWriter;
+
+import wordy.interpreter.EvaluationContext;
 
 import static wordy.ast.Utils.orderedMap;
 
@@ -10,7 +13,11 @@ import static wordy.ast.Utils.orderedMap;
  */
 public class BinaryExpressionNode extends ExpressionNode {
     public enum Operator {
-        ADDITION, SUBTRACTION, MULTIPLICATION, DIVISION, EXPONENTIATION
+        ADDITION,
+        SUBTRACTION,
+        MULTIPLICATION,
+        DIVISION,
+        EXPONENTIATION
     }
 
     private final Operator operator;
@@ -31,9 +38,9 @@ public class BinaryExpressionNode extends ExpressionNode {
 
     @Override
     public boolean equals(Object o) {
-        if(this == o)
+        if (this == o)
             return true;
-        if(o == null || getClass() != o.getClass())
+        if (o == null || getClass() != o.getClass())
             return false;
         BinaryExpressionNode that = (BinaryExpressionNode) o;
         return this.operator == that.operator
@@ -58,5 +65,47 @@ public class BinaryExpressionNode extends ExpressionNode {
     @Override
     protected String describeAttributes() {
         return "(operator=" + operator + ')';
+    }
+
+    @Override
+    public double doEvaluate(EvaluationContext context) {
+        double left = lhs.doEvaluate(context);
+        double right = rhs.doEvaluate(context);
+        if (operator == Operator.ADDITION) {
+            return left + right;
+        } else if (operator == Operator.MULTIPLICATION) {
+            return left * right;
+        } else if (operator == Operator.SUBTRACTION) {
+            return left - right;
+        } else if (operator == Operator.DIVISION) {
+            return left / right;
+        } else if (operator == Operator.EXPONENTIATION) {
+            return Math.pow(left, right);
+        }
+        throw new Error("Operator not valid");
+    }
+
+    @Override
+    public void compile(PrintWriter out) {
+        if (operator == Operator.EXPONENTIATION) {
+            out.print("Math.pow(");
+            lhs.compile(out);
+            out.print(',');
+            rhs.compile(out);
+            out.print(')');
+        } else {
+            out.print('(');
+            lhs.compile(out);
+            if (operator == Operator.ADDITION)
+                out.print('+');
+            if (operator == Operator.MULTIPLICATION)
+                out.print('*');
+            if (operator == Operator.SUBTRACTION)
+                out.print('-');
+            if (operator == Operator.DIVISION)
+                out.print('/');
+            rhs.compile(out);
+            out.print(')');
+        }
     }
 }

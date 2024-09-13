@@ -1,8 +1,11 @@
 package wordy.ast;
 
+import java.io.PrintWriter;
 import java.util.Collections;
 import java.util.Map;
 import java.util.Objects;
+
+import wordy.interpreter.EvaluationContext;
 
 /**
  * A variable reference (e.g. “x”) in a Wordy abstract syntax tree. Note that this is a variable
@@ -31,9 +34,9 @@ public class VariableNode extends ExpressionNode {
 
     @Override
     public boolean equals(Object o) {
-        if(this == o)
+        if (this == o)
             return true;
-        if(o == null || getClass() != o.getClass())
+        if (o == null || getClass() != o.getClass())
             return false;
         VariableNode that = (VariableNode) o;
         return this.name.equals(that.name);
@@ -52,5 +55,14 @@ public class VariableNode extends ExpressionNode {
     @Override
     protected String describeAttributes() {
         return "(name=\"" + name + "\")";
+    }
+
+    @Override
+    public double doEvaluate(EvaluationContext context) {
+        return context.get(name);
+    }
+
+    public void compile(PrintWriter out) {
+        out.print("context." + name);
     }
 }
