@@ -223,7 +223,7 @@ Don’t forget to **commit and push your work**.
     - Comment out the line that specifies `ripples.wordy`, and uncomment the line that specifies `mandel.wordy`.
     - Run it again! Fractals! Your interpreter is doing the computations that create the fractal. Yay you!
     - Click to zoom in on the fractal! But…oooo, that's slow.
-    - Quit and relaunch ShaderUI, and note the rendering time it logs in the console for the initial view of the Mandelbrot set (`Done rendering (___ms)`). Write that number down.
+    - Quit and relaunch ShaderUI, and note the rendering time it logs in the console for the initial view of the Mandelbrot set (`Done rendering (___ms)`). Write that number down. **12326ms**
 
 Do you see how incredibly cool this is?
 <details>
