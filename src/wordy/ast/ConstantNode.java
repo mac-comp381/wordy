@@ -1,5 +1,6 @@
 package wordy.ast;
 
+import java.io.PrintWriter;
 import java.util.Collections;
 import java.util.Map;
 import java.util.Objects;
@@ -14,6 +15,11 @@ public final class ConstantNode extends ExpressionNode {
 
     public ConstantNode(double value) {
         this.value = value;
+    }
+
+    @Override
+    public void compile(PrintWriter out) {
+        out.print(value);
     }
 
     @Override

@@ -1,5 +1,6 @@
 package wordy.ast;
 
+import java.io.PrintWriter;
 import java.util.Map;
 import java.util.Objects;
 
@@ -22,6 +23,40 @@ public class BinaryExpressionNode extends ExpressionNode {
         this.operator = operator;
         this.lhs = lhs;
         this.rhs = rhs;
+    }
+
+    @Override
+    public void compile(PrintWriter out) {
+        if (operator != Operator.EXPONENTIATION) {
+            out.println("(");
+            lhs.compile(out);
+
+            switch (operator) {
+                case ADDITION:
+                    out.print(" + ");
+                    break;
+                case SUBTRACTION:    
+                    out.print(" - ");
+                    break;
+                case MULTIPLICATION:
+                    out.print(" * ");
+                    break;
+                case DIVISION:
+                    out.print(" / ");
+                    break;
+                default:
+                    return;
+            }
+
+            rhs.compile(out);
+            out.print(")");
+        } else {
+            out.print("Math.pow(");
+            lhs.compile(out);
+            out.print(",");
+            rhs.compile(out);
+            out.print(")");
+        }
     }
 
     @Override

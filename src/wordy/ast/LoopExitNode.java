@@ -1,5 +1,6 @@
 package wordy.ast;
 
+import java.io.PrintWriter;
 import java.util.Collections;
 import java.util.Map;
 
@@ -14,6 +15,11 @@ import wordy.interpreter.LoopExited;
  */
 public final class LoopExitNode extends StatementNode {
     public LoopExitNode() {
+    }
+
+    @Override
+    public void compile(PrintWriter out) {
+        out.print("break;");
     }
 
     @Override

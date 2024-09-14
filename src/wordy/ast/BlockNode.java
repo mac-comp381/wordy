@@ -1,5 +1,6 @@
 package wordy.ast;
 
+import java.io.PrintWriter;
 import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -25,6 +26,16 @@ public class BlockNode extends StatementNode {
 
     public BlockNode(StatementNode... statements) {
         this.statements = Arrays.asList(statements);
+    }
+
+    @Override
+    public void compile(PrintWriter out) {
+        out.print("{ ");
+        for (StatementNode statement : statements) {
+            statement.compile(out);
+        }
+
+        out.print(" }");
     }
 
     @Override
