@@ -64,6 +64,21 @@ public class BinaryExpressionNode extends ExpressionNode {
 
     @Override
     protected double doEvaluate(EvaluationContext context) {
-        return lhs.doEvaluate(context) operator rhs.doEvaluate(context);
+        if (operator.name().equals("ADDITION")) {
+            return lhs.evaluate(context) + rhs.evaluate(context);
+        } else if(operator.name().equals("SUBTRACTION")) {
+            return lhs.evaluate(context) - rhs.evaluate(context);
+        } else if(operator.name().equals("MULTIPLICATION")) {
+            return lhs.evaluate(context) * rhs.evaluate(context);
+        } else if(operator.name().equals("DIVISION")) {
+            return lhs.evaluate(context) / rhs.evaluate(context);
+        } else if(operator.name().equals("EXPONENTIATION")) {
+            double result = lhs.evaluate(context);
+            for (int i = 1; i < rhs.evaluate(context); i++) {
+                result = result * lhs.evaluate(context);
+            }
+            return result;
+        }
+        return 0;
     }
 }
