@@ -3,6 +3,8 @@ package wordy.ast;
 import java.util.Map;
 import java.util.Objects;
 
+import wordy.interpreter.EvaluationContext;
+
 import static wordy.ast.Utils.orderedMap;
 
 /**
@@ -58,5 +60,23 @@ public class BinaryExpressionNode extends ExpressionNode {
     @Override
     protected String describeAttributes() {
         return "(operator=" + operator + ')';
+    }
+
+    @Override
+    protected double doEvaluate(EvaluationContext context) {
+        double leftVal = lhs.evaluate(context);
+        double rightVal = rhs.evaluate(context);
+
+        if (operator == Operator.ADDITION) {
+            return leftVal + rightVal;
+        } else if (operator == Operator.SUBTRACTION) {
+            return leftVal - rightVal;
+        } else if (operator == Operator.MULTIPLICATION) {
+            return leftVal * rightVal;
+        } else if (operator == Operator.DIVISION) {
+            return leftVal / rightVal;
+        } else {
+            return Math.pow(leftVal, rightVal);
+        }
     }
 }
