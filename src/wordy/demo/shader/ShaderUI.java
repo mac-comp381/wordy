@@ -23,7 +23,7 @@ import wordy.parser.WordyParser;
  * click on to zoom.
  */
 public class ShaderUI {
-    private static final boolean USE_COMPILER = false;
+    private static final boolean USE_COMPILER = true;
 
     private final StatementNode program;
     private final BufferedImage image;
@@ -35,8 +35,8 @@ public class ShaderUI {
 
     public static void main(String[] args) throws Exception {
         new ShaderUI(
-            "ripples.wordy",  // Simple test involving only assignments and expressions
-//            "mandel.wordy",   // More complex test involving loops and conditionals
+            // "ripples.wordy",  // Simple test involving only assignments and expressions
+           "mandel.wordy",   // More complex test involving loops and conditionals
             600, 600
         );
     }
