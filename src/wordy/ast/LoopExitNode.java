@@ -4,6 +4,7 @@ import java.util.Collections;
 import java.util.Map;
 
 import wordy.interpreter.EvaluationContext;
+import wordy.interpreter.LoopExited;
 
 /**
  * A statement that causes program flow to exit the nearest-nested loop. Often called “break” in
@@ -17,7 +18,7 @@ public final class LoopExitNode extends StatementNode {
 
     @Override
     protected void doRun(EvaluationContext context) {
-
+        throw new LoopExited();
     }
 
     @Override
