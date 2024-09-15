@@ -1,15 +1,13 @@
 package wordy.interpreter;
 
-import org.junit.jupiter.api.Disabled;
-import org.junit.jupiter.api.Test;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static wordy.parser.WordyParser.parseExpression;
 import static wordy.parser.WordyParser.parseProgram;
 import static wordy.parser.WordyParser.parseStatement;
 
-@Disabled
+import org.junit.jupiter.api.Test;
+
 public class InterpreterTest {
     private final EvaluationContext context = new EvaluationContext();
 

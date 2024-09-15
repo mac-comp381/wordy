@@ -1,9 +1,11 @@
 package wordy.ast;
 
+import static wordy.ast.Utils.orderedMap;
+
 import java.util.Map;
 import java.util.Objects;
 
-import static wordy.ast.Utils.orderedMap;
+import wordy.interpreter.EvaluationContext;
 
 /**
  * Two expressions joined by an operator (e.g. “x plus y”) in a Wordy abstract syntax tree.
@@ -20,6 +22,19 @@ public class BinaryExpressionNode extends ExpressionNode {
         this.operator = operator;
         this.lhs = lhs;
         this.rhs = rhs;
+    }
+
+    @Override
+    protected double doEvaluate(EvaluationContext context) {
+        double lhsValue = lhs.evaluate(context);
+        double rhsValue = rhs.evaluate(context);
+        return switch (operator) {
+            case ADDITION -> lhsValue + rhsValue;
+            case DIVISION -> lhsValue / rhsValue;
+            case EXPONENTIATION -> Math.pow(lhsValue, rhsValue);
+            case MULTIPLICATION -> lhsValue * rhsValue;
+            case SUBTRACTION -> lhsValue - rhsValue;
+        };
     }
 
     @Override

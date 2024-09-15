@@ -1,9 +1,11 @@
 package wordy.ast;
 
+import static wordy.ast.Utils.orderedMap;
+
 import java.util.Map;
 import java.util.Objects;
 
-import static wordy.ast.Utils.orderedMap;
+import wordy.interpreter.EvaluationContext;
 
 /**
  * A conditional (“If … then”) in a Wordy abstract syntax tree.
@@ -29,6 +31,22 @@ public class ConditionalNode extends StatementNode {
         this.rhs = rhs;
         this.ifTrue = ifTrue;
         this.ifFalse = ifFalse;
+    }
+
+    @Override
+    protected void doRun(EvaluationContext context) {
+        double lhsValue = lhs.evaluate(context);
+        double rhsValue = rhs.evaluate(context);
+        boolean b = switch (operator) {
+            case EQUALS -> lhsValue == rhsValue;
+            case GREATER_THAN -> lhsValue > rhsValue;
+            case LESS_THAN -> lhsValue < rhsValue;
+        };
+        if (b) {
+            ifTrue.run(context);
+        } else {
+            ifFalse.run(context);
+        }
     }
 
     @Override
