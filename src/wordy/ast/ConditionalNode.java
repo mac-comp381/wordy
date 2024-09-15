@@ -3,6 +3,8 @@ package wordy.ast;
 import java.util.Map;
 import java.util.Objects;
 
+import wordy.interpreter.EvaluationContext;
+
 import static wordy.ast.Utils.orderedMap;
 
 /**
@@ -71,5 +73,29 @@ public class ConditionalNode extends StatementNode {
     @Override
     protected String describeAttributes() {
         return "(operator=" + operator + ')';
+    }
+
+    @Override
+    protected void doRun(EvaluationContext context) {
+        if (operator.name().equals("EQUALS")) {
+            if (lhs.evaluate(context) == rhs.evaluate(context)) {
+                 ifTrue.run(context);
+            } else {
+                ifFalse.run(context);
+            }
+        } else if (operator.name().equals("LESS_THAN")) {
+            if (lhs.evaluate(context) < rhs.evaluate((context))) {
+                ifTrue.run(context);
+            } else {
+                ifFalse.run(context);
+            }
+        } else if (operator.name().equals("GREATER_THAN")) {
+            if (lhs.evaluate(context) > rhs.evaluate(context)) {
+                ifTrue.run(context);
+            } else {
+                ifFalse.run(context);
+            }
+
+        }
     }
 }
