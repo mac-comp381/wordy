@@ -2,6 +2,7 @@ package wordy.ast;
 
 import static wordy.ast.Utils.orderedMap;
 
+import java.io.PrintWriter;
 import java.util.Map;
 import java.util.Objects;
 
@@ -35,6 +36,29 @@ public class BinaryExpressionNode extends ExpressionNode {
             case MULTIPLICATION -> lhsValue * rhsValue;
             case SUBTRACTION -> lhsValue - rhsValue;
         };
+    }
+
+    @Override
+    public void compile(PrintWriter out) {
+        if (operator == Operator.EXPONENTIATION) {
+            out.print("Math.pow(");
+            lhs.compile(out);
+            out.print(", ");
+            rhs.compile(out);
+            out.print(")");
+        } else {
+            out.print("(");
+            lhs.compile(out);
+            out.print(switch (operator) {
+                case ADDITION -> " + ";
+                case DIVISION -> " / ";
+                case MULTIPLICATION -> " * ";
+                case SUBTRACTION -> " - ";
+                default -> throw new IllegalArgumentException("Unexpected value: " + operator);
+            });
+            rhs.compile(out);
+            out.print(")");
+        }
     }
 
     @Override

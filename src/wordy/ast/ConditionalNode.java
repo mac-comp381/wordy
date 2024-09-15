@@ -2,6 +2,7 @@ package wordy.ast;
 
 import static wordy.ast.Utils.orderedMap;
 
+import java.io.PrintWriter;
 import java.util.Map;
 import java.util.Objects;
 
@@ -47,6 +48,26 @@ public class ConditionalNode extends StatementNode {
         } else {
             ifFalse.run(context);
         }
+    }
+
+    @Override
+    public void compile(PrintWriter out) {
+        out.print("if (");
+        lhs.compile(out);
+        out.print(" ");
+        out.print(switch (operator) {
+            case EQUALS -> "==";
+            case GREATER_THAN -> ">";
+            case LESS_THAN -> "<";
+        });
+        out.print(" ");
+        rhs.compile(out);
+        out.print(") ");
+        ifTrue.compile(out);
+        // if (ifFalse != BlockNode.EMPTY) {
+        out.print(" else ");
+        ifFalse.compile(out);
+        // }
     }
 
     @Override
