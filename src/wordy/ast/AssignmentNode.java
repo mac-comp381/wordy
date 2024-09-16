@@ -1,7 +1,10 @@
 package wordy.ast;
 
+import java.io.PrintWriter;
 import java.util.Map;
 import java.util.Objects;
+
+import wordy.interpreter.EvaluationContext;
 
 import static wordy.ast.Utils.orderedMap;
 
@@ -23,6 +26,22 @@ public class AssignmentNode extends StatementNode {
     public AssignmentNode(VariableNode variable, ExpressionNode expression) {
         this.variable = variable;
         this.expression = expression;
+    }
+
+    @Override
+    public void compile(PrintWriter out) {
+        variable.compile(out);
+        out.print(" = ");
+        expression.compile(out);
+        out.print(";");
+    }
+
+    @Override
+    protected void doRun(EvaluationContext context) {
+        double expr = expression.doEvaluate(context);
+        String varName = variable.getName();
+
+        context.set(varName, expr);
     }
 
     @Override

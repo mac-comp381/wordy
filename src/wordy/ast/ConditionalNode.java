@@ -1,7 +1,10 @@
 package wordy.ast;
 
+import java.io.PrintWriter;
 import java.util.Map;
 import java.util.Objects;
+
+import wordy.interpreter.EvaluationContext;
 
 import static wordy.ast.Utils.orderedMap;
 
@@ -29,6 +32,55 @@ public class ConditionalNode extends StatementNode {
         this.rhs = rhs;
         this.ifTrue = ifTrue;
         this.ifFalse = ifFalse;
+    }
+
+    @Override
+    public void compile(PrintWriter out) {
+        out.print("if (");
+        lhs.compile(out);
+        
+        switch (operator) {
+            case EQUALS:
+                out.print(" == ");
+                break;
+            case LESS_THAN:
+                out.print(" < ");
+                break;
+            case GREATER_THAN:
+                out.print(" > ");
+                break;
+        }
+
+        rhs.compile(out);
+        out.print(")");
+
+        out.print(" \n");
+        ifTrue.compile(out);
+        out.print(" else \n");
+        ifFalse.compile(out);
+        out.print("");
+    }
+
+    @Override
+    protected void doRun(EvaluationContext context) {
+        double leftSide = lhs.doEvaluate(context);
+        double rightSide = rhs.doEvaluate(context);
+        boolean evalTrueFalse = false;
+
+        switch (operator) {
+            case EQUALS:
+                evalTrueFalse = (leftSide == rightSide);
+                break;
+            case LESS_THAN:
+                evalTrueFalse = (leftSide < rightSide);
+                break;
+            case GREATER_THAN:
+                evalTrueFalse = (leftSide > rightSide);
+                break;
+        }
+
+        if (evalTrueFalse) ifTrue.doRun(context);
+        if (!evalTrueFalse) ifFalse.doRun(context);
     }
 
     @Override
