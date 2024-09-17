@@ -4,6 +4,8 @@ import java.util.Map;
 import java.util.Objects;
 
 import static wordy.ast.Utils.orderedMap;
+import wordy.interpreter.EvaluationContext;
+
 
 /**
  * An assignment statement (“Set <variable> to <expression>”) in a Wordy abstract syntax tree.
@@ -54,5 +56,11 @@ public class AssignmentNode extends StatementNode {
             + "variable='" + variable + '\''
             + ", expression=" + expression
             + '}';
+    }
+
+    @Override
+    protected void doRun(EvaluationContext context) {
+        double value = expression.evaluate(context);
+        context.setVariable(variable.getName(), value);
     }
 }
