@@ -85,15 +85,35 @@ public class BinaryExpressionNode extends ExpressionNode {
 
     public void compile(PrintWriter out) {
         if (operator.name().equals("ADDITION")) {
-            out.print("(context." + lhs + " + " + "context." + rhs + ")");
+            out.print("(");
+            lhs.compile(out) ;
+            out.print(" + ");
+            rhs.compile(out);
+            out.print(")");
         } else if(operator.name().equals("SUBTRACTION")) {
-            out.print("(context." + lhs + " - " + "context." + rhs + ")"); 
+            out.print("(");
+            lhs.compile(out) ;
+            out.print(" - ");
+            rhs.compile(out);
+            out.print(")");        
         } else if(operator.name().equals("MULTIPLICATION")) {
-            out.print("(context." + lhs + " * " + "context." + rhs + ")"); 
+            out.print("(");
+            lhs.compile(out) ;
+            out.print(" * ");
+            rhs.compile(out);
+            out.print(")");
         } else if(operator.name().equals("DIVISION")) {
-            out.print("(context." + lhs + " / " + "context." + rhs + ")"); 
-        } else if(operator.name().equals("EXPONENTIATION")) {            
-            out.print("(Math.pow(" + "context." + lhs + ", " + "context." + rhs + "))");
+            out.print("(");
+            lhs.compile(out) ;
+            out.print(" / ");
+            rhs.compile(out);
+            out.print(")");
+        } else if(operator.name().equals("EXPONENTIATION")) {   
+            out.print("Math.pow(");
+            lhs.compile(out) ;
+            out.print(", ");
+            rhs.compile(out);
+            out.print(")");
         }
     }
 }
