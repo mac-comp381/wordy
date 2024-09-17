@@ -143,7 +143,7 @@ Don’t forget to **commit and push your work**.
 - Run `ShaderUI` again. It is still using the interpreter. Note the speed. Quit the `ShaderUI` app.
 - Open up the source code for `ShaderUI`, and change the `USE_COMPILER` flag to `true`.
 - Run `ShaderUI` once again.
-- Note the new rendering time in your IDE’s console (`Done rendering (___ms)`). How does it compare to the interpreter?
+- Note the new rendering time in your IDE’s console (`Done rendering (363ms)`). How does it compare to the interpreter?
 - Yes, wow. That’s the advantage of a compiled language.
 - If you are curious (but only if you are really curious; it’s messy):
     - Look at `CompiledShader` to see how Java code compiles, runs, and communicates with Wordy code.

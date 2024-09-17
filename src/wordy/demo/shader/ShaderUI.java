@@ -23,7 +23,7 @@ import wordy.parser.WordyParser;
  * click on to zoom.
  */
 public class ShaderUI {
-    private static final boolean USE_COMPILER = false;
+    private static final boolean USE_COMPILER = true;
 
     private final StatementNode program;
     private final BufferedImage image;

@@ -5,6 +5,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.io.PrintWriter;
 
 import wordy.interpreter.EvaluationContext;
 
@@ -68,5 +69,14 @@ public class BlockNode extends StatementNode {
         for(StatementNode n : statements){
             n.run(context);
         }
+    }
+
+    @Override
+    public void compile(PrintWriter out) {
+        out.print("{\n");
+        for(StatementNode n : statements){
+            n.compile(out);
+        }
+        out.print("}\n");
     }
 }
