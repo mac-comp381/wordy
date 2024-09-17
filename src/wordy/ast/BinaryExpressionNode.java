@@ -1,5 +1,6 @@
 package wordy.ast;
 
+import java.io.PrintWriter;
 import java.util.Map;
 import java.util.Objects;
 
@@ -80,5 +81,19 @@ public class BinaryExpressionNode extends ExpressionNode {
             return result;
         }
         return 0;
+    }
+
+    public void compile(PrintWriter out) {
+        if (operator.name().equals("ADDITION")) {
+            out.print("(context." + lhs + " + " + "context." + rhs + ")");
+        } else if(operator.name().equals("SUBTRACTION")) {
+            out.print("(context." + lhs + " - " + "context." + rhs + ")"); 
+        } else if(operator.name().equals("MULTIPLICATION")) {
+            out.print("(context." + lhs + " * " + "context." + rhs + ")"); 
+        } else if(operator.name().equals("DIVISION")) {
+            out.print("(context." + lhs + " / " + "context." + rhs + ")"); 
+        } else if(operator.name().equals("EXPONENTIATION")) {            
+            out.print("(Math.pow(" + "context." + lhs + ", " + "context." + rhs + "))");
+        }
     }
 }

@@ -1,5 +1,6 @@
 package wordy.ast;
 
+import java.io.PrintWriter;
 import java.util.Collections;
 import java.util.Map;
 import java.util.Objects;
@@ -60,5 +61,9 @@ public class VariableNode extends ExpressionNode {
     @Override
     protected double doEvaluate(EvaluationContext context) {
         return context.get(name);
+    }
+
+    public void compile(PrintWriter out) {
+        out.print("context." + name);
     }
 }
