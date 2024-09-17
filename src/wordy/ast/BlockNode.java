@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
+import wordy.interpreter.EvaluationContext;
+
 /**
  * A sequence of zero or more sequentially executed statements in a Wordy abstract syntax tree.
  */
@@ -33,6 +35,13 @@ public class BlockNode extends StatementNode {
             result.put(String.valueOf(index), iter.next());
         }
         return result;
+    }
+
+    @Override
+    protected void doRun(EvaluationContext context){
+        for(StatementNode statement : statements){
+            statement.doRun(context);
+        }
     }
 
     @Override
