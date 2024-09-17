@@ -61,6 +61,6 @@ public class AssignmentNode extends StatementNode {
     @Override
     protected void doRun(EvaluationContext context) {
         double value = expression.evaluate(context);
-        context.setVariable(variable.getName(), value);
+        context.set(variable.getName(), value);
     }
 }
