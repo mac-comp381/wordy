@@ -4,7 +4,7 @@ import java.util.Map;
 import java.util.Objects;
 
 import wordy.interpreter.EvaluationContext;
-
+import java.io.PrintWriter;
 import static wordy.ast.Utils.orderedMap;
 
 /**
@@ -108,5 +108,25 @@ public class ConditionalNode extends StatementNode {
                 }
                 break;
         }
+    }
+    @Override
+    public void compile(PrintWriter out) {
+
+        Map<Operator, String> operatorMap = Map.of(
+            Operator.EQUALS, "==",
+            Operator.LESS_THAN, "<",
+            Operator.GREATER_THAN, ">"
+        );
+
+        out.print("if (");
+        lhs.compile(out);
+        out.print(" ");
+        out.print(operatorMap.get(operator));
+        out.print(" ");
+        rhs.compile(out);
+        out.print(") ");
+        ifTrue.compile(out);
+        out.print(" else ");
+        ifFalse.compile(out);
     }
 }
