@@ -2,6 +2,9 @@ package wordy.ast;
 
 import java.util.Map;
 import java.util.Objects;
+import java.io.PrintWriter;
+
+import wordy.interpreter.EvaluationContext;
 
 import static wordy.ast.Utils.orderedMap;
 
@@ -71,5 +74,54 @@ public class ConditionalNode extends StatementNode {
     @Override
     protected String describeAttributes() {
         return "(operator=" + operator + ')';
+    }
+
+    @Override
+    protected void doRun(EvaluationContext context){
+        if(operator.equals(Operator.EQUALS)){
+            if(lhs.evaluate(context) == rhs.evaluate(context)){
+                ifTrue.run(context);
+            }
+            else{
+                ifFalse.run(context);
+            }
+        }
+        else if(operator.equals(Operator.LESS_THAN)){
+            if(lhs.evaluate(context) < rhs.evaluate(context)){
+                ifTrue.run(context);
+            }
+            else{
+                ifFalse.run(context);
+            }
+        }
+        else{
+            if(lhs.evaluate(context) > rhs.evaluate(context)){
+                ifTrue.run(context);
+            }
+            else{
+                ifFalse.run(context);
+            }
+        }
+    }
+
+    @Override
+    public void compile(PrintWriter out) {
+        out.print("if(");
+        lhs.compile(out);
+        if(operator.equals(Operator.EQUALS)){
+            out.print(" == ");
+        }
+        else if(operator.equals(Operator.LESS_THAN)){
+            out.print(" < ");
+        }
+        else {
+            out.print(" > ");
+        }
+        rhs.compile(out);
+        out.print(") ");
+        ifTrue.compile(out);
+        out.print("else ");
+        ifFalse.compile(out);
+
     }
 }

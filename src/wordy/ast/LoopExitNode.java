@@ -2,6 +2,10 @@ package wordy.ast;
 
 import java.util.Collections;
 import java.util.Map;
+import java.io.PrintWriter;
+
+import wordy.interpreter.EvaluationContext;
+import wordy.interpreter.LoopExited;
 
 /**
  * A statement that causes program flow to exit the nearest-nested loop. Often called “break” in
@@ -32,4 +36,15 @@ public final class LoopExitNode extends StatementNode {
     public String toString() {
         return "LoopExitNode";
     }
+
+    @Override
+    protected void doRun(EvaluationContext context){
+        throw new LoopExited();
+    }
+
+    @Override
+    public void compile(PrintWriter out) {
+        out.print("break;\n");
+    }
+
 }
