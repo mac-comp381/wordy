@@ -69,6 +69,6 @@ public class BinaryExpressionNode extends ExpressionNode {
         else if (this.operator == Operator.MULTIPLICATION) return lhs.evaluate(context) * rhs.evaluate(context);
         else if (this.operator == Operator.DIVISION) return lhs.evaluate(context) / rhs.evaluate(context);
         else if (this.operator == Operator.EXPONENTIATION) return Math.pow(lhs.evaluate(context), rhs.evaluate(context));
-        else throw new UnsupportedOperationException("Operator not supported");
+        else throw new UnsupportedOperationException("Operator " + operator.toString() + " not supported");
     }
 }
