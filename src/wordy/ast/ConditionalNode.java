@@ -3,6 +3,8 @@ package wordy.ast;
 import java.util.Map;
 import java.util.Objects;
 
+import wordy.interpreter.EvaluationContext;
+
 import static wordy.ast.Utils.orderedMap;
 
 /**
@@ -72,4 +74,33 @@ public class ConditionalNode extends StatementNode {
     protected String describeAttributes() {
         return "(operator=" + operator + ')';
     }
+
+    @Override
+    protected void doRun(EvaluationContext context) {
+        boolean isCondition = false;
+
+        double left = lhs.evaluate(context);
+        double right = rhs.evaluate(context);
+        
+        if(operator == Operator.EQUALS){
+            isCondition = (left == right);
+        }
+        else if(operator == Operator.LESS_THAN){
+            isCondition = (left < right);
+        }
+        else if(operator == Operator.GREATER_THAN){
+            isCondition = (left > right);
+        }
+        else{
+            throw new UnsupportedOperationException("Interpreter not implemented yet for " + getClass().getSimpleName());
+        }
+
+        if(isCondition){
+            ifTrue.doRun(context);
+        }
+        else{
+            ifFalse.doRun(context); 
+        }
+    }
 }
+
