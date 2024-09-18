@@ -2,6 +2,7 @@ package wordy.ast;
 
 import java.util.Map;
 import java.util.Objects;
+import java.io.PrintWriter;
 
 import wordy.interpreter.EvaluationContext;
 
@@ -49,6 +50,31 @@ public class BinaryExpressionNode extends ExpressionNode {
         // https://stackoverflow.com/questions/4872978/how-do-i-pass-a-class-as-a-parameter-in-java
             //Specifically citing the answer from Olanrewaju O. Joseph
         throw new EnumConstantNotPresentException(Operator.class, operator.toString());
+    }
+
+    @Override
+    public void compile(PrintWriter out) {
+        if(operator.equals(Operator.EXPONENTIATION)){
+            out.print("Math.pow(");
+            lhs.compile(out);
+            out.print(", ");
+            rhs.compile(out);
+            out.println(")");
+            return;
+        }
+
+        out.print("(");
+        lhs.compile(out);
+        if(operator.equals(Operator.ADDITION))
+            out.print(" + ");
+        else if(operator.equals(Operator.DIVISION))
+            out.print(" / ");
+        else if(operator.equals(Operator.MULTIPLICATION))
+            out.print(" * ");
+        else if(operator.equals(Operator.SUBTRACTION))
+            out.print(" - ");
+        rhs.compile(out);
+        out.print(")");
     }
 
     @Override
