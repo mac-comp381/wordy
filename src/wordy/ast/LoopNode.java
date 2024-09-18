@@ -1,5 +1,9 @@
 package wordy.ast;
 
+import wordy.interpreter.EvaluationContext;
+import wordy.interpreter.LoopExited;
+
+import java.io.PrintWriter;
 import java.util.Map;
 import java.util.Objects;
 
@@ -22,6 +26,12 @@ public class LoopNode extends StatementNode {
     }
 
     @Override
+    public void compile(PrintWriter out) {
+        out.println("while (true)");
+        body.compile(out);
+    }
+
+    @Override
     public boolean equals(Object o) {
         if(this == o)
             return true;
@@ -39,5 +49,16 @@ public class LoopNode extends StatementNode {
     @Override
     public String toString() {
         return "LoopNode{body=" + body + '}';
+    }
+
+    @Override
+    protected void doRun(EvaluationContext context) {
+        while (true) {
+            try {
+                body.run(context);
+            } catch (LoopExited e) {
+                break;
+            }
+        }
     }
 }

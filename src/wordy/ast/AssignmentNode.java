@@ -1,5 +1,8 @@
 package wordy.ast;
 
+import wordy.interpreter.EvaluationContext;
+
+import java.io.PrintWriter;
 import java.util.Map;
 import java.util.Objects;
 
@@ -33,6 +36,14 @@ public class AssignmentNode extends StatementNode {
     }
 
     @Override
+    public void compile(PrintWriter out) {
+        variable.compile(out);
+        out.print(" = ");
+        expression.compile(out);
+        out.println(";");
+    }
+
+    @Override
     public boolean equals(Object o) {
         if(this == o)
             return true;
@@ -54,5 +65,11 @@ public class AssignmentNode extends StatementNode {
             + "variable='" + variable + '\''
             + ", expression=" + expression
             + '}';
+    }
+
+    @Override
+    protected void doRun(EvaluationContext context) {
+        double contents = expression.evaluate(context);
+        context.set(variable.getName(), contents);
     }
 }

@@ -1,5 +1,8 @@
 package wordy.ast;
 
+import wordy.interpreter.EvaluationContext;
+
+import java.io.PrintWriter;
 import java.util.Map;
 import java.util.Objects;
 
@@ -41,6 +44,32 @@ public class ConditionalNode extends StatementNode {
     }
 
     @Override
+    public void compile(PrintWriter out) {
+        out.print("if (");
+        if (this.operator == Operator.EQUALS) {
+            lhs.compile(out);
+            out.print(" == ");
+            rhs.compile(out);
+        }
+        else if (this.operator == Operator.LESS_THAN) {
+            lhs.compile(out);
+            out.print(" < ");
+            rhs.compile(out);
+        }
+        else if (this.operator == Operator.GREATER_THAN) {
+            lhs.compile(out);
+            out.print(" > ");
+            rhs.compile(out);
+        }
+        else throw new UnsupportedOperationException("Operator " + operator.toString() + " not supported");
+
+        out.println(")");
+        ifTrue.compile(out);
+        out.println("else");
+        ifFalse.compile(out);
+    }
+
+    @Override
     public boolean equals(Object o) {
         if(this == o) return true;
         if(o == null || getClass() != o.getClass()) return false;
@@ -71,5 +100,31 @@ public class ConditionalNode extends StatementNode {
     @Override
     protected String describeAttributes() {
         return "(operator=" + operator + ')';
+    }
+
+    @Override
+    protected void doRun(EvaluationContext context) {
+        if (operator == Operator.EQUALS) {
+            if (lhs.evaluate(context) == rhs.evaluate(context)) {
+                ifTrue.run(context);
+            } else {
+                ifFalse.run(context);
+            }
+        }
+        else if (operator == Operator.LESS_THAN) {
+            if (lhs.evaluate(context) < rhs.evaluate(context)) {
+                ifTrue.run(context);
+            } else {
+                ifFalse.run(context);
+            }
+        }
+        else if (operator == Operator.GREATER_THAN) {
+            if (lhs.evaluate(context) > rhs.evaluate(context)) {
+                ifTrue.run(context);
+            } else {
+                ifFalse.run(context);
+            }
+        }
+        else throw new UnsupportedOperationException("Operator " + operator.toString() + " not supported");
     }
 }

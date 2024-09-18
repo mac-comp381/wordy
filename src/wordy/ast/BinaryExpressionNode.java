@@ -1,5 +1,8 @@
 package wordy.ast;
 
+import wordy.interpreter.EvaluationContext;
+
+import java.io.PrintWriter;
 import java.util.Map;
 import java.util.Objects;
 
@@ -27,6 +30,46 @@ public class BinaryExpressionNode extends ExpressionNode {
         return orderedMap(
             "lhs", lhs,
             "rhs", rhs);
+    }
+
+    @Override
+    public void compile(PrintWriter out) {
+        if (this.operator == Operator.ADDITION) {
+            out.print("(");
+            lhs.compile(out);
+            out.print(" + ");
+            rhs.compile(out);
+            out.print(")");
+        }
+        else if (this.operator == Operator.SUBTRACTION) {
+            out.print("(");
+            lhs.compile(out);
+            out.print(" - ");
+            rhs.compile(out);
+            out.print(")");
+        }
+        else if (this.operator == Operator.MULTIPLICATION) {
+            out.print("(");
+            lhs.compile(out);
+            out.print(" * ");
+            rhs.compile(out);
+            out.print(")");
+        }
+        else if (this.operator == Operator.DIVISION) {
+            out.print("(");
+            lhs.compile(out);
+            out.print(" / ");
+            rhs.compile(out);
+            out.print(")");
+        }
+        else if (this.operator == Operator.EXPONENTIATION) {
+            out.print("Math.pow(");
+            lhs.compile(out);
+            out.print(", ");
+            rhs.compile(out);
+            out.print(")");
+        }
+        else throw new UnsupportedOperationException("Operator " + operator.toString() + " not supported");
     }
 
     @Override
@@ -58,5 +101,15 @@ public class BinaryExpressionNode extends ExpressionNode {
     @Override
     protected String describeAttributes() {
         return "(operator=" + operator + ')';
+    }
+
+    @Override
+    protected double doEvaluate(EvaluationContext context) {
+        if (this.operator == Operator.ADDITION) return lhs.evaluate(context) + rhs.evaluate(context);
+        else if (this.operator == Operator.SUBTRACTION) return lhs.evaluate(context) - rhs.evaluate(context);
+        else if (this.operator == Operator.MULTIPLICATION) return lhs.evaluate(context) * rhs.evaluate(context);
+        else if (this.operator == Operator.DIVISION) return lhs.evaluate(context) / rhs.evaluate(context);
+        else if (this.operator == Operator.EXPONENTIATION) return Math.pow(lhs.evaluate(context), rhs.evaluate(context));
+        else throw new UnsupportedOperationException("Operator " + operator.toString() + " not supported");
     }
 }
