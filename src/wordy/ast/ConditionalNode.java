@@ -63,11 +63,10 @@ public class ConditionalNode extends StatementNode {
         }
         else throw new UnsupportedOperationException("Operator " + operator.toString() + " not supported");
 
-        out.println(") {");
+        out.println(")");
         ifTrue.compile(out);
-        out.println("} else {");
+        out.println("else");
         ifFalse.compile(out);
-        out.println("}");
     }
 
     @Override

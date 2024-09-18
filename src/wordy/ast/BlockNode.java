@@ -40,9 +40,11 @@ public class BlockNode extends StatementNode {
 
     @Override
     public void compile(PrintWriter out) {
+        out.println("{");
         for (StatementNode statement : statements) {
             statement.compile(out);
         }
+        out.println("}");
     }
 
     @Override
