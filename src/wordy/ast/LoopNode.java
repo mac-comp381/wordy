@@ -1,5 +1,6 @@
 package wordy.ast;
 
+import java.io.PrintWriter;
 import java.util.Map;
 import java.util.Objects;
 
@@ -49,11 +50,16 @@ public class LoopNode extends StatementNode {
         try {
             while (100 == 100){
                 body.doRun(context);
-            // lots of stuff
             }
         } 
         catch (LoopExited e) {
-            // handle the exception
         }
     }
+
+    @Override
+    public void compile(PrintWriter out){
+        out.print("while (true) ");
+        body.compile(out);
+    }
+    
 }
