@@ -1,8 +1,11 @@
 package wordy.ast;
 
+import java.io.PrintWriter;
 import java.util.Collections;
 import java.util.Map;
 import java.util.Objects;
+
+import wordy.interpreter.EvaluationContext;
 
 /**
  * A variable reference (e.g. “x”) in a Wordy abstract syntax tree. Note that this is a variable
@@ -15,6 +18,16 @@ public class VariableNode extends ExpressionNode {
 
     public VariableNode(String name) {
         this.name = name;
+    }
+
+    @Override
+    protected double doEvaluate(EvaluationContext context) {
+        return context.get(name);
+    }
+
+    @Override
+    public void compile(PrintWriter out) {
+        out.print("context." + name);
     }
 
     /**

@@ -1,10 +1,13 @@
 package wordy.ast;
 
+import java.io.PrintWriter;
 import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+
+import wordy.interpreter.EvaluationContext;
 
 /**
  * A sequence of zero or more sequentially executed statements in a Wordy abstract syntax tree.
@@ -23,6 +26,24 @@ public class BlockNode extends StatementNode {
 
     public BlockNode(StatementNode... statements) {
         this.statements = Arrays.asList(statements);
+    }
+
+    @Override
+    protected void doRun(EvaluationContext context) {
+        for (StatementNode statementNode : statements) {
+            statementNode.run(context);
+        }
+    }
+
+    @Override
+    public void compile(PrintWriter out) {
+        out.print("{");
+        out.println();
+        for (StatementNode statementNode : statements) {
+            statementNode.compile(out);
+            out.println();
+        }
+        out.print("}");
     }
 
     @Override

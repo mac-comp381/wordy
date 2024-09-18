@@ -1,21 +1,19 @@
 package wordy.compiler;
 
-import org.junit.jupiter.api.Disabled;
-import org.junit.jupiter.api.Test;
-
-import java.io.PrintWriter;
-import java.io.StringWriter;
-
-import wordy.ast.ASTNode;
-import wordy.ast.ConstantNode;
-import wordy.ast.VariableNode;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static wordy.parser.WordyParser.parseExpression;
 import static wordy.parser.WordyParser.parseProgram;
 import static wordy.parser.WordyParser.parseStatement;
 
-@Disabled
+import java.io.PrintWriter;
+import java.io.StringWriter;
+
+import org.junit.jupiter.api.Test;
+
+import wordy.ast.ASTNode;
+import wordy.ast.ConstantNode;
+import wordy.ast.VariableNode;
+
 public class CompilerTest {
     @Test
     void compileConstant() {
