@@ -9,7 +9,7 @@ import static wordy.parser.WordyParser.parseExpression;
 import static wordy.parser.WordyParser.parseProgram;
 import static wordy.parser.WordyParser.parseStatement;
 
-@Disabled
+// @Disabled
 public class InterpreterTest {
     private final EvaluationContext context = new EvaluationContext();
 
