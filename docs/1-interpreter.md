@@ -225,6 +225,10 @@ Don’t forget to **commit and push your work**.
     - Click to zoom in on the fractal! But…oooo, that's slow.
     - Quit and relaunch ShaderUI, and note the rendering time it logs in the console for the initial view of the Mandelbrot set (`Done rendering (___ms)`). Write that number down.
 
+Rendering...
+Done rendering (7616ms)
+
+
 Do you see how incredibly cool this is?
 <details>
   <summary>I guess? Not really. How cool is it?</summary>
