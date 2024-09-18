@@ -101,8 +101,6 @@ public class BinaryExpressionNode extends ExpressionNode {
                 out.print(" / ");
                 break;
             case EXPONENTIATION:
-                out.print(" Math.pow(");
-                lhs.compile(out);
                 out.print(", ");
                 rhs.compile(out);
                 out.print(")");
@@ -111,6 +109,7 @@ public class BinaryExpressionNode extends ExpressionNode {
         rhs.compile(out);
         out.print(")");
     }
+
 
 
 }
