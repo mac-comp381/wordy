@@ -1,7 +1,11 @@
 package wordy.ast;
 
+import java.io.PrintWriter;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+
+import wordy.interpreter.EvaluationContext;
 
 import static wordy.ast.Utils.orderedMap;
 
@@ -71,5 +75,92 @@ public class ConditionalNode extends StatementNode {
     @Override
     protected String describeAttributes() {
         return "(operator=" + operator + ')';
+    }
+
+    @Override
+    protected void doRun(EvaluationContext context) {
+        double lhsValue = lhs.doEvaluate(context);
+        double rhsValue = rhs.doEvaluate(context);
+        boolean conditionMet = false;
+
+        switch (operator) {
+            case EQUALS:
+                conditionMet = (lhsValue == rhsValue);
+                break;
+            case LESS_THAN:
+                conditionMet = (lhsValue < rhsValue);
+                break;
+            case GREATER_THAN:
+                conditionMet = (lhsValue > rhsValue);
+                break;
+        }
+
+        if (conditionMet) {
+            ifTrue.doRun(context);
+        } else {
+            ifFalse.doRun(context);
+        }
+    }
+
+    public void compile(PrintWriter out) {
+        // Compile the conditional part: if (lhs < rhs)
+        out.print("if(");
+        lhs.compile(out);
+    
+        switch (operator) {
+            case EQUALS:
+                out.print(" == ");
+                break;
+            case LESS_THAN:
+                out.print(" < ");
+                break;
+            case GREATER_THAN:
+                out.print(" > ");
+                break;
+        }
+    
+        rhs.compile(out);
+        out.print(") ");
+    
+        // Compile the true block
+        if (ifTrue instanceof BlockNode blockTrue) {
+            if (blockTrue.getStatements().isEmpty()) {
+                out.print("{}"); // Print empty block as {}
+            } else if (blockTrue.getStatements().size() == 1) {
+                // Single statement, no braces needed
+                blockTrue.getStatements().get(0).compile(out);
+            } else {
+                // Multiple statements, use braces
+                out.println("{");
+                for (StatementNode stmt : blockTrue.getStatements()) {
+                    stmt.compile(out);
+                    out.println();
+                }
+                out.print("}");
+            }
+        } else {
+            ifTrue.compile(out);
+        }
+    
+        // Compile the false block
+        out.print(" else ");
+        if (ifFalse instanceof BlockNode blockFalse) {
+            if (blockFalse.getStatements().isEmpty()) {
+                out.print("{}"); // Print empty block as {}
+            } else if (blockFalse.getStatements().size() == 1) {
+                // Single statement, no braces needed
+                blockFalse.getStatements().get(0).compile(out);
+            } else {
+                // Multiple statements, use braces
+                out.println("{");
+                for (StatementNode stmt : blockFalse.getStatements()) {
+                    stmt.compile(out);
+                    out.println();
+                }
+                out.print("}");
+            }
+        } else {
+            ifFalse.compile(out);
+        }
     }
 }

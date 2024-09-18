@@ -1,7 +1,10 @@
 package wordy.ast;
 
+import java.io.PrintWriter;
 import java.util.Map;
 import java.util.Objects;
+
+import wordy.interpreter.EvaluationContext;
 
 import static wordy.ast.Utils.orderedMap;
 
@@ -54,5 +57,19 @@ public class AssignmentNode extends StatementNode {
             + "variable='" + variable + '\''
             + ", expression=" + expression
             + '}';
+    }
+
+    protected void doRun(EvaluationContext context) 
+    {
+        double result = expression.doEvaluate(context);
+        context.set(variable.getName(), result);
+    }
+
+    public void compile(PrintWriter out) {
+        out.print("context.");
+        out.print(variable.getName());
+        out.print(" = ");
+        expression.compile(out);
+        out.println(";");
     }
 }
