@@ -3,6 +3,7 @@ package wordy.ast;
 import wordy.interpreter.EvaluationContext;
 import wordy.interpreter.LoopExited;
 
+import java.io.PrintWriter;
 import java.util.Map;
 import java.util.Objects;
 
@@ -22,6 +23,13 @@ public class LoopNode extends StatementNode {
     @Override
     public Map<String, ASTNode> getChildren() {
         return Map.of("body", body);
+    }
+
+    @Override
+    public void compile(PrintWriter out) {
+        out.println("while (true) {");
+        body.compile(out);
+        out.println("}");
     }
 
     @Override

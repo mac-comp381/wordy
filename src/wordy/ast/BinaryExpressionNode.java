@@ -2,6 +2,7 @@ package wordy.ast;
 
 import wordy.interpreter.EvaluationContext;
 
+import java.io.PrintWriter;
 import java.util.Map;
 import java.util.Objects;
 
@@ -29,6 +30,46 @@ public class BinaryExpressionNode extends ExpressionNode {
         return orderedMap(
             "lhs", lhs,
             "rhs", rhs);
+    }
+
+    @Override
+    public void compile(PrintWriter out) {
+        if (this.operator == Operator.ADDITION) {
+            out.print("(");
+            lhs.compile(out);
+            out.print(" + ");
+            rhs.compile(out);
+            out.print(")");
+        }
+        else if (this.operator == Operator.SUBTRACTION) {
+            out.print("(");
+            lhs.compile(out);
+            out.print(" - ");
+            rhs.compile(out);
+            out.print(")");
+        }
+        else if (this.operator == Operator.MULTIPLICATION) {
+            out.print("(");
+            lhs.compile(out);
+            out.print(" * ");
+            rhs.compile(out);
+            out.print(")");
+        }
+        else if (this.operator == Operator.DIVISION) {
+            out.print("(");
+            lhs.compile(out);
+            out.print(" / ");
+            rhs.compile(out);
+            out.print(")");
+        }
+        else if (this.operator == Operator.EXPONENTIATION) {
+            out.print("Math.pow(");
+            lhs.compile(out);
+            out.print(", ");
+            rhs.compile(out);
+            out.print(")");
+        }
+        else throw new UnsupportedOperationException("Operator " + operator.toString() + " not supported");
     }
 
     @Override

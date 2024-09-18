@@ -2,6 +2,7 @@ package wordy.ast;
 
 import wordy.interpreter.EvaluationContext;
 
+import java.io.PrintWriter;
 import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -35,6 +36,13 @@ public class BlockNode extends StatementNode {
             result.put(String.valueOf(index), iter.next());
         }
         return result;
+    }
+
+    @Override
+    public void compile(PrintWriter out) {
+        for (StatementNode statement : statements) {
+            statement.compile(out);
+        }
     }
 
     @Override

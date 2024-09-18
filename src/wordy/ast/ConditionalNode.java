@@ -2,6 +2,7 @@ package wordy.ast;
 
 import wordy.interpreter.EvaluationContext;
 
+import java.io.PrintWriter;
 import java.util.Map;
 import java.util.Objects;
 
@@ -40,6 +41,33 @@ public class ConditionalNode extends StatementNode {
             "rhs", rhs,
             "ifTrue", ifTrue,
             "ifFalse", ifFalse);
+    }
+
+    @Override
+    public void compile(PrintWriter out) {
+        out.print("if (");
+        if (this.operator == Operator.EQUALS) {
+            lhs.compile(out);
+            out.print(" == ");
+            rhs.compile(out);
+        }
+        else if (this.operator == Operator.LESS_THAN) {
+            lhs.compile(out);
+            out.print(" < ");
+            rhs.compile(out);
+        }
+        else if (this.operator == Operator.GREATER_THAN) {
+            lhs.compile(out);
+            out.print(" > ");
+            rhs.compile(out);
+        }
+        else throw new UnsupportedOperationException("Operator " + operator.toString() + " not supported");
+
+        out.println(") {");
+        ifTrue.compile(out);
+        out.println("} else {");
+        ifFalse.compile(out);
+        out.println("}");
     }
 
     @Override

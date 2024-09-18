@@ -3,6 +3,7 @@ package wordy.ast;
 import wordy.interpreter.EvaluationContext;
 import wordy.interpreter.LoopExited;
 
+import java.io.PrintWriter;
 import java.util.Collections;
 import java.util.Map;
 
@@ -20,6 +21,12 @@ public final class LoopExitNode extends StatementNode {
     public Map<String, ASTNode> getChildren() {
         return Collections.emptyMap();
     }
+
+    @Override
+    public void compile(PrintWriter out) {
+        out.println("break;");
+    }
+
     @Override
     public boolean equals(Object o) {
         return this == o
