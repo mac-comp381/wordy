@@ -1,7 +1,10 @@
 package wordy.ast;
 
+import java.io.PrintWriter;
 import java.util.Map;
 import java.util.Objects;
+
+import wordy.interpreter.EvaluationContext;
 
 import static wordy.ast.Utils.orderedMap;
 
@@ -71,5 +74,77 @@ public class ConditionalNode extends StatementNode {
     @Override
     protected String describeAttributes() {
         return "(operator=" + operator + ')';
+    }
+
+    @Override
+    protected void doRun(EvaluationContext context) {
+        double lhsValue = lhs.doEvaluate(context);
+        double rhsValue = rhs.doEvaluate(context);
+
+        switch (operator) {
+            case EQUALS:
+                if (lhsValue == rhsValue) {
+                    ifTrue.doRun(context);
+                } else {
+                    ifFalse.doRun(context);
+                }
+                break;
+            
+            case LESS_THAN:
+                if (lhsValue < rhsValue) {
+                    ifTrue.doRun(context);
+                } else {
+                    ifFalse.doRun(context);
+                }
+                break;
+
+            case GREATER_THAN:
+                if (lhsValue > rhsValue) {
+                    ifTrue.doRun(context);
+                } else {
+                    ifFalse.doRun(context);
+                }
+                break;
+        
+            default:
+                throw new UnsupportedOperationException("Operator error, for " + getClass().getSimpleName());
+        }
+    }
+
+    public void compile(PrintWriter out) {
+        switch (operator) {
+            case EQUALS:
+                out.print("if(");
+                lhs.compile(out);
+                out.print(" == ");
+                rhs.compile(out);
+                out.print(") ");
+                ifTrue.compile(out);
+                out.print(" else ");
+                ifFalse.compile(out);
+                break;
+
+            case LESS_THAN:
+                out.print("if(");
+                lhs.compile(out);
+                out.print(" < ");
+                rhs.compile(out);
+                out.print(") ");
+                ifTrue.compile(out);
+                out.print(" else ");
+                ifFalse.compile(out);
+                break;
+
+            case GREATER_THAN:
+                out.print("if(");
+                lhs.compile(out);
+                out.print(" > ");
+                rhs.compile(out);
+                out.print(") ");
+                ifTrue.compile(out);
+                out.print(" else ");
+                ifFalse.compile(out);
+                break;
+        }
     }
 }

@@ -1,7 +1,10 @@
 package wordy.ast;
 
+import java.io.PrintWriter;
 import java.util.Map;
 import java.util.Objects;
+
+import wordy.interpreter.EvaluationContext;
 
 import static wordy.ast.Utils.orderedMap;
 
@@ -58,5 +61,73 @@ public class BinaryExpressionNode extends ExpressionNode {
     @Override
     protected String describeAttributes() {
         return "(operator=" + operator + ')';
+    }
+
+    @Override
+    protected double doEvaluate(EvaluationContext context) {
+
+        switch (operator) {
+            case ADDITION:
+                return lhs.doEvaluate(context) + rhs.doEvaluate(context);
+        
+            case SUBTRACTION:
+                return lhs.doEvaluate(context) - rhs.doEvaluate(context);
+
+            case MULTIPLICATION:
+                return lhs.doEvaluate(context) * rhs.doEvaluate(context);
+
+            case DIVISION:
+                return lhs.doEvaluate(context) / rhs.doEvaluate(context);
+
+            case EXPONENTIATION:
+                return Math.pow(lhs.doEvaluate(context), rhs.doEvaluate(context));
+
+            default:
+                throw new UnsupportedOperationException("Error operator " + getClass().getSimpleName());
+        }        
+    }
+
+    public void compile(PrintWriter out) {
+        switch (operator) {
+            case ADDITION:
+                out.print("(");
+                lhs.compile(out);
+                out.print(" + ");
+                rhs.compile(out);
+                out.print(")");
+                break;
+        
+            case SUBTRACTION:
+                out.print("(");
+                lhs.compile(out);
+                out.print(" - ");
+                rhs.compile(out);
+                out.print(")");
+                break;
+
+            case MULTIPLICATION:
+                out.print("(");
+                lhs.compile(out);
+                out.print(" * ");
+                rhs.compile(out);
+                out.print(")");
+                break;
+
+            case DIVISION:
+                out.print("(");
+                lhs.compile(out);
+                out.print(" / ");
+                rhs.compile(out);
+                out.print(")");
+                break;
+
+            case EXPONENTIATION:
+                out.print("Math.pow(");
+                lhs.compile(out);
+                out.print(", ");
+                rhs.compile(out);
+                out.print(")");
+                break;
+        }
     }
 }
