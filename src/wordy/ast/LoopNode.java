@@ -50,7 +50,7 @@ public class LoopNode extends StatementNode {
             while (true) {
                 body.doRun(context);   
             }
-        } catch (Exception loopExited) {
+        } catch (LoopExited loopExited) {
             // loop done :)
         }
     }
