@@ -3,6 +3,8 @@ package wordy.ast;
 import java.util.Map;
 import java.util.Objects;
 
+import wordy.interpreter.EvaluationContext;
+
 import static wordy.ast.Utils.orderedMap;
 
 /**
@@ -58,5 +60,21 @@ public class BinaryExpressionNode extends ExpressionNode {
     @Override
     protected String describeAttributes() {
         return "(operator=" + operator + ')';
+    }
+
+    @Override
+    protected double doEvaluate(EvaluationContext context) {
+        // I'm not very familiar with enums. There might be a better way to do this?
+        if (operator.toString().equals("ADDITION")) {
+            return lhs.doEvaluate(context) + rhs.doEvaluate(context);  
+        } else if (operator.toString().equals("SUBTRACTION")) {
+            return lhs.doEvaluate(context) - rhs.doEvaluate(context);  
+        }  else if (operator.toString().equals("MULTIPLICATION")) {
+            return lhs.doEvaluate(context) * rhs.doEvaluate(context);  
+        }  else if (operator.toString().equals("DIVISION")) {
+            return lhs.doEvaluate(context) / rhs.doEvaluate(context);  
+        }  else {
+            return Math.pow(lhs.doEvaluate(context), rhs.doEvaluate(context));
+        } 
     }
 }

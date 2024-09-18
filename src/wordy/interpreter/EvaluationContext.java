@@ -16,7 +16,7 @@ import wordy.ast.ASTNode;
  *
  * @see wordy.compiler.WordyExecutable.ExecutionContext for the compiler counterpart to this class
  */
-public class EvaluationContext {
+public class  EvaluationContext {
     private final Map<String,Double> variables = new LinkedHashMap<>();
     private final Tracer tracer;
 
