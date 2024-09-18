@@ -1,7 +1,11 @@
 package wordy.ast;
 
+import java.io.PrintWriter;
+
 import java.util.Map;
 import java.util.Objects;
+
+import wordy.interpreter.EvaluationContext;
 
 import static wordy.ast.Utils.orderedMap;
 
@@ -58,5 +62,59 @@ public class BinaryExpressionNode extends ExpressionNode {
     @Override
     protected String describeAttributes() {
         return "(operator=" + operator + ')';
+    }
+
+    @Override
+    protected double doEvaluate(EvaluationContext context) {
+        if (operator.name().equals("ADDITION")) {
+            return lhs.evaluate(context) + rhs.evaluate(context);
+        } else if(operator.name().equals("SUBTRACTION")) {
+            return lhs.evaluate(context) - rhs.evaluate(context);
+        } else if(operator.name().equals("MULTIPLICATION")) {
+            return lhs.evaluate(context) * rhs.evaluate(context);
+        } else if(operator.name().equals("DIVISION")) {
+            return lhs.evaluate(context) / rhs.evaluate(context);
+        } else if(operator.name().equals("EXPONENTIATION")) {
+            double result = lhs.evaluate(context);
+            for (int i = 1; i < rhs.evaluate(context); i++) {
+                result = result * lhs.evaluate(context);
+            }
+            return result;
+        }
+        return 0;
+    }
+
+    public void compile(PrintWriter out) {
+        if (operator.name().equals("ADDITION")) {
+            out.print("(");
+            lhs.compile(out) ;
+            out.print(" + ");
+            rhs.compile(out);
+            out.print(")");
+        } else if(operator.name().equals("SUBTRACTION")) {
+            out.print("(");
+            lhs.compile(out) ;
+            out.print(" - ");
+            rhs.compile(out);
+            out.print(")");        
+        } else if(operator.name().equals("MULTIPLICATION")) {
+            out.print("(");
+            lhs.compile(out) ;
+            out.print(" * ");
+            rhs.compile(out);
+            out.print(")");
+        } else if(operator.name().equals("DIVISION")) {
+            out.print("(");
+            lhs.compile(out) ;
+            out.print(" / ");
+            rhs.compile(out);
+            out.print(")");
+        } else if(operator.name().equals("EXPONENTIATION")) {   
+            out.print("Math.pow(");
+            lhs.compile(out) ;
+            out.print(", ");
+            rhs.compile(out);
+            out.print(")");
+        }
     }
 }
