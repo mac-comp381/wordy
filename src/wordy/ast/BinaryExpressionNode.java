@@ -1,9 +1,12 @@
 package wordy.ast;
 
+import java.io.PrintWriter;
 import java.util.Map;
 import java.util.Objects;
 
 import static wordy.ast.Utils.orderedMap;
+import wordy.interpreter.EvaluationContext;
+
 
 /**
  * Two expressions joined by an operator (e.g. “x plus y”) in a Wordy abstract syntax tree.
@@ -59,4 +62,61 @@ public class BinaryExpressionNode extends ExpressionNode {
     protected String describeAttributes() {
         return "(operator=" + operator + ')';
     }
+
+    @Override
+    protected double doEvaluate(EvaluationContext context) {
+        double lhsValue = lhs.evaluate(context);
+        double rhsValue = rhs.evaluate(context);
+        switch(operator) {
+            case ADDITION:
+                return lhsValue + rhsValue;
+            case SUBTRACTION:
+                return lhsValue - rhsValue;
+            case MULTIPLICATION:
+                return lhsValue * rhsValue;
+            case DIVISION:
+                return lhsValue / rhsValue;
+            case EXPONENTIATION:
+                return Math.pow(lhsValue, rhsValue);
+            default:
+                throw new AssertionError("Unknown operator: " + operator);
+        }
+    }
+
+    @Override
+    public void compile(PrintWriter out) {
+        if (operator == Operator.EXPONENTIATION) {
+            out.print("Math.pow(");
+            lhs.compile(out);
+            out.print(", ");
+            if (rhs instanceof ConstantNode && ((ConstantNode) rhs).getValue() == 2.0) {
+                out.print("2.0");
+            } else {
+                rhs.compile(out);
+            }
+            out.print(")");
+        } else {
+            out.print("(");
+            lhs.compile(out);
+            switch (operator) {
+                case ADDITION:
+                    out.print(" + ");
+                    break;
+                case SUBTRACTION:
+                    out.print(" - ");
+                    break;
+                case MULTIPLICATION:
+                    out.print(" * ");
+                    break;
+                case DIVISION:
+                    out.print(" / ");
+                    break;
+            }
+            rhs.compile(out);
+            out.print(")");
+        }
+    }
+
+
+
 }
