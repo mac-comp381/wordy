@@ -3,6 +3,8 @@ package wordy.ast;
 import java.util.Collections;
 import java.util.Map;
 
+import java.io.PrintWriter;
+
 import wordy.interpreter.EvaluationContext;
 import wordy.interpreter.LoopExited;
 
@@ -39,5 +41,9 @@ public final class LoopExitNode extends StatementNode {
     @Override
     protected void doRun(EvaluationContext context) {
         throw new LoopExited();
+    }
+
+    public void compile(PrintWriter out) {
+        out.print("break;");
     }
 }
