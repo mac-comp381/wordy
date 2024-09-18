@@ -85,29 +85,36 @@ public class BinaryExpressionNode extends ExpressionNode {
 
     @Override
     public void compile(PrintWriter out) {
-        out.print("(");
-        lhs.compile(out);
-        switch (operator) {
-            case ADDITION:
-                out.print(" + ");
-                break;
-            case SUBTRACTION:
-                out.print(" - ");
-                break;
-            case MULTIPLICATION:
-                out.print(" * ");
-                break;
-            case DIVISION:
-                out.print(" / ");
-                break;
-            case EXPONENTIATION:
-                out.print(", ");
+        if (operator == Operator.EXPONENTIATION) {
+            out.print("Math.pow(");
+            lhs.compile(out);
+            out.print(", ");
+            if (rhs instanceof ConstantNode && ((ConstantNode) rhs).getValue() == 2.0) {
+                out.print("2.0");
+            } else {
                 rhs.compile(out);
-                out.print(")");
-                return;
+            }
+            out.print(")");
+        } else {
+            out.print("(");
+            lhs.compile(out);
+            switch (operator) {
+                case ADDITION:
+                    out.print(" + ");
+                    break;
+                case SUBTRACTION:
+                    out.print(" - ");
+                    break;
+                case MULTIPLICATION:
+                    out.print(" * ");
+                    break;
+                case DIVISION:
+                    out.print(" / ");
+                    break;
+            }
+            rhs.compile(out);
+            out.print(")");
         }
-        rhs.compile(out);
-        out.print(")");
     }
 
 

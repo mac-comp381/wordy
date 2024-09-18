@@ -56,4 +56,8 @@ public final class ConstantNode extends ExpressionNode {
     public void compile(PrintWriter out) {
         out.print(value);
     }
+
+    public double getValue() {
+        return value;
+    }
 }
