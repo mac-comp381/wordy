@@ -15,7 +15,6 @@ import static wordy.parser.WordyParser.parseExpression;
 import static wordy.parser.WordyParser.parseProgram;
 import static wordy.parser.WordyParser.parseStatement;
 
-@Disabled
 public class CompilerTest {
     @Test
     void compileConstant() {
@@ -88,12 +87,12 @@ public class CompilerTest {
             "exit loop");
     }
 
-    @Test
-    void compileLoop() {
-        assertStatementCompilesTo(
-            "while(true) { context.x = (context.x + 1.0); }",
-            "loop: set x to x plus 1. end of loop");
-    }
+        @Test
+        void compileLoop() {
+            assertStatementCompilesTo(
+                "while(true) { context.x = (context.x + 1.0); }",
+                "loop: set x to x plus 1. end of loop");
+        }
 
     // Full end-to-end test; other tests here just check generated code.
     @Test
