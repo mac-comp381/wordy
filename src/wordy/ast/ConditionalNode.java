@@ -1,7 +1,10 @@
 package wordy.ast;
 
+import java.io.PrintWriter;
 import java.util.Map;
 import java.util.Objects;
+
+import wordy.interpreter.EvaluationContext;
 
 import static wordy.ast.Utils.orderedMap;
 
@@ -38,6 +41,55 @@ public class ConditionalNode extends StatementNode {
             "rhs", rhs,
             "ifTrue", ifTrue,
             "ifFalse", ifFalse);
+    }
+
+    @Override
+    protected void doRun(EvaluationContext context){
+        double lhsNum = lhs.doEvaluate(context);
+        double rhsNum = rhs.doEvaluate(context);
+        if(operator.equals(Operator.EQUALS)){
+            if(lhsNum == rhsNum){
+                ifTrue.doRun(context);
+            } else {
+                ifFalse.doRun(context);
+            }
+        }
+        else if(operator.equals(Operator.GREATER_THAN)){
+            if(lhsNum > rhsNum){
+                ifTrue.doRun(context);
+            } else {
+                ifFalse.doRun(context);
+            }
+        }
+        else if(operator.equals(Operator.LESS_THAN)){
+            if(lhsNum < rhsNum){
+                ifTrue.doRun(context);
+            } else {
+                ifFalse.doRun(context);
+            }
+        }
+    }
+
+    @Override
+    public void compile(PrintWriter out){
+        out.print("if(");
+        lhs.compile(out);
+
+        if(operator.equals(Operator.LESS_THAN)){
+            out.print(" < ");
+        }
+        else if(operator.equals(Operator.EQUALS)){
+            out.print(" == ");
+        }
+        else if(operator.equals(Operator.GREATER_THAN)){
+            out.print(" > ");
+        }
+
+        rhs.compile(out);
+        out.print(")");
+        ifTrue.compile(out);
+        out.print("else ");
+        ifFalse.compile(out);
     }
 
     @Override
