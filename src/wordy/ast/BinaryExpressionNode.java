@@ -87,28 +87,30 @@ public class BinaryExpressionNode extends ExpressionNode {
     public void compile(PrintWriter out) {
         out.print("(");
         lhs.compile(out);
-        out.print(" ");
-        switch(operator) {
+        switch (operator) {
             case ADDITION:
-                out.print("+");
+                out.print(" + ");
                 break;
             case SUBTRACTION:
-                out.print("-");
+                out.print(" - ");
                 break;
             case MULTIPLICATION:
-                out.print("*");
+                out.print(" * ");
                 break;
             case DIVISION:
-                out.print("/");
+                out.print(" / ");
                 break;
             case EXPONENTIATION:
-                out.print("^");
-                break;
-            default:
-                throw new AssertionError("Unknown operator: " + operator);
+                out.print(" Math.pow(");
+                lhs.compile(out);
+                out.print(", ");
+                rhs.compile(out);
+                out.print(")");
+                return;
         }
-        out.print(" ");
         rhs.compile(out);
         out.print(")");
     }
+
+
 }
