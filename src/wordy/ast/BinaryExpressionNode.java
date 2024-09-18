@@ -2,6 +2,9 @@ package wordy.ast;
 
 import java.util.Map;
 import java.util.Objects;
+import java.io.PrintWriter;
+
+import wordy.interpreter.EvaluationContext;
 
 import static wordy.ast.Utils.orderedMap;
 
@@ -58,5 +61,56 @@ public class BinaryExpressionNode extends ExpressionNode {
     @Override
     protected String describeAttributes() {
         return "(operator=" + operator + ')';
+    }
+
+    @Override
+    protected double doEvaluate(EvaluationContext context) {
+        // I'm not very familiar with enums. There might be a better way to do this?
+        if (operator.toString().equals("ADDITION")) {
+            return lhs.doEvaluate(context) + rhs.doEvaluate(context);  
+        } else if (operator.toString().equals("SUBTRACTION")) {
+            return lhs.doEvaluate(context) - rhs.doEvaluate(context);  
+        }  else if (operator.toString().equals("MULTIPLICATION")) {
+            return lhs.doEvaluate(context) * rhs.doEvaluate(context);  
+        }  else if (operator.toString().equals("DIVISION")) {
+            return lhs.doEvaluate(context) / rhs.doEvaluate(context);  
+        }  else {
+            return Math.pow(lhs.doEvaluate(context), rhs.doEvaluate(context));
+        } 
+    }
+
+    @Override
+    public void compile(PrintWriter out) {
+        if (operator.toString().equals("ADDITION")) {
+            out.print("(");
+            lhs.compile(out);
+            out.print("+");
+            rhs.compile(out); 
+            out.print(")");
+        } else if (operator.toString().equals("SUBTRACTION")) {
+            out.print("(");
+            lhs.compile(out);
+            out.print("-");
+            rhs.compile(out); 
+            out.print(")");
+        }  else if (operator.toString().equals("MULTIPLICATION")) {
+            out.print("(");
+            lhs.compile(out);
+            out.print("*");
+            rhs.compile(out); 
+            out.print(")"); 
+        }  else if (operator.toString().equals("DIVISION")) {
+            out.print("(");
+            lhs.compile(out);
+            out.print("/");
+            rhs.compile(out); 
+            out.print(")");
+        }  else {
+            out.print("Math.pow(");
+            lhs.compile(out);
+            out.print(",");
+            rhs.compile(out); 
+            out.print(")");
+        } 
     }
 }

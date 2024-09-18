@@ -2,6 +2,9 @@ package wordy.ast;
 
 import java.util.Map;
 import java.util.Objects;
+import java.io.PrintWriter;
+
+import wordy.interpreter.EvaluationContext;
 
 import static wordy.ast.Utils.orderedMap;
 
@@ -71,5 +74,44 @@ public class ConditionalNode extends StatementNode {
     @Override
     protected String describeAttributes() {
         return "(operator=" + operator + ')';
+    }
+
+    @Override
+    protected void doRun(EvaluationContext context) {
+        boolean conditionalResult;
+        if (operator.toString().equals("EQUALS")) {
+            conditionalResult = (lhs.evaluate(context) == rhs.evaluate(context));
+        } else if (operator.toString().equals("LESS_THAN")) {
+            conditionalResult = (lhs.evaluate(context) < rhs.evaluate(context)); 
+        }  else if (operator.toString().equals("GREATER_THAN")) {
+            conditionalResult = (lhs.evaluate(context) > rhs.evaluate(context));
+        }  else {
+            throw new UnsupportedOperationException("Invalid operator " + operator.toString());
+        } 
+        if (conditionalResult) {
+            ifTrue.doRun(context);
+        } else {
+            ifFalse.doRun(context);
+        }   
+    }
+
+    @Override
+    public void compile(PrintWriter out) {
+        out.print("if (");
+        lhs.compile(out);
+        if (operator.toString().equals("EQUALS")) {
+            out.print("==");
+        } else if (operator.toString().equals("LESS_THAN")) {
+            out.print("<");
+        }  else if (operator.toString().equals("GREATER_THAN")) {
+            out.print(">");
+        }  else {
+            throw new UnsupportedOperationException("Invalid operator " + operator.toString());
+        } 
+        rhs.compile(out);
+        out.print(")");
+        ifTrue.compile(out);
+        out.print("else ");
+        ifFalse.compile(out);
     }
 }
