@@ -70,5 +70,6 @@ public class AssignmentNode extends StatementNode {
         variable.compile(out);
         out.print(" = ");
         expression.compile(out);
+        out.print(";");
     }
 }
