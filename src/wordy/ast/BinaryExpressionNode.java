@@ -2,6 +2,7 @@ package wordy.ast;
 
 import java.util.Map;
 import java.util.Objects;
+import java.io.PrintWriter;
 
 import wordy.interpreter.EvaluationContext;
 
@@ -75,6 +76,41 @@ public class BinaryExpressionNode extends ExpressionNode {
             return lhs.doEvaluate(context) / rhs.doEvaluate(context);  
         }  else {
             return Math.pow(lhs.doEvaluate(context), rhs.doEvaluate(context));
+        } 
+    }
+
+    @Override
+    public void compile(PrintWriter out) {
+        if (operator.toString().equals("ADDITION")) {
+            out.print("(");
+            lhs.compile(out);
+            out.print("+");
+            rhs.compile(out); 
+            out.print(")");
+        } else if (operator.toString().equals("SUBTRACTION")) {
+            out.print("(");
+            lhs.compile(out);
+            out.print("-");
+            rhs.compile(out); 
+            out.print(")");
+        }  else if (operator.toString().equals("MULTIPLICATION")) {
+            out.print("(");
+            lhs.compile(out);
+            out.print("*");
+            rhs.compile(out); 
+            out.print(")"); 
+        }  else if (operator.toString().equals("DIVISION")) {
+            out.print("(");
+            lhs.compile(out);
+            out.print("/");
+            rhs.compile(out); 
+            out.print(")");
+        }  else {
+            out.print("Math.pow(");
+            lhs.compile(out);
+            out.print(",");
+            rhs.compile(out); 
+            out.print(")");
         } 
     }
 }
