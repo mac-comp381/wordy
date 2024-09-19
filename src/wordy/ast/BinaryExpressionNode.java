@@ -1,7 +1,10 @@
 package wordy.ast;
 
+import java.io.PrintWriter;
 import java.util.Map;
 import java.util.Objects;
+
+import wordy.interpreter.EvaluationContext;
 
 import static wordy.ast.Utils.orderedMap;
 
@@ -58,5 +61,58 @@ public class BinaryExpressionNode extends ExpressionNode {
     @Override
     protected String describeAttributes() {
         return "(operator=" + operator + ')';
+    }
+
+    @Override
+    protected double doEvaluate(EvaluationContext context){
+        Double lval = this.lhs.evaluate(context);
+        Double rval = this.rhs.evaluate(context);
+        switch (this.operator) {
+            case ADDITION:
+                return lval + rval;
+            case SUBTRACTION:
+                return lval - rval;
+            case MULTIPLICATION:
+                return lval * rval;
+            case DIVISION:
+                return lval / rval;
+            case EXPONENTIATION:
+                return Math.pow(lval, rval);
+            default:
+                return -1;
+        }
+    }
+
+    @Override
+    public void compile(PrintWriter out) {
+        if (operator == Operator.EXPONENTIATION) {
+            out.print("Math.pow(");
+            lhs.compile(out);
+            out.print(", ");
+            rhs.compile(out);
+            out.print(")");
+        }
+        else {
+            out.print("(");
+            lhs.compile(out);
+            switch (this.operator) {
+                case ADDITION:
+                    out.print(" + ");
+                    break;
+                case SUBTRACTION:
+                    out.print(" - ");
+                    break;
+                case MULTIPLICATION:
+                    out.print(" * ");
+                    break;
+                case DIVISION:
+                    out.print(" / ");
+                    break;
+                default:
+                    break;
+            }
+            rhs.compile(out);
+            out.print(")");
+        }
     }
 }
