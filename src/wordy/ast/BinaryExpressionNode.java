@@ -1,7 +1,10 @@
 package wordy.ast;
 
+import java.io.PrintWriter;
 import java.util.Map;
 import java.util.Objects;
+
+import wordy.interpreter.EvaluationContext;
 
 import static wordy.ast.Utils.orderedMap;
 
@@ -58,5 +61,56 @@ public class BinaryExpressionNode extends ExpressionNode {
     @Override
     protected String describeAttributes() {
         return "(operator=" + operator + ')';
+    }
+
+    @Override
+    protected double doEvaluate(EvaluationContext context) {
+        if (operator == Operator.ADDITION) {
+            return lhs.evaluate(context) + rhs.evaluate(context);
+        }
+        if (operator == Operator.SUBTRACTION) {
+            return lhs.evaluate(context) - rhs.evaluate(context);
+        }
+        if (operator == Operator.MULTIPLICATION) {
+            return lhs.evaluate(context) * rhs.evaluate(context);
+        }
+        if (operator == Operator.DIVISION) {
+            return lhs.evaluate(context) / rhs.evaluate(context);
+        }
+        if (operator == Operator.EXPONENTIATION) {
+            return Math.pow(lhs.evaluate(context), rhs.evaluate(context));
+        }
+        return 0;
+    }
+
+    @Override
+    public void compile(PrintWriter out) {
+        if (operator != Operator.EXPONENTIATION) {
+            out.print("(");
+            lhs.compile(out);
+        }
+        if (operator == Operator.ADDITION) {
+            out.print(" + ");
+        }
+        if (operator == Operator.SUBTRACTION) {
+            out.print(" - ");
+        }
+        if (operator == Operator.MULTIPLICATION) {
+            out.print(" * ");
+        }
+        if (operator == Operator.DIVISION) {
+            out.print(" / ");
+        }
+        if (operator == Operator.EXPONENTIATION) {
+            out.print("Math.pow(");
+            lhs.compile(out);
+            out.print(", ");
+            rhs.compile(out);
+            out.print(")");
+        }
+        else {
+            rhs.compile(out);
+            out.print(")");
+        }
     }
 }
