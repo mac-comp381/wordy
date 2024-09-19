@@ -1,5 +1,6 @@
 package wordy.ast;
 
+import java.io.PrintWriter;
 import java.util.Map;
 import java.util.Objects;
 
@@ -62,5 +63,13 @@ public class AssignmentNode extends StatementNode {
     protected void doRun(EvaluationContext context){
         context.set(this.variable.getName(), this.expression.evaluate(context));
         return;
+    }
+
+    @Override
+    public void compile(PrintWriter out) {
+        variable.compile(out);
+        out.print(" = ");
+        expression.compile(out);
+        out.print(";");
     }
 }
