@@ -1,7 +1,10 @@
 package wordy.ast;
 
+import java.io.PrintWriter;
 import java.util.Map;
 import java.util.Objects;
+
+import wordy.interpreter.EvaluationContext;
 
 import static wordy.ast.Utils.orderedMap;
 
@@ -58,5 +61,66 @@ public class BinaryExpressionNode extends ExpressionNode {
     @Override
     protected String describeAttributes() {
         return "(operator=" + operator + ')';
+    }
+
+    @Override
+    protected double doEvaluate(EvaluationContext context) {
+        double lhs = this.lhs.evaluate(context);
+        double rhs = this.rhs.evaluate(context);
+        switch (this.operator) {
+            case ADDITION:
+                return lhs + rhs;
+
+            case SUBTRACTION:
+                return lhs - rhs;
+
+            case MULTIPLICATION:
+                return lhs * rhs;
+
+            case DIVISION:
+                return lhs / rhs;
+            
+            case EXPONENTIATION:
+                return Math.pow(lhs, rhs);
+        
+            default:
+                return 0;
+        }
+    }
+
+    @Override
+    public void compile(PrintWriter out) {
+        if (operator == Operator.EXPONENTIATION) {
+            out.print("Math.pow(");
+            lhs.compile(out);
+            out.print(", ");
+            rhs.compile(out);
+            out.print(")");
+        } else {
+            out.print("(");
+            lhs.compile(out);
+            switch (operator) {
+                case ADDITION:
+                    out.print(" + ");
+                    break;
+            
+                case SUBTRACTION:
+                    out.print(" - ");
+                    break;
+            
+                case MULTIPLICATION:
+                    out.print(" * ");
+                    break;
+            
+                case DIVISION:
+                    out.print(" / ");
+                    break;
+            
+                default:
+                    throw new UnsupportedOperationException();
+            }
+            rhs.compile(out);
+            out.print(")");
+        }
     }
 }
