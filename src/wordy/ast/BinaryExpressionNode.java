@@ -117,7 +117,7 @@ public class BinaryExpressionNode extends ExpressionNode {
                     break;
             
                 default:
-                    break;
+                    throw new UnsupportedOperationException();
             }
             rhs.compile(out);
             out.print(")");

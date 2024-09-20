@@ -127,7 +127,7 @@ public class ConditionalNode extends StatementNode {
                 break;
         
             default:
-                break;
+                throw new UnsupportedOperationException();
         }
         rhs.compile(out);
         out.print(") ");
