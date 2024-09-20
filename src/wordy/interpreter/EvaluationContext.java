@@ -5,6 +5,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 import wordy.ast.ASTNode;
+import wordy.ast.StatementNode;
 
 /**
  * Holds the values of a Wordy program’s variables before, during, and after interpreted execution.
@@ -63,4 +64,5 @@ public class EvaluationContext {
 
         enum Phase { STARTED, COMPLETED }
     }
+
 }
