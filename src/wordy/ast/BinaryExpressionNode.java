@@ -1,7 +1,10 @@
 package wordy.ast;
 
+import java.io.PrintWriter;
 import java.util.Map;
 import java.util.Objects;
+
+import wordy.interpreter.EvaluationContext;
 
 import static wordy.ast.Utils.orderedMap;
 
@@ -58,5 +61,43 @@ public class BinaryExpressionNode extends ExpressionNode {
     @Override
     protected String describeAttributes() {
         return "(operator=" + operator + ')';
+    }
+    
+    @Override
+    protected double doEvaluate(EvaluationContext context) {
+        if (operator.equals(Operator.ADDITION))
+        return lhs.evaluate(context) + rhs.evaluate(context);
+        else if(operator.equals(Operator.SUBTRACTION))
+        return lhs.evaluate(context) - rhs.evaluate(context);
+        else if(operator.equals(Operator.DIVISION))
+        return lhs.evaluate(context) / rhs.evaluate(context);
+        else if(operator.equals(Operator.MULTIPLICATION))
+        return lhs.evaluate(context) * rhs.evaluate(context);
+        else
+        return Math.pow(lhs.evaluate(context), rhs.evaluate(context));
+    }
+
+    @Override
+    public void compile(PrintWriter out) {
+        if (operator.equals(Operator.EXPONENTIATION)){
+            out.print("Math.pow(");
+            lhs.compile(out);
+            out.print(", ");
+        }
+        else{
+            out.print("(");
+            lhs.compile(out);
+            if (operator.equals(Operator.ADDITION))
+                out.print(" + ");
+            else if(operator.equals(Operator.SUBTRACTION))
+                out.print(" - ");
+            else if(operator.equals(Operator.DIVISION))
+                out.print(" / ");
+            else if(operator.equals(Operator.MULTIPLICATION))
+                out.print(" * ");
+
+            }
+        rhs.compile(out);
+        out.print(")");
     }
 }
