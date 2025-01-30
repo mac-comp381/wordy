@@ -18,6 +18,8 @@ import wordy.ast.BlockNode;
 import wordy.ast.ConditionalNode;
 import wordy.ast.ConstantNode;
 import wordy.ast.ExpressionNode;
+import wordy.ast.FunctionCallNode;
+import wordy.ast.FunctionNode;
 import wordy.ast.LoopExitNode;
 import wordy.ast.LoopNode;
 import wordy.ast.StatementNode;
@@ -83,9 +85,45 @@ public class WordyParser extends BaseParser<ASTNode> {
     Rule Statement() {
         return FirstOf(
             Assignment(),
+            Function(),
             Conditional(),
             Loop(),
             LoopExit());
+    }
+
+    Rule Function() {
+        Var<String> name = new Var<>();
+        return Sequence(
+            KeyPhrase("define"),
+            OptionalSpace(),
+            Sequence(OneOrMore(FirstOf(
+                CharRange('a', 'z'),
+                CharRange('A', 'Z'),
+                "_")),
+            name.set(matchOrDefault(" "))),
+            OptionalSpace(),
+            KeyPhrase("to be"),
+            OptionalSurroundingSpace(":"),
+            Block(),
+            KeyPhrase("end of definition"),
+            push(new FunctionNode(name.get(), (BlockNode) pop()))
+        );
+    }
+
+    Rule FunctionCall() {
+        Var<String> name = new Var<>();
+        return Sequence(
+            KeyPhrase("do"),
+            ZeroOrMore(
+                Sequence(
+                    OneOrMore(FirstOf(
+                        CharRange('a', 'z'),
+                        CharRange('A', 'Z'),
+                        "_")),
+                    name.set(matchOrDefault(" ")))),
+            push(new FunctionCallNode(name.get())),
+            OptionalSpace()
+        );
     }
 
     Rule Conditional() {
@@ -204,7 +242,7 @@ public class WordyParser extends BaseParser<ASTNode> {
     }
 
     Rule Atom() {
-        return FirstOf(Number(), Variable(), Parens());
+        return FirstOf(Number(), FunctionCall(), Variable(), Parens());
     }
 
     Rule Parens() {

@@ -9,7 +9,7 @@ import static wordy.parser.WordyParser.parseExpression;
 import static wordy.parser.WordyParser.parseProgram;
 import static wordy.parser.WordyParser.parseStatement;
 
-@Disabled
+
 public class InterpreterTest {
     private final EvaluationContext context = new EvaluationContext();
 
@@ -90,6 +90,19 @@ public class InterpreterTest {
         runProgram("loop: set x to x plus 1. if x equals 10 then exit loop. set y to y plus x squared. end of loop.");
         assertVariableEquals("x", 10);
         assertVariableEquals("y", 285);
+    }
+
+    @Test
+    void executeFunction() {
+        String program =
+            "set a to 0." 
+            + "define test to be: set a to 10. set result to a plus 1. End of definition. ";
+
+        runProgram(program);
+        assertVariableEquals("a", 0);
+        runStatement("set b to do test.");
+        assertVariableEquals("b", 11);
+        assertVariableEquals("a", 0);
     }
 
     // ––––––– Helpers –––––––
