@@ -1,39 +1,130 @@
 # Wordy
 
-Wordy is a toy programming language. We will do science to it.
+Wordy is a tiny programming language suitable for exploration of basic language implementation principle. It is a Paul Cantrell invention specifically for Macalester’s Programming Languages course.
 
-This project contains the beginning of a Wordy implementation in Java. The starter code provides you with a parser that translates Wordy source code into an AST. You will use that AST to implement an **interpreter** and a **compiler** for the language.
+Wordy uses English words throughout its syntax. It supports simple arithmetic expressions, loops, and conditionals.
 
+This repository includes a working Wordy parser. It also includes a skeleton for building a Wordy interpreter and Wordy-to-Java compiler. Students will build the interpreter and compiler [as a homework assignment](https://p-lang.innig.net/latest/hw/wordy/).
 
-## Learning Goals
+This repository also includes a **playground** that lets you explore Wordy parsing and execution, and a **shader** that uses Wordy code to create graphics. You can run both from the command line:
 
-- Understand the difference between interpreters and compilers.
-- Understand how AST data structures relate to source code.
-- Practice writing code that processes code.
-- Think in detail about the semantics of basic language constructs.
-- Get a taste of the work involved in implementing a programming language.
+    ./gradlew playground
 
+    ./gradlew shader
 
-## Project setup
+(Note that the shader will not work at all until you implement the Wordy interpreter.)
 
-**Fork** this repository, then **clone** it using the Git tool of your choice (such as [GitHub Desktop](https://desktop.github.com), [GitUp](https://gitup.co), [SourceTree](https://www.sourcetreeapp.com), [Fork](https://git-fork.com) (Paul’s current favorite, but not free), [GitKraken](https://www.gitkraken.com), or the `git` command line).
+You can also run them from and IDE such as IntelliJ or Visual Studio Code using the `main` methods in these two files:
 
-⚠️ Make sure you **fork** and **clone** the repository; do not just download the zip!
+    src/wordy/demo/Playground.java
 
-⚠️ When you clone the repository, pay attention to _where_ you are cloning it on your computer’s file system. (In GitHub Desktop, you can use Repository → Show in Finder (Mac) / Repository → Show in Explorer (Windows) if you aren’t sure where you cloned it. Other Git GUIs have a similar feature.)
+    src/wordy/demo/shader/Shader.java
 
-Now set up your development environment, using the Java development tool of your choice:
+## About the language
 
-- [IntelliJ instructions](docs/setup-intellij.md)
-- [Visual Studio Code instructions](docs/setup-vs-code.md)
-- [Command line instructions](docs/setup-command-line.md)
+Wordy is intentionally a very simple language. It supports only a single type: 64-bit floating point numbers[^1]. A program operates on a set of named variables in a “context,” taking its input from any variables already present, and leaving its output as variables set at termination. Variables do not need to be declared, and all variables are zero by default.
 
-Any one of these tools will work fine — or if it doesn’t, contact Paul! Pick the one you are most comfortable with, or the one you most want to learn more about.
+[^1]: Wait, aren’t floating point numbers dangerous, [full of rounding pitfalls and wildly counterintuitive behavior](https://stackoverflow.com/questions/10371857/is-floating-point-addition-and-multiplication-associative)? Yes, they are, but don’t worry: Wordy is just a toy language. No _actual_ programming language in widespread practical use for critical applications would ever [do something as ridiculous as making floating point its default or only numeric type](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Numbers_and_dates). Perish the thought.
 
+There are no other types other than double, including boolean. Wordy's conditionals allow a single comparison between two expressions; programs must construct “and” and “or” by using nested conditionals. The language has no traversible data structures, has no functions, and is not Turing complete.
 
-## The assignment
+## Sample code
 
-- Part 0: [Understand your starting point](docs/0-starting-point.md)
-- Part 1: [Implement an interpreter](docs/1-interpreter.md)
-- Part 2: [Implement a compiler](docs/2-compiler.md)
-- [Bonus challenges](3-bonus.md)
+Compute the nth Fibonacci number, where `n` is provided as input:
+
+```
+Set a to 1.
+Set b to 1.
+Set count to n.
+Loop:
+    If count is less than 1 then exit loop.
+    Set next to a plus b.
+    Set a to b.
+    Set b to next.
+    Set count to count minus 1.
+End of loop.
+```
+
+Compute a Mandelbrot orbit `count` at (`cr`, `ci`), assuming the count is infinite if it exceeds `max_iterations`:
+
+```
+Set zr to 0.
+Set zi to 0.
+Loop:
+    If count is greater than max_iterations then:
+        Set count to 1 divided by 0.
+        Exit loop.
+    End of conditional.
+    If zr squared plus zi squared is greater than 4 then exit loop.
+    Set new_zr to zr squared minus zi squared plus cr.
+    Set zi to 2 times zr times zi plus ci.
+    Set zr to new_zr.
+    Set count to count plus 1.
+End of loop.
+```
+
+## Language Grammar
+
+This is an informal grammar of the language. To help with readability, the grammar below omits spaces. Details are in the full parser, in `src/wordy/parser/WordyParser.java`.
+
+```regex
+Program →
+    Block EOF
+
+Block →
+    (Statement ".")+
+
+Statement →
+    Assignment | Conditional | Loop | LoopExit
+
+Conditional →
+    "if" 
+    Expression
+    ("equals" | "is equal to" | "is less than" | "is greater than")
+    Expression
+    "then"
+    (
+        (":" Block ("else" ":" Block)? "end of conditional")
+        | (Statement ("else" Statement)?)
+    )
+
+Loop →
+    "loop" ":"
+    Block
+    "end of loop"
+
+LoopExit →
+    "exit loop"
+
+Assignment →
+    "set" Variable "to" Expression
+
+Expression →
+    AdditiveExpression
+
+AdditiveExpression →
+    MultiplicativeExpression (("plus" | "minus") MultiplicativeExpression)*
+
+MultiplicativeExpression →
+    ExponentialExpression (("times" | "divided by") ExponentialExpression)*
+
+ExponentialExpression →
+    Atom (("to the power of" ExponentialExpression) | "squared")*
+
+Atom →
+    Number | Variable | Parens
+
+Parens →
+    "(" Expression ")"
+
+Number →
+    "-"? Digit+ ("." Digit+)?
+
+Variable →
+    ([a-z] | [A-Z] | "_")+
+
+Digit →
+    [0-9]
+```
+
+---
