@@ -18,7 +18,7 @@ You can also run them from and IDE such as IntelliJ or Visual Studio Code using 
 
     src/wordy/demo/Playground.java
 
-    src/wordy/demo/shader/Shader.java
+    src/wordy/demo/shader/ShaderUI.java
 
 ## About the language
 
