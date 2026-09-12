@@ -15,16 +15,25 @@ dependencies {
     implementation group: 'org.parboiled', name: 'parboiled-java', version: '1.4.1'
     implementation group: 'org.ow2.asm', name: 'asm', version: '9.1'
     implementation group: 'org.jooq', name: 'joor', version: '0.9.+'
-    testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter', version: '5.9.+'
+    testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter', version: '5.+'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+}
+
+java {
+    sourceCompatibility = 1.17
+    targetCompatibility = 1.17
 }
 
 [
     playground: 'wordy.demo.Playground',
     shader: 'wordy.demo.shader.ShaderUI'
-].each { taskName, mainClass ->
+].each { taskName, mainClassName ->
     task(taskName, dependsOn: 'classes', type: JavaExec) {
-        main = mainClass
+        mainClass = mainClassName
         classpath = sourceSets.main.runtimeClasspath
+        javaLauncher = javaToolchains.launcherFor {
+            languageVersion = java.toolchain.languageVersion
+        }
     }
 }
 
@@ -37,9 +46,6 @@ test {
         logger.quiet "[${desc.className}] ${desc.name}: ${result.resultType}"
     }
 }
-
-sourceCompatibility = 1.16
-targetCompatibility = 1.16
 
 sourceSets.main.java.srcDirs = ['src']
 sourceSets.main.resources.srcDirs = ['res']
