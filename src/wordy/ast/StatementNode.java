@@ -3,10 +3,8 @@ package wordy.ast;
 import wordy.interpreter.EvaluationContext;
 
 /**
- * A Wordy abstract syntax subtree that will evaluate to a specific value when the program runs.
- * 
- * Wordy only supports double-precision floating point expressions; all ExpressionNodes evaluate
- * to a double.
+ * A Wordy abstract syntax subtree that takes some action when the program runs, and does not
+ * evaluate to a specific value.
  */
 public abstract class StatementNode extends ASTNode {
     /**
