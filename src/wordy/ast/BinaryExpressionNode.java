@@ -1,5 +1,7 @@
 package wordy.ast;
 
+import wordy.interpreter.EvaluationContext;
+
 import java.util.Map;
 import java.util.Objects;
 
@@ -58,5 +60,24 @@ public class BinaryExpressionNode extends ExpressionNode {
     @Override
     protected String describeAttributes() {
         return "(operator=" + operator + ')';
+    }
+
+    @Override
+    protected double doEvaluate(EvaluationContext context) {
+        double leftValue = lhs.evaluate(context);
+        double rightValue = rhs.evaluate(context);
+
+        if (operator == Operator.ADDITION) {
+            return leftValue + rightValue;
+        } else if (operator == Operator.SUBTRACTION) {
+            return leftValue - rightValue;
+        } else if (operator == Operator.MULTIPLICATION) {
+            return leftValue * rightValue;
+        } else if (operator == Operator.DIVISION) {
+            return leftValue / rightValue;
+        } else if (operator == Operator.EXPONENTIATION) {
+            return Math.pow(leftValue, rightValue);
+        }
+        throw new IllegalStateException("operator unknown");
     }
 }
