@@ -1,0 +1,9 @@
+1. I didn't delete the useless `compile()` and `doEvaluate()` functions. I just leave the trash there,
+which is not a good habit.
+2. One of the most notable differences in the code is that Paul uses a `switch-case` structure to
+organize what were originally parallel if statements. I think it's a beautiful way to do it.
+3. Also, when using a for loop in `BlockNode`, Paul uses `var` to describe the variable type,
+while I use `StatementNode` there. I think it's an ambiguous inference, and let java detect the
+variable type themself. That's probably because of the static type checking.
+
+
