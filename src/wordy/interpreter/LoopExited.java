@@ -5,4 +5,7 @@ package wordy.interpreter;
  * Thrown by {@link wordy.ast.LoopExitNode}.
  */
 public class LoopExited extends RuntimeException {
+    public LoopExited() {
+        super("Loop was exited");
+    }
 }

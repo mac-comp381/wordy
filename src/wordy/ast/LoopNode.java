@@ -1,7 +1,11 @@
 package wordy.ast;
 
+import java.io.PrintWriter;
 import java.util.Map;
 import java.util.Objects;
+
+import wordy.interpreter.EvaluationContext;
+import wordy.interpreter.LoopExited;
 
 /**
  * Wordy’s only looping construct, essentially an infinite while loop. Repeatedly runs the `body`
@@ -40,4 +44,23 @@ public class LoopNode extends StatementNode {
     public String toString() {
         return "LoopNode{body=" + body + '}';
     }
+
+    @Override
+    protected void doRun(EvaluationContext context) {
+        try {
+            // Keep running the loop body until the LoopExited exception is thrown
+            while (true) {
+                body.run(context);
+            }
+        } catch (LoopExited e) {
+            // Loop has exited, handle any final tasks if needed
+        }
+    }
+
+    @Override
+    public void compile(PrintWriter out) {
+        out.println("while(true)"); // Start of the infinite loop
+        body.compile(out); // Compile the body of the loop
+    }
+
 }
