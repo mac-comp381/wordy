@@ -30,7 +30,9 @@ public abstract class ASTNode {
      */
     public Set<VariableNode> findAllVariables() {
         Set<VariableNode> results = new HashSet<>();
+//        hashset returns the set of unique variables
         forEachVariable(results::add);
+//        forEachVariable(variable -> results.add(variable));
         return results;
     }
 
