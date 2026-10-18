@@ -44,7 +44,7 @@ public class ConditionalNode extends StatementNode {
     }
 
     @Override
-    public void doRun(EvaluationContext context) {
+    protected void doRun(EvaluationContext context) {
         (conditionMatches(context) ? ifTrue : ifFalse)
             .run(context);
     }

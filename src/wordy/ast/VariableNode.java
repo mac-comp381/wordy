@@ -33,7 +33,7 @@ public class VariableNode extends ExpressionNode {
     }
 
     @Override
-    public double doEvaluate(EvaluationContext context) {
+    protected double doEvaluate(EvaluationContext context) {
         return context.get(name);
     }
 

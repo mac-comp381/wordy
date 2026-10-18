@@ -23,7 +23,7 @@ public final class LoopExitNode extends StatementNode {
     }
 
     @Override
-    public void doRun(EvaluationContext context) {
+    protected void doRun(EvaluationContext context) {
         throw new LoopExited();
     }
 

@@ -36,7 +36,7 @@ public class AssignmentNode extends StatementNode {
     }
 
     @Override
-    public void doRun(EvaluationContext context) {
+    protected void doRun(EvaluationContext context) {
         context.set(variable.getName(), expression.evaluate(context));
     }
 

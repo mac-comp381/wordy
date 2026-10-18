@@ -26,7 +26,7 @@ public class LoopNode extends StatementNode {
     }
 
     @Override
-    public void doRun(EvaluationContext context) {
+    protected void doRun(EvaluationContext context) {
         try {
             while(true)
                 body.run(context);

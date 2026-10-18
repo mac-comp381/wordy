@@ -33,7 +33,7 @@ public class BinaryExpressionNode extends ExpressionNode {
     }
 
     @Override
-    public double doEvaluate(EvaluationContext context) {
+    protected double doEvaluate(EvaluationContext context) {
         double lhsValue = lhs.evaluate(context);
         double rhsValue = rhs.evaluate(context);
 
